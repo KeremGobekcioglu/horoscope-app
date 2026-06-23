@@ -1,0 +1,66 @@
+<resources>
+    <string name="app_name">Yıldızname</string>
+    <string name="splash_tagline">Voice of the Stars</string>
+
+    <!-- Bottom nav -->
+    <string name="nav_home">Home</string>
+    <string name="nav_calendar">Calendar</string>
+    <string name="nav_compatibility">Compatibility</string>
+    <string name="nav_settings">Settings</string>
+
+    <!-- Home -->
+    <string name="home_daily_title">Daily Reading</string>
+    <string name="home_weekly">Weekly</string>
+    <string name="home_monthly">Monthly</string>
+
+    <!-- Reading periods -->
+    <string name="period_daily">Daily</string>
+    <string name="period_weekly">Weekly</string>
+    <string name="period_monthly">Monthly</string>
+
+    <!-- Score labels -->
+    <string name="score_love">Love</string>
+    <string name="score_career">Career</string>
+    <string name="score_health">Health</string>
+    <string name="score_general">General</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_pick_sign_title">Choose Your Sign</string>
+    <string name="onboarding_pick_sign_subtitle">Select your sign for personalized readings</string>
+    <string name="onboarding_birth_date_title">Your Birth Date</string>
+    <string name="onboarding_birth_date_subtitle">Enter your birth date for more precise readings</string>
+    <string name="onboarding_refine_title">Natal Chart (Optional)</string>
+    <string name="onboarding_refine_subtitle">Enter birth time and location for deep analysis</string>
+
+    <!-- Compatibility -->
+    <string name="compat_title">Compatibility Analysis</string>
+    <string name="compat_your_sign">Your Sign</string>
+    <string name="compat_partner_sign">Partner\'s Sign</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Settings</string>
+    <string name="settings_language">Language</string>
+    <string name="settings_notifications">Notifications</string>
+    <string name="settings_about">About</string>
+
+    <!-- Common -->
+    <string name="btn_continue">Continue</string>
+    <string name="btn_skip">Skip</string>
+    <string name="btn_back">Back</string>
+    <string name="btn_share">Share</string>
+    <string name="btn_start">Get Started</string>
+
+    <!-- Zodiac signs (English) -->
+    <string name="sign_aries">Aries</string>
+    <string name="sign_taurus">Taurus</string>
+    <string name="sign_gemini">Gemini</string>
+    <string name="sign_cancer">Cancer</string>
+    <string name="sign_leo">Leo</string>
+    <string name="sign_virgo">Virgo</string>
+    <string name="sign_libra">Libra</string>
+    <string name="sign_scorpio">Scorpio</string>
+    <string name="sign_sagittarius">Sagittarius</string>
+    <string name="sign_capricorn">Capricorn</string>
+    <string name="sign_aquarius">Aquarius</string>
+    <string name="sign_pisces">Pisces</string>
+</resources>

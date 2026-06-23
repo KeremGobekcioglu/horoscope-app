@@ -1,0 +1,66 @@
+<resources>
+    <string name="app_name">Yıldızname</string>
+    <string name="splash_tagline">Yıldızların Sesi</string>
+
+    <!-- Bottom nav -->
+    <string name="nav_home">Ana Sayfa</string>
+    <string name="nav_calendar">Takvim</string>
+    <string name="nav_compatibility">Uyum</string>
+    <string name="nav_settings">Ayarlar</string>
+
+    <!-- Home -->
+    <string name="home_daily_title">Günlük Yorum</string>
+    <string name="home_weekly">Haftalık</string>
+    <string name="home_monthly">Aylık</string>
+
+    <!-- Reading periods -->
+    <string name="period_daily">Günlük</string>
+    <string name="period_weekly">Haftalık</string>
+    <string name="period_monthly">Aylık</string>
+
+    <!-- Score labels -->
+    <string name="score_love">Aşk</string>
+    <string name="score_career">Kariyer</string>
+    <string name="score_health">Sağlık</string>
+    <string name="score_general">Genel</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_pick_sign_title">Burcunuzu Seçin</string>
+    <string name="onboarding_pick_sign_subtitle">Kişisel yorumlarınız için burcunuzu seçin</string>
+    <string name="onboarding_birth_date_title">Doğum Tarihiniz</string>
+    <string name="onboarding_birth_date_subtitle">Daha hassas yorumlar için doğum tarihinizi girin</string>
+    <string name="onboarding_refine_title">Natal Harita (İsteğe Bağlı)</string>
+    <string name="onboarding_refine_subtitle">Derin analiz için doğum saatinizi ve yerinizi girin</string>
+
+    <!-- Compatibility -->
+    <string name="compat_title">Uyum Analizi</string>
+    <string name="compat_your_sign">Burcunuz</string>
+    <string name="compat_partner_sign">Partnerinizin Burcu</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Ayarlar</string>
+    <string name="settings_language">Dil</string>
+    <string name="settings_notifications">Bildirimler</string>
+    <string name="settings_about">Hakkında</string>
+
+    <!-- Common -->
+    <string name="btn_continue">Devam</string>
+    <string name="btn_skip">Atla</string>
+    <string name="btn_back">Geri</string>
+    <string name="btn_share">Paylaş</string>
+    <string name="btn_start">Başla</string>
+
+    <!-- Zodiac signs (Turkish) -->
+    <string name="sign_aries">Koç</string>
+    <string name="sign_taurus">Boğa</string>
+    <string name="sign_gemini">İkizler</string>
+    <string name="sign_cancer">Yengeç</string>
+    <string name="sign_leo">Aslan</string>
+    <string name="sign_virgo">Başak</string>
+    <string name="sign_libra">Terazi</string>
+    <string name="sign_scorpio">Akrep</string>
+    <string name="sign_sagittarius">Yay</string>
+    <string name="sign_capricorn">Oğlak</string>
+    <string name="sign_aquarius">Kova</string>
+    <string name="sign_pisces">Balık</string>
+</resources>
