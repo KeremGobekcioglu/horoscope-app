@@ -1,7 +1,8 @@
 package com.kg.horoscope
 
 import androidx.compose.ui.window.ComposeUIViewController
-import com.kg.horoscope.di.appModule
+import com.yildizname.App
+import com.yildizname.di.appModule
 import org.koin.core.context.startKoin
 
 fun MainViewController() = ComposeUIViewController { App() }
