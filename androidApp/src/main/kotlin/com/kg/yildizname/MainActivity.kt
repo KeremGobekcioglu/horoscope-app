@@ -1,10 +1,9 @@
-package com.kg.horoscope
+package com.kg.yildizname
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import com.kg.yildizname.App
 import com.kg.yildizname.di.appModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.GlobalContext

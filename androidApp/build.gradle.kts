@@ -23,7 +23,7 @@ dependencies {
 }
 
 android {
-    namespace = "com.kg.horoscope"
+    namespace = "com.kg.yildizname"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {

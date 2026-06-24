@@ -20,7 +20,7 @@ kotlin {
     }
 
     androidLibrary {
-       namespace = "com.kg.horoscope.shared"
+       namespace = "com.kg.yildizname.shared"
        compileSdk = libs.versions.android.compileSdk.get().toInt()
        minSdk = libs.versions.android.minSdk.get().toInt()
 

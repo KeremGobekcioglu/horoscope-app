@@ -1,9 +1,9 @@
-package com.kg.horoscope
+package com.kg.yildizname
 
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class SharedCommonTest {
+class SharedLogicIOSTest {
 
     @Test
     fun example() {
