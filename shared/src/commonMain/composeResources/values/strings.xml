@@ -32,6 +32,41 @@
     <string name="onboarding_refine_title">Natal Harita (İsteğe Bağlı)</string>
     <string name="onboarding_refine_subtitle">Derin analiz için doğum saatinizi ve yerinizi girin</string>
 
+    <!-- Onboarding Step 2 -->
+    <string name="onboarding_step2_title">Doğum tarihin?</string>
+    <string name="onboarding_step2_subtitle">KOZMİK HARİTAN İÇİN TARİHİNİ SEÇ</string>
+    <string name="onboarding_skip">ATLA</string>
+    <string name="onboarding_continue">Devam Et</string>
+
+    <!-- Month names -->
+    <string name="month_january">Ocak</string>
+    <string name="month_february">Şubat</string>
+    <string name="month_march">Mart</string>
+    <string name="month_april">Nisan</string>
+    <string name="month_may">Mayıs</string>
+    <string name="month_june">Haziran</string>
+    <string name="month_july">Temmuz</string>
+    <string name="month_august">Ağustos</string>
+    <string name="month_september">Eylül</string>
+    <string name="month_october">Ekim</string>
+    <string name="month_november">Kasım</string>
+    <string name="month_december">Aralık</string>
+
+    <!-- Onboarding Step 3 -->
+    <string name="onboarding_step3_title">Daha doğru tahminler için</string>
+    <string name="onboarding_step3_optional_badge">İsteğe bağlı</string>
+    <string name="onboarding_step3_birth_time_hint">Doğum saati</string>
+    <string name="onboarding_step3_birth_city_hint">Doğum şehri</string>
+    <string name="onboarding_step3_gender_hint">Cinsiyet</string>
+    <string name="onboarding_step3_start">Başla</string>
+    <string name="onboarding_step3_skip">ŞİMDİLİK GEÇ</string>
+
+    <!-- Gender options -->
+    <string name="gender_male">Erkek</string>
+    <string name="gender_female">Kadın</string>
+    <string name="gender_other">Diğer</string>
+    <string name="gender_prefer_not">Belirtmek istemiyorum</string>
+
     <!-- Compatibility -->
     <string name="compat_title">Uyum Analizi</string>
     <string name="compat_your_sign">Burcunuz</string>

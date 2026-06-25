@@ -32,6 +32,41 @@
     <string name="onboarding_refine_title">Natal Chart (Optional)</string>
     <string name="onboarding_refine_subtitle">Enter birth time and location for deep analysis</string>
 
+    <!-- Onboarding Step 2 -->
+    <string name="onboarding_step2_title">Your birth date?</string>
+    <string name="onboarding_step2_subtitle">SELECT YOUR DATE FOR YOUR COSMIC MAP</string>
+    <string name="onboarding_skip">SKIP</string>
+    <string name="onboarding_continue">Continue</string>
+
+    <!-- Month names -->
+    <string name="month_january">January</string>
+    <string name="month_february">February</string>
+    <string name="month_march">March</string>
+    <string name="month_april">April</string>
+    <string name="month_may">May</string>
+    <string name="month_june">June</string>
+    <string name="month_july">July</string>
+    <string name="month_august">August</string>
+    <string name="month_september">September</string>
+    <string name="month_october">October</string>
+    <string name="month_november">November</string>
+    <string name="month_december">December</string>
+
+    <!-- Onboarding Step 3 -->
+    <string name="onboarding_step3_title">For more accurate predictions</string>
+    <string name="onboarding_step3_optional_badge">Optional</string>
+    <string name="onboarding_step3_birth_time_hint">Birth time</string>
+    <string name="onboarding_step3_birth_city_hint">Birth city</string>
+    <string name="onboarding_step3_gender_hint">Gender</string>
+    <string name="onboarding_step3_start">Start</string>
+    <string name="onboarding_step3_skip">SKIP FOR NOW</string>
+
+    <!-- Gender options -->
+    <string name="gender_male">Male</string>
+    <string name="gender_female">Female</string>
+    <string name="gender_other">Other</string>
+    <string name="gender_prefer_not">Prefer not to say</string>
+
     <!-- Compatibility -->
     <string name="compat_title">Compatibility Analysis</string>
     <string name="compat_your_sign">Your Sign</string>

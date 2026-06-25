@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kg.yildizname.core.data.prefs.UserPreferencesDataSource
 import com.kg.yildizname.core.domain.model.ZodiacSign
+import com.kg.yildizname.feature.onboarding.BirthDate
+import com.kg.yildizname.feature.onboarding.OnboardingOptionalData
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -31,6 +33,46 @@ class OnboardingViewModel(
         viewModelScope.launch {
             prefs.saveZodiacSign(sign.key)
             _events.send(OnboardingEvent.NavigateToStep2)
+        }
+    }
+
+    fun setBirthDate(date: BirthDate) {
+        _uiState.update { it.copy(birthDate = date) }
+    }
+
+    fun confirmBirthDate() {
+        val date = _uiState.value.birthDate
+        viewModelScope.launch {
+            date?.let { prefs.saveBirthDate(it.day, it.month, it.year) }
+            _events.send(OnboardingEvent.NavigateToStep3)
+        }
+    }
+
+    fun skipBirthDate() {
+        viewModelScope.launch {
+            _events.send(OnboardingEvent.NavigateToStep3)
+        }
+    }
+
+    fun setOptionalData(data: OnboardingOptionalData) {
+        _uiState.update { it.copy(optionalData = data) }
+    }
+
+    fun completeOnboarding() {
+        val data = _uiState.value.optionalData
+        viewModelScope.launch {
+            data.birthTime?.let { prefs.saveBirthTime(it) }
+            data.birthCity?.let { prefs.saveBirthCity(it) }
+            data.gender?.let { prefs.saveGender(it.name) }
+            prefs.markOnboardingComplete()
+            _events.send(OnboardingEvent.NavigateToHome)
+        }
+    }
+
+    fun skipOptionalData() {
+        viewModelScope.launch {
+            prefs.markOnboardingComplete()
+            _events.send(OnboardingEvent.NavigateToHome)
         }
     }
 }

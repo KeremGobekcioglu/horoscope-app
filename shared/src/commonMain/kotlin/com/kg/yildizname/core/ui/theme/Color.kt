@@ -17,3 +17,5 @@ val YzStarWhite = Color(0xFFFFFFFF)
 val YzCardBg    = Color(0xFF181B2A)
 val YzCardBgSel = Color(0xFF0F1222)
 val YzOnSurface = Color(0xFFE0E1F7)
+
+val YzPickerBg  = Color(0xFF141827)

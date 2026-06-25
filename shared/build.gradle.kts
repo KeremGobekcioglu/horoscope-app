@@ -55,6 +55,7 @@ kotlin {
             implementation(libs.ktor.serialization.kotlinx.json)
             implementation(libs.kotlinx.coroutines.core)
             implementation(libs.datastore.preferences.core)
+            implementation(compose.materialIconsExtended)
         }
         androidMain.dependencies {
             implementation(libs.compose.uiToolingPreview)
