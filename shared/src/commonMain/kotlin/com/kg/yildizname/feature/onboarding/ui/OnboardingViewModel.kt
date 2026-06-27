@@ -31,8 +31,12 @@ class OnboardingViewModel(
     fun confirmSign() {
         val sign = _uiState.value.selectedSign ?: return
         viewModelScope.launch {
-            prefs.saveZodiacSign(sign.key)
-            _events.send(OnboardingEvent.NavigateToStep2)
+            try {
+                prefs.saveZodiacSign(sign.key)
+                _events.send(OnboardingEvent.NavigateToStep2)
+            } catch (e: Exception) {
+                _uiState.update { it.copy(error = e.message) }
+            }
         }
     }
 
@@ -43,8 +47,12 @@ class OnboardingViewModel(
     fun confirmBirthDate() {
         val date = _uiState.value.birthDate
         viewModelScope.launch {
-            date?.let { prefs.saveBirthDate(it.day, it.month, it.year) }
-            _events.send(OnboardingEvent.NavigateToStep3)
+            try {
+                date?.let { prefs.saveBirthDate(it.day, it.month, it.year) }
+                _events.send(OnboardingEvent.NavigateToStep3)
+            } catch (e: Exception) {
+                _uiState.update { it.copy(error = e.message) }
+            }
         }
     }
 
@@ -61,10 +69,14 @@ class OnboardingViewModel(
     fun completeOnboarding() {
         val data = _uiState.value.optionalData
         viewModelScope.launch {
-            data.birthTime?.let { prefs.saveBirthTime(it) }
-            data.birthCity?.let { prefs.saveBirthCity(it) }
-            data.gender?.let { prefs.saveGender(it.name) }
-            prefs.markOnboardingComplete()
+            try {
+                data.birthTime?.let { prefs.saveBirthTime(it) }
+                data.birthCity?.let { prefs.saveBirthCity(it) }
+                data.gender?.let { prefs.saveGender(it.name) }
+                prefs.markOnboardingComplete()
+            } catch (e: Exception) {
+                _uiState.update { it.copy(error = e.message) }
+            }
             _events.send(OnboardingEvent.NavigateToHome)
         }
     }
@@ -74,5 +86,8 @@ class OnboardingViewModel(
             prefs.markOnboardingComplete()
             _events.send(OnboardingEvent.NavigateToHome)
         }
+    }
+    fun clearError() {
+        _uiState.update { it.copy(error = null) }
     }
 }

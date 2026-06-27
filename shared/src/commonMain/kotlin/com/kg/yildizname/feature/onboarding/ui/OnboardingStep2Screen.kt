@@ -16,6 +16,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -178,7 +180,18 @@ fun OnboardingStep2Screen(
     onDateChanged: (BirthDate) -> Unit,
     onContinue: () -> Unit,
     onSkip: () -> Unit,
+    error: String? = null,
+    onErrorShown: () -> Unit = {},
 ) {
+    val snackbarHostState = remember { SnackbarHostState() }
+
+    LaunchedEffect(error) {
+        if (error != null) {
+            snackbarHostState.showSnackbar(error)
+            onErrorShown()
+        }
+    }
+
     val months = listOf(
         stringResource(Res.string.month_january),
         stringResource(Res.string.month_february),
@@ -306,5 +319,10 @@ fun OnboardingStep2Screen(
         ) {
             YzButton(text = stringResource(Res.string.onboarding_continue), onClick = onContinue)
         }
+
+        SnackbarHost(
+            hostState = snackbarHostState,
+            modifier  = Modifier.align(Alignment.BottomCenter).padding(16.dp),
+        )
     }
 }

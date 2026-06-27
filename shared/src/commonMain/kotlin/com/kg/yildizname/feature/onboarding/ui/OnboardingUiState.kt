@@ -8,4 +8,5 @@ data class OnboardingUiState(
     val selectedSign: ZodiacSign? = null,
     val birthDate: BirthDate? = null,
     val optionalData: OnboardingOptionalData = OnboardingOptionalData(),
+    val error: String? = null,
 )

@@ -3,6 +3,7 @@ package com.kg.yildizname.navigation
 import kotlinx.serialization.Serializable
 
 @Serializable object Splash
+@Serializable object OnboardingGraph
 @Serializable object OnboardingStep1
 @Serializable object OnboardingStep2
 @Serializable object OnboardingStep3

@@ -25,8 +25,11 @@ import androidx.compose.material.icons.outlined.Schedule
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -141,7 +144,18 @@ fun OnboardingStep3Screen(
     onDataChanged: (OnboardingOptionalData) -> Unit,
     onStart: () -> Unit,
     onSkip: () -> Unit,
+    error: String? = null,
+    onErrorShown: () -> Unit = {},
 ) {
+    val snackbarHostState = remember { SnackbarHostState() }
+
+    LaunchedEffect(error) {
+        if (error != null) {
+            snackbarHostState.showSnackbar(error)
+            onErrorShown()
+        }
+    }
+
     var genderExpanded by remember { mutableStateOf(false) }
 
     Box(
@@ -325,5 +339,10 @@ fun OnboardingStep3Screen(
                     .padding(8.dp),
             )
         }
+
+        SnackbarHost(
+            hostState = snackbarHostState,
+            modifier  = Modifier.align(Alignment.BottomCenter).padding(16.dp),
+        )
     }
 }
