@@ -6,6 +6,8 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.kotlinSerialization)
+    alias(libs.plugins.google.services)
+
 }
 
 kotlin {
@@ -37,6 +39,10 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
+            implementation(libs.gitlive.firebase.firestore)
+            implementation(libs.gitlive.firebase.common)
+            implementation(libs.kotlinx.datetime)         // skip if already present
+
             implementation(libs.compose.runtime)
             implementation(libs.compose.foundation)
             implementation(libs.compose.material3)
@@ -60,6 +66,8 @@ kotlin {
         androidMain.dependencies {
             implementation(libs.compose.uiToolingPreview)
             implementation(libs.ktor.client.okhttp)
+            implementation(libs.androidx.lifecycle.process)
+
         }
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
