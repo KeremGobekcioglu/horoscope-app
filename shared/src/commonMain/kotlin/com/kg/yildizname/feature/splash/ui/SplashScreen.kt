@@ -63,8 +63,7 @@ private fun generateStars(seed: Long = 42L): List<StarParticle> {
 
 @Composable
 fun SplashScreen(
-    onNavigateToHome: () -> Unit,
-    onNavigateToOnboarding: () -> Unit,
+    onAnimationDone: () -> Unit,
 ) {
     val stars = remember { generateStars() }
 
@@ -120,7 +119,7 @@ fun SplashScreen(
     LaunchedEffect(phase) {
         if (phase >= 5) {
             delay(100)
-            onNavigateToHome()
+            onAnimationDone()
         }
     }
 

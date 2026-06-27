@@ -55,4 +55,15 @@ class UserPreferencesDataSource(
     suspend fun saveGender(gender: String) {
         dataStore.edit { it[KEY_GENDER] = gender }
     }
+
+    suspend fun getBirthDay(): Int?     = dataStore.data.first()[KEY_BIRTH_DAY]
+    suspend fun getBirthMonth(): Int?   = dataStore.data.first()[KEY_BIRTH_MONTH]
+    suspend fun getBirthYear(): Int?    = dataStore.data.first()[KEY_BIRTH_YEAR]
+    suspend fun getBirthTime(): String? = dataStore.data.first()[KEY_BIRTH_TIME]
+    suspend fun getBirthCity(): String? = dataStore.data.first()[KEY_BIRTH_CITY]
+    suspend fun getGender(): String?    = dataStore.data.first()[KEY_GENDER]
+
+    suspend fun clearAll() {
+        dataStore.edit { it.clear() }
+    }
 }

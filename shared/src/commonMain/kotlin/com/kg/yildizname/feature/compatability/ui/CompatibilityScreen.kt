@@ -1,4 +1,4 @@
-package com.kg.yildizname.feature.compatibility.ui
+package com.kg.yildizname.feature.compatability.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

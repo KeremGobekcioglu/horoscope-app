@@ -74,17 +74,21 @@ class OnboardingViewModel(
                 data.birthCity?.let { prefs.saveBirthCity(it) }
                 data.gender?.let { prefs.saveGender(it.name) }
                 prefs.markOnboardingComplete()
+                _events.send(OnboardingEvent.NavigateToHome)
             } catch (e: Exception) {
                 _uiState.update { it.copy(error = e.message) }
             }
-            _events.send(OnboardingEvent.NavigateToHome)
         }
     }
 
     fun skipOptionalData() {
         viewModelScope.launch {
-            prefs.markOnboardingComplete()
-            _events.send(OnboardingEvent.NavigateToHome)
+            try {
+                prefs.markOnboardingComplete()
+                _events.send(OnboardingEvent.NavigateToHome)
+            } catch (e: Exception) {
+                _uiState.update { it.copy(error = e.message) }
+            }
         }
     }
     fun clearError() {

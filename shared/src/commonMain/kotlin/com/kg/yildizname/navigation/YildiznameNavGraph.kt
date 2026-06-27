@@ -13,8 +13,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.toRoute
 import com.kg.yildizname.feature.calendar.ui.CalendarScreen
-import com.kg.yildizname.feature.compatibility.ui.CompatibilityScreen
+import com.kg.yildizname.feature.compatability.ui.CompatibilityScreen
+import com.kg.yildizname.feature.home.ui.HomeEvent
 import com.kg.yildizname.feature.home.ui.HomeScreen
+import com.kg.yildizname.feature.home.ui.HomeViewModel
 import com.kg.yildizname.feature.onboarding.ui.OnboardingEvent
 import com.kg.yildizname.feature.onboarding.ui.OnboardingStep1Screen
 import com.kg.yildizname.feature.onboarding.ui.OnboardingStep2Screen
@@ -22,7 +24,9 @@ import com.kg.yildizname.feature.onboarding.ui.OnboardingStep3Screen
 import com.kg.yildizname.feature.onboarding.ui.OnboardingViewModel
 import com.kg.yildizname.feature.reading.ui.ReadingDetailScreen
 import com.kg.yildizname.feature.settings.ui.SettingsScreen
+import com.kg.yildizname.feature.splash.ui.SplashEvent
 import com.kg.yildizname.feature.splash.ui.SplashScreen
+import com.kg.yildizname.feature.splash.ui.SplashViewModel
 import org.koin.compose.viewmodel.koinViewModel
 
 // Helper that gives every onboarding screen the SAME ViewModel instance.
@@ -45,21 +49,26 @@ private fun NavBackStackEntry.rememberOnboardingViewModel(
 fun YildiznameNavGraph(navController: NavHostController) {
     NavHost(
         navController    = navController,
-        startDestination = Splash
+        startDestination = Splash,
     ) {
+
         composable<Splash> {
-            SplashScreen(
-                onNavigateToHome = {
-                    navController.navigate(OnboardingGraph) {
-                        popUpTo<Splash> { inclusive = true }
-                    }
-                },
-                onNavigateToOnboarding = {
-                    navController.navigate(OnboardingGraph) {
-                        popUpTo<Splash> { inclusive = true }
+            val vm: SplashViewModel = koinViewModel()
+
+            LaunchedEffect(vm) {
+                vm.events.collect { event ->
+                    when (event) {
+                        SplashEvent.NavigateToHome -> navController.navigate(Home) {
+                            popUpTo<Splash> { inclusive = true }
+                        }
+                        SplashEvent.NavigateToOnboarding -> navController.navigate(OnboardingGraph) {
+                            popUpTo<Splash> { inclusive = true }
+                        }
                     }
                 }
-            )
+            }
+
+            SplashScreen(onAnimationDone = vm::onAnimationDone)
         }
 
         // Groups all onboarding screens under one parent route (OnboardingGraph).
@@ -90,7 +99,7 @@ fun YildiznameNavGraph(navController: NavHostController) {
                 OnboardingStep1Screen(
                     selectedSign   = uiState.selectedSign,
                     onSignSelected = vm::selectSign,
-                    onContinue     = { vm.confirmSign() },
+                    onContinue     = vm::confirmSign,
                     error          = uiState.error,
                     onErrorShown   = vm::clearError,
                 )
@@ -113,8 +122,8 @@ fun YildiznameNavGraph(navController: NavHostController) {
                 OnboardingStep2Screen(
                     selectedDate  = uiState.birthDate,
                     onDateChanged = vm::setBirthDate,
-                    onContinue    = { vm.confirmBirthDate() },
-                    onSkip        = { vm.skipBirthDate() },
+                    onContinue    = vm::confirmBirthDate,
+                    onSkip        = vm::skipBirthDate,
                     error         = uiState.error,
                     onErrorShown  = vm::clearError,
                 )
@@ -143,8 +152,8 @@ fun YildiznameNavGraph(navController: NavHostController) {
                 OnboardingStep3Screen(
                     optionalData  = uiState.optionalData,
                     onDataChanged = vm::setOptionalData,
-                    onStart       = { vm.completeOnboarding() },
-                    onSkip        = { vm.skipOptionalData() },
+                    onStart       = vm::completeOnboarding,
+                    onSkip        = vm::skipOptionalData,
                     error         = uiState.error,
                     onErrorShown  = vm::clearError,
                 )
@@ -152,10 +161,25 @@ fun YildiznameNavGraph(navController: NavHostController) {
         }
 
         composable<Home> {
-            HomeScreen(
-                onReadingDetail = { sign, period ->
-                    navController.navigate(ReadingDetail(sign = sign, period = period))
+            val vm: HomeViewModel = koinViewModel()
+            val uiState by vm.uiState.collectAsStateWithLifecycle()
+
+            LaunchedEffect(vm) {
+                vm.events.collect { event ->
+                    when (event) {
+                        HomeEvent.NavigateToOnboarding -> navController.navigate(OnboardingGraph) {
+                            popUpTo<Home> { inclusive = true }
+                        }
+                    }
                 }
+            }
+
+            HomeScreen(
+                uiState           = uiState,
+                onClearOnboarding = vm::clearOnboarding,
+                onReadingDetail   = { sign, period ->
+                    navController.navigate(ReadingDetail(sign = sign, period = period))
+                },
             )
         }
 
@@ -164,7 +188,7 @@ fun YildiznameNavGraph(navController: NavHostController) {
             ReadingDetailScreen(
                 sign   = route.sign,
                 period = route.period,
-                onBack = { navController.popBackStack() }
+                onBack = { navController.popBackStack() },
             )
         }
 
