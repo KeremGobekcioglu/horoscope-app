@@ -34,6 +34,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -168,6 +171,7 @@ fun OnboardingStep3Screen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .statusBarsPadding()
                 .padding(horizontal = 20.dp),
         ) {
             Spacer(Modifier.height(20.dp))
@@ -320,7 +324,9 @@ fun OnboardingStep3Screen(
             modifier            = Modifier
                 .align(Alignment.BottomCenter)
                 .fillMaxWidth()
-                .padding(horizontal = 20.dp, vertical = 20.dp),
+                .navigationBarsPadding()
+                .padding(horizontal = 20.dp, vertical = 20.dp)
+                .widthIn(max = 480.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             YzButton(text = stringResource(Res.string.onboarding_step3_start), onClick = onStart)

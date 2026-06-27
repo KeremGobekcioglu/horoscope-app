@@ -13,8 +13,11 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -35,6 +38,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kg.yildizname.core.domain.model.ZodiacSign
@@ -48,12 +52,15 @@ import com.kg.yildizname.core.ui.theme.YzCardBgSel
 import com.kg.yildizname.core.ui.theme.YzGold
 import com.kg.yildizname.core.ui.theme.YzMuted
 import com.kg.yildizname.core.ui.theme.YzOnSurface
+import com.kg.yildizname.core.ui.utils.YzWindowWidth
+import com.kg.yildizname.core.ui.utils.rememberWindowWidth
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
 private fun ZodiacCard(
     sign: ZodiacSign,
     selected: Boolean,
+    compact: Boolean,
     onClick: () -> Unit,
 ) {
     val borderColor = if (selected) YzGold else YzBorder
@@ -73,16 +80,19 @@ private fun ZodiacCard(
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
-            modifier            = Modifier.padding(horizontal = 8.dp, vertical = 12.dp),
+            modifier            = Modifier.padding(
+                horizontal = 8.dp,
+                vertical   = if (compact) 8.dp else 12.dp,
+            ),
         ) {
             Image(
                 painter            = painterResource(sign.drawable),
                 contentDescription = sign.nameTr,
                 contentScale       = ContentScale.Fit,
-                modifier           = Modifier.size(56.dp),
+                modifier           = Modifier.size(if (compact) 48.dp else 56.dp),
             )
 
-            Spacer(Modifier.height(10.dp))
+            Spacer(Modifier.height(if (compact) 6.dp else 10.dp))
 
             Text(
                 text       = sign.nameTr,
@@ -91,6 +101,8 @@ private fun ZodiacCard(
                 fontWeight = if (selected) FontWeight.Bold else FontWeight.SemiBold,
                 textAlign  = TextAlign.Center,
                 maxLines   = 1,
+                overflow   = TextOverflow.Ellipsis,
+                modifier   = Modifier.fillMaxWidth(),
             )
 
             Spacer(Modifier.height(3.dp))
@@ -101,6 +113,8 @@ private fun ZodiacCard(
                 fontSize  = 10.sp,
                 textAlign = TextAlign.Center,
                 maxLines  = 1,
+                overflow  = TextOverflow.Ellipsis,
+                modifier  = Modifier.fillMaxWidth(),
             )
         }
     }
@@ -123,6 +137,14 @@ fun OnboardingStep1Screen(
         }
     }
 
+    val windowWidth = rememberWindowWidth()
+    val compact     = windowWidth == YzWindowWidth.Compact
+    val columns     = when (windowWidth) {
+        YzWindowWidth.Compact  -> 3
+        YzWindowWidth.Medium   -> 4
+        YzWindowWidth.Expanded -> 6
+    }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -131,7 +153,9 @@ fun OnboardingStep1Screen(
         StarFieldBackground(modifier = Modifier.fillMaxSize())
 
         Column(
-            modifier            = Modifier.fillMaxSize(),
+            modifier            = Modifier
+                .fillMaxSize()
+                .statusBarsPadding(),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Spacer(Modifier.height(20.dp))
@@ -141,7 +165,7 @@ fun OnboardingStep1Screen(
             Text(
                 text       = "Burcunu seç",
                 color      = YzGold,
-                fontSize   = 32.sp,
+                fontSize   = if (compact) 28.sp else 32.sp,
                 fontWeight = FontWeight.Bold,
                 fontStyle  = FontStyle.Italic,
                 textAlign  = TextAlign.Center,
@@ -160,11 +184,11 @@ fun OnboardingStep1Screen(
             Spacer(Modifier.height(24.dp))
 
             LazyVerticalGrid(
-                columns               = GridCells.Fixed(3),
+                columns               = GridCells.Fixed(columns),
                 modifier              = Modifier
                     .weight(1f)
                     .padding(horizontal = 16.dp),
-                contentPadding        = PaddingValues(bottom = 16.dp),
+                contentPadding        = PaddingValues(bottom = 8.dp),
                 horizontalArrangement = Arrangement.spacedBy(10.dp),
                 verticalArrangement   = Arrangement.spacedBy(10.dp),
             ) {
@@ -172,38 +196,40 @@ fun OnboardingStep1Screen(
                     ZodiacCard(
                         sign     = sign,
                         selected = sign == selectedSign,
+                        compact  = compact,
                         onClick  = { onSignSelected(sign) },
                     )
                 }
             }
-        }
 
-        Box(
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .fillMaxWidth()
-                .background(
-                    Brush.verticalGradient(listOf(Color.Transparent, YzBg, YzBg))
-                )
-                .padding(horizontal = 20.dp, vertical = 20.dp),
-        ) {
-            val enabled = selectedSign != null
+            // fillMaxWidth, no weight — fixed height so the grid doesn't compete for space
             Box(
-                modifier = Modifier
+                modifier         = Modifier
                     .fillMaxWidth()
-                    .height(52.dp)
-                    .clip(RoundedCornerShape(50))
-                    .background(if (enabled) YzGold else YzGold.copy(alpha = 0.35f))
-                    .alpha(if (enabled) 1f else 0.6f)
-                    .clickable(enabled = enabled) { onContinue() },
+                    .background(Brush.verticalGradient(listOf(Color.Transparent, YzBg, YzBg)))
+                    .navigationBarsPadding()
+                    .padding(horizontal = 20.dp, vertical = 20.dp),
                 contentAlignment = Alignment.Center,
             ) {
-                Text(
-                    text       = "Devam Et",
-                    color      = if (enabled) Color(0xFF1A1400) else YzMuted,
-                    fontSize   = 16.sp,
-                    fontWeight = FontWeight.SemiBold,
-                )
+                val enabled = selectedSign != null
+                Box(
+                    modifier = Modifier
+                        .widthIn(max = 480.dp)
+                        .fillMaxWidth()
+                        .height(52.dp)
+                        .clip(RoundedCornerShape(50))
+                        .background(if (enabled) YzGold else YzGold.copy(alpha = 0.35f))
+                        .alpha(if (enabled) 1f else 0.6f)
+                        .clickable(enabled = enabled) { onContinue() },
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Text(
+                        text       = "Devam Et",
+                        color      = if (enabled) Color(0xFF1A1400) else YzMuted,
+                        fontSize   = 16.sp,
+                        fontWeight = FontWeight.SemiBold,
+                    )
+                }
             }
         }
 

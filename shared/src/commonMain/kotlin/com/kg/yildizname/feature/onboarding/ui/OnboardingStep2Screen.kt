@@ -10,8 +10,11 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -235,6 +238,7 @@ fun OnboardingStep2Screen(
         Column(
             modifier            = Modifier
                 .fillMaxSize()
+                .statusBarsPadding()
                 .padding(horizontal = 20.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
@@ -311,13 +315,17 @@ fun OnboardingStep2Screen(
         }
 
         Box(
-            modifier = Modifier
+            modifier         = Modifier
                 .align(Alignment.BottomCenter)
                 .fillMaxWidth()
                 .background(Brush.verticalGradient(listOf(Color.Transparent, YzBg, YzBg)))
+                .navigationBarsPadding()
                 .padding(horizontal = 20.dp, vertical = 20.dp),
+            contentAlignment = Alignment.Center,
         ) {
-            YzButton(text = stringResource(Res.string.onboarding_continue), onClick = onContinue)
+            Box(modifier = Modifier.widthIn(max = 480.dp).fillMaxWidth()) {
+                YzButton(text = stringResource(Res.string.onboarding_continue), onClick = onContinue)
+            }
         }
 
         SnackbarHost(
