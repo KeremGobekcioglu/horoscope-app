@@ -73,6 +73,7 @@ kotlin {
             implementation(libs.kotlinx.coroutines.core)
             implementation(libs.datastore.preferences.core)
             implementation(compose.materialIconsExtended)
+            implementation(libs.compose.icons.feather)
         }
         androidMain.dependencies {
             implementation(project.dependencies.platform(libs.firebase.bom))

@@ -60,4 +60,9 @@ class HomeViewModel(
             }
         }
     }
+
+    fun retry() {
+        lastFetchedDate = null   // reset so fetchIfNeeded() doesn't short-circuit
+        fetchIfNeeded()
+    }
 }

@@ -25,6 +25,7 @@ room = "2.7.0"
 sqlite = "2.5.0"
 ksp = "2.3.9"
 firebase-bom = "34.4.0"
+compose-icons = "1.1.0"
 
 [libraries]
 gitlive-firebase-firestore  = { module = "dev.gitlive:firebase-firestore",  version.ref = "gitlive-firebase" }
@@ -35,6 +36,7 @@ room-runtime                = { module = "androidx.room:room-runtime",       ver
 room-compiler               = { module = "androidx.room:room-compiler",      version.ref = "room" }
 sqlite-bundled              = { module = "androidx.sqlite:sqlite-bundled",   version.ref = "sqlite" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebase-bom" }
+compose-icons-feather = { module = "br.com.devsrsouza.compose.icons:feather", version.ref = "compose-icons" }
 
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 kotlin-testJunit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }

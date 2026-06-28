@@ -14,7 +14,16 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import compose.icons.FeatherIcons
+import compose.icons.feathericons.Activity
+import compose.icons.feathericons.Bell
+import compose.icons.feathericons.Briefcase
+import compose.icons.feathericons.Heart
+import compose.icons.feathericons.Image
+import compose.icons.feathericons.Share2
+import compose.icons.feathericons.Star
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
@@ -223,12 +232,12 @@ private fun HomeTopBar(
             TopBarIconButton(
                 contentDescription = stringResource(Res.string.home_notification_cd),
                 onClick = onNotificationClick,
-                icon = painterResource(Res.drawable.ic_bell),        // drop ic_bell.xml here
+                icon = FeatherIcons.Bell,
             )
             TopBarIconButton(
                 contentDescription = stringResource(Res.string.home_share_card_cd),
                 onClick = onShareCardClick,
-                icon = painterResource(Res.drawable.ic_share_card),  // drop ic_share_card.xml here
+                icon = FeatherIcons.Image,
             )
         }
     }
@@ -236,7 +245,7 @@ private fun HomeTopBar(
 
 @Composable
 private fun TopBarIconButton(
-    icon: Painter,
+    icon: ImageVector,
     contentDescription: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -251,7 +260,7 @@ private fun TopBarIconButton(
         contentAlignment = Alignment.Center
     ) {
         Icon(
-            painter = icon,
+            imageVector = icon,
             contentDescription = contentDescription,
             tint = YzInk,
             modifier = Modifier.size(18.dp)
@@ -476,13 +485,13 @@ private fun EnergySection(
                 EnergyScoreTile(
                     label = stringResource(Res.string.home_score_love),
                     score = scores.love,
-                    icon = painterResource(Res.drawable.ic_score_love),
+                    icon = FeatherIcons.Heart,
                     modifier = Modifier.weight(1f)
                 )
                 EnergyScoreTile(
                     label = stringResource(Res.string.home_score_work),
                     score = scores.work,
-                    icon = painterResource(Res.drawable.ic_score_work),
+                    icon = FeatherIcons.Briefcase,
                     modifier = Modifier.weight(1f)
                 )
             }
@@ -493,13 +502,13 @@ private fun EnergySection(
                 EnergyScoreTile(
                     label = stringResource(Res.string.home_score_health),
                     score = scores.health,
-                    icon = painterResource(Res.drawable.ic_score_health),
+                    icon = FeatherIcons.Activity,
                     modifier = Modifier.weight(1f)
                 )
                 EnergyScoreTile(
                     label = stringResource(Res.string.home_score_luck),
                     score = scores.luck,
-                    icon = painterResource(Res.drawable.ic_score_luck),
+                    icon = FeatherIcons.Star,
                     modifier = Modifier.weight(1f)
                 )
             }
@@ -511,7 +520,7 @@ private fun EnergySection(
 private fun EnergyScoreTile(
     label: String,
     score: Int,
-    icon: Painter,
+    icon: ImageVector,
     modifier: Modifier = Modifier,
 ) {
     // Animate the score bar width from 0 → fraction on first composition
@@ -539,7 +548,7 @@ private fun EnergyScoreTile(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Icon(
-                    painter = icon,
+                    imageVector = icon,
                     contentDescription = null,
                     tint = YzMuted,
                     modifier = Modifier.size(20.dp)
@@ -638,7 +647,7 @@ private fun HomeShareFab(
         contentAlignment = Alignment.Center
     ) {
         Icon(
-            painter = painterResource(Res.drawable.ic_share),
+            imageVector = FeatherIcons.Share2,
             contentDescription = stringResource(Res.string.home_share_cd),
             tint = Color(0xFF1A1000),    // near-black on gold — better contrast than white
             modifier = Modifier.size(22.dp)
