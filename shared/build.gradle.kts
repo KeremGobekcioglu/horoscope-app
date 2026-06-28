@@ -6,12 +6,20 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.kotlinSerialization)
-    alias(libs.plugins.google.services)
     alias(libs.plugins.ksp)
     alias(libs.plugins.room)
 }
 
 kotlin {
+    compilerOptions {
+        // Room KMP uses expect/actual classes (Beta). Suppress the warning so it
+        // doesn't escalate to an error; KSP generates the actual implementations.
+        freeCompilerArgs.addAll(
+            "-Xexpect-actual-classes",
+            "-opt-in=kotlin.time.ExperimentalTime",
+        )
+    }
+
     listOf(
         iosArm64(),
         iosSimulatorArm64()
@@ -28,7 +36,7 @@ kotlin {
        minSdk = libs.versions.android.minSdk.get().toInt()
 
        compilerOptions {
-           jvmTarget = JvmTarget.JVM_11
+           jvmTarget = JvmTarget.JVM_17
        }
        androidResources {
            enable = true

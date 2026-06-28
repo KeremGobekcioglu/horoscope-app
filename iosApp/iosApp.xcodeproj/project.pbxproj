@@ -6,6 +6,13 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		4C06F1502FF1657400339D34 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 4C06F14F2FF1657400339D34 /* FirebaseAnalytics */; };
+		4C06F1522FF1657400339D34 /* FirebaseAppCheck in Frameworks */ = {isa = PBXBuildFile; productRef = 4C06F1512FF1657400339D34 /* FirebaseAppCheck */; };
+		4C06F1542FF1657400339D34 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 4C06F1532FF1657400339D34 /* FirebaseFirestore */; };
+		4C06F1562FF1657400339D34 /* FirebaseFunctions in Frameworks */ = {isa = PBXBuildFile; productRef = 4C06F1552FF1657400339D34 /* FirebaseFunctions */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		41AA85170DDDC2D3A4B762C3 /* Horoscope.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Horoscope.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -41,6 +48,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C06F1502FF1657400339D34 /* FirebaseAnalytics in Frameworks */,
+				4C06F1542FF1657400339D34 /* FirebaseFirestore in Frameworks */,
+				4C06F1562FF1657400339D34 /* FirebaseFunctions in Frameworks */,
+				4C06F1522FF1657400339D34 /* FirebaseAppCheck in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -55,12 +66,20 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		8400AC9726E40A7956861654 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 		962ACA53F4A0524873AF9AFC = {
 			isa = PBXGroup;
 			children = (
 				CDCDBB534DFCCA0BA7105801 /* Configuration */,
 				319D4286054E577EE90825A3 /* iosApp */,
 				4970EA6ABE337511D0271DF6 /* Products */,
+				8400AC9726E40A7956861654 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -84,8 +103,6 @@
 				319D4286054E577EE90825A3 /* iosApp */,
 			);
 			name = iosApp;
-			packageProductDependencies = (
-			);
 			productName = iosApp;
 			productReference = 41AA85170DDDC2D3A4B762C3 /* Horoscope.app */;
 			productType = "com.apple.product-type.application";
@@ -114,6 +131,9 @@
 			);
 			mainGroup = 962ACA53F4A0524873AF9AFC;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				4C06F14E2FF1657400339D34 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 4970EA6ABE337511D0271DF6 /* Products */;
 			projectDirPath = "";
@@ -370,6 +390,40 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		4C06F14E2FF1657400339D34 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 12.15.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		4C06F14F2FF1657400339D34 /* FirebaseAnalytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4C06F14E2FF1657400339D34 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalytics;
+		};
+		4C06F1512FF1657400339D34 /* FirebaseAppCheck */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4C06F14E2FF1657400339D34 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAppCheck;
+		};
+		4C06F1532FF1657400339D34 /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4C06F14E2FF1657400339D34 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
+		};
+		4C06F1552FF1657400339D34 /* FirebaseFunctions */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4C06F14E2FF1657400339D34 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFunctions;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 149937E2C114904D9695A526 /* Project object */;
 }
