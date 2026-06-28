@@ -2,54 +2,62 @@ package com.kg.yildizname.feature.home.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.kg.yildizname.core.data.prefs.UserPreferencesDataSource
-import com.kg.yildizname.core.domain.model.ZodiacSigns
-import kotlinx.coroutines.channels.Channel
+import com.kg.yildizname.core.data.model.ZodiacSign
+import com.kg.yildizname.core.data.repository.UserRepository
+import com.kg.yildizname.core.domain.usecase.GetDailyReadingUseCase
+import com.kg.yildizname.core.util.DateUtils
+import com.kg.yildizname.platform.ForegroundObserver
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.receiveAsFlow
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 
-sealed interface HomeEvent {
-    data object NavigateToOnboarding : HomeEvent
-}
-
 class HomeViewModel(
-    private val prefs: UserPreferencesDataSource,
+    private val getDailyReading: GetDailyReadingUseCase,
+    private val userRepository: UserRepository,
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(HomeUiState())
+    private val _uiState = MutableStateFlow<HomeUiState>(HomeUiState.Loading)
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
 
-    private val _events = Channel<HomeEvent>(Channel.BUFFERED)
-    val events = _events.receiveAsFlow()
+    private var lastFetchedDate: String? = null
+
+    private val foregroundObserver = ForegroundObserver { onForeground() }
 
     init {
-        viewModelScope.launch { loadPrefs() }
+        foregroundObserver.start()
+        fetchIfNeeded()
     }
 
-    private suspend fun loadPrefs() {
-        val signKey = prefs.getZodiacSign()
-        _uiState.update {
-            it.copy(
-                isLoading  = false,
-                zodiacSign = ZodiacSigns.find { s -> s.key == signKey },
-                birthDay   = prefs.getBirthDay(),
-                birthMonth = prefs.getBirthMonth(),
-                birthYear  = prefs.getBirthYear(),
-                birthTime  = prefs.getBirthTime(),
-                birthCity  = prefs.getBirthCity(),
-                gender     = prefs.getGender(),
-            )
-        }
+    override fun onCleared() {
+        super.onCleared()
+        foregroundObserver.stop()
     }
 
-    fun clearOnboarding() {
+    private fun onForeground() {
+        fetchIfNeeded()
+    }
+
+    private fun fetchIfNeeded() {
+        val today = DateUtils.today()
+        if (lastFetchedDate == today) return
+        lastFetchedDate = today
         viewModelScope.launch {
-            prefs.clearAll()
-            _events.send(HomeEvent.NavigateToOnboarding)
+            _uiState.value = HomeUiState.Loading
+            try {
+                val sign = userRepository.getSavedSign() ?: ZodiacSign.SCORPIO
+                getDailyReading(sign)
+                    .catch { e -> _uiState.value = HomeUiState.Error(e.message ?: "error") }
+                    .collect { reading ->
+                        _uiState.value = HomeUiState.Success(
+                            reading    = reading,
+                            todayLabel = today,
+                        )
+                    }
+            } catch (e: Exception) {
+                _uiState.value = HomeUiState.Error(e.message ?: "error")
+            }
         }
     }
 }

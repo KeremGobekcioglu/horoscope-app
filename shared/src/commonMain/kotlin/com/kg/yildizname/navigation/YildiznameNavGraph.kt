@@ -14,7 +14,6 @@ import androidx.navigation.compose.navigation
 import androidx.navigation.toRoute
 import com.kg.yildizname.feature.calendar.ui.CalendarScreen
 import com.kg.yildizname.feature.compatability.ui.CompatibilityScreen
-import com.kg.yildizname.feature.home.ui.HomeEvent
 import com.kg.yildizname.feature.home.ui.HomeScreen
 import com.kg.yildizname.feature.home.ui.HomeViewModel
 import com.kg.yildizname.feature.onboarding.ui.OnboardingEvent
@@ -164,20 +163,9 @@ fun YildiznameNavGraph(navController: NavHostController) {
             val vm: HomeViewModel = koinViewModel()
             val uiState by vm.uiState.collectAsStateWithLifecycle()
 
-            LaunchedEffect(vm) {
-                vm.events.collect { event ->
-                    when (event) {
-                        HomeEvent.NavigateToOnboarding -> navController.navigate(OnboardingGraph) {
-                            popUpTo<Home> { inclusive = true }
-                        }
-                    }
-                }
-            }
-
             HomeScreen(
-                uiState           = uiState,
-                onClearOnboarding = vm::clearOnboarding,
-                onReadingDetail   = { sign, period ->
+                uiState         = uiState,
+                onReadingDetail = { sign, period ->
                     navController.navigate(ReadingDetail(sign = sign, period = period))
                 },
             )

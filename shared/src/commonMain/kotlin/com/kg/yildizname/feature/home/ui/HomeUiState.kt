@@ -1,14 +1,12 @@
 package com.kg.yildizname.feature.home.ui
 
-import com.kg.yildizname.core.domain.model.ZodiacSign
+import com.kg.yildizname.core.data.model.Reading
 
-data class HomeUiState(
-    val isLoading: Boolean = true,
-    val zodiacSign: ZodiacSign? = null,
-    val birthDay: Int? = null,
-    val birthMonth: Int? = null,
-    val birthYear: Int? = null,
-    val birthTime: String? = null,
-    val birthCity: String? = null,
-    val gender: String? = null,
-)
+sealed interface HomeUiState {
+    data object Loading : HomeUiState
+    data class Success(
+        val reading: Reading,
+        val todayLabel: String,
+    ) : HomeUiState
+    data class Error(val message: String) : HomeUiState
+}
