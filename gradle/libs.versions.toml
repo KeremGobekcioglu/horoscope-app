@@ -25,7 +25,7 @@ kotlinx-datetime = "0.6.0"
 gitlive-firebase-firestore  = { module = "dev.gitlive:firebase-firestore",  version.ref = "gitlive-firebase" }
 gitlive-firebase-common     = { module = "dev.gitlive:firebase-common",     version.ref = "gitlive-firebase" }
 kotlinx-datetime            = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
-androidx-lifecycle-process  = { module = "androidx.lifecycle:lifecycle-process", version = "androidx-lifecycle" }
+androidx-lifecycle-process  = { module = "androidx.lifecycle:lifecycle-process", version.ref = "androidx-lifecycle" }
 
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 kotlin-testJunit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
