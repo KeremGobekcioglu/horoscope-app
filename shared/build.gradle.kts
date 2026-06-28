@@ -7,7 +7,8 @@ plugins {
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.kotlinSerialization)
     alias(libs.plugins.google.services)
-
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.room)
 }
 
 kotlin {
@@ -41,7 +42,9 @@ kotlin {
         commonMain.dependencies {
             implementation(libs.gitlive.firebase.firestore)
             implementation(libs.gitlive.firebase.common)
-            implementation(libs.kotlinx.datetime)         // skip if already present
+            implementation(libs.kotlinx.datetime)
+            implementation(libs.room.runtime)
+            implementation(libs.sqlite.bundled)
 
             implementation(libs.compose.runtime)
             implementation(libs.compose.foundation)
@@ -64,6 +67,8 @@ kotlin {
             implementation(compose.materialIconsExtended)
         }
         androidMain.dependencies {
+            implementation(project.dependencies.platform(libs.firebase.bom))
+
             implementation(libs.compose.uiToolingPreview)
             implementation(libs.ktor.client.okhttp)
             implementation(libs.androidx.lifecycle.process)
@@ -78,6 +83,13 @@ kotlin {
     }
 }
 
+room {
+    schemaDirectory("$projectDir/schemas")
+}
+
 dependencies {
     androidRuntimeClasspath(libs.compose.uiTooling)
+    add("kspAndroid", libs.room.compiler)
+    add("kspIosArm64", libs.room.compiler)
+    add("kspIosSimulatorArm64", libs.room.compiler)
 }
