@@ -3,7 +3,7 @@
     <string name="splash_tagline">Yıldızların Sesi</string>
 
     <!-- Bottom nav -->
-    <string name="nav_home">Ana Sayfa</string>
+    <string name="nav_home">Ev</string>
     <string name="nav_calendar">Takvim</string>
     <string name="nav_compatibility">Uyum</string>
     <string name="nav_settings">Ayarlar</string>
@@ -12,6 +12,19 @@
     <string name="home_daily_title">Günlük Yorum</string>
     <string name="home_weekly">Haftalık</string>
     <string name="home_monthly">Aylık</string>
+    <string name="home_reading_title">Günlük Burç Yorumun</string>
+    <string name="home_score_title">Enerji Puanları</string>
+    <string name="home_daily_commentary_label">GÜNLÜK YORUM</string>
+    <string name="home_daily_energy_label">GÜNÜN ENERJİSİ</string>
+    <string name="home_read_more">Devamını oku</string>
+    <string name="home_score_love">AŞK</string>
+    <string name="home_score_work">İŞ</string>
+    <string name="home_score_health">SAĞLIK</string>
+    <string name="home_score_luck">ŞANS</string>
+    <string name="home_loading">Yıldızlar hizalanıyor…</string>
+    <string name="home_error_retry">Tekrar dene</string>
+    <string name="home_share_cd">Yorumu paylaş</string>
+    <string name="home_notification_cd">Bildirimler</string>
 
     <!-- Reading periods -->
     <string name="period_daily">Günlük</string>
