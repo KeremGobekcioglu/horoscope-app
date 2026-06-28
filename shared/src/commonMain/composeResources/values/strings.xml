@@ -25,6 +25,7 @@
     <string name="home_error_retry">Tekrar dene</string>
     <string name="home_share_cd">Yorumu paylaş</string>
     <string name="home_notification_cd">Bildirimler</string>
+    <string name="home_share_card_cd">Paylaşım kartı</string>
 
     <!-- Reading periods -->
     <string name="period_daily">Günlük</string>
@@ -111,4 +112,33 @@
     <string name="sign_capricorn">Oğlak</string>
     <string name="sign_aquarius">Kova</string>
     <string name="sign_pisces">Balık</string>
+
+    <!-- Sign names (Turkish) -->
+    <string name="sign_name_aries">Koç</string>
+    <string name="sign_name_taurus">Boğa</string>
+    <string name="sign_name_gemini">İkizler</string>
+    <string name="sign_name_cancer">Yengeç</string>
+    <string name="sign_name_leo">Aslan</string>
+    <string name="sign_name_virgo">Başak</string>
+    <string name="sign_name_libra">Terazi</string>
+    <string name="sign_name_scorpio">Akrep</string>
+    <string name="sign_name_sagittarius">Yay</string>
+    <string name="sign_name_capricorn">Oğlak</string>
+    <string name="sign_name_aquarius">Kova</string>
+    <string name="sign_name_pisces">Balık</string>
+
+    <!-- Sign date ranges (Turkish) -->
+    <string name="sign_dates_aries">21 Mart – 19 Nisan</string>
+    <string name="sign_dates_taurus">20 Nisan – 20 Mayıs</string>
+    <string name="sign_dates_gemini">21 Mayıs – 20 Haziran</string>
+    <string name="sign_dates_cancer">21 Haziran – 22 Temmuz</string>
+    <string name="sign_dates_leo">23 Temmuz – 22 Ağustos</string>
+    <string name="sign_dates_virgo">23 Ağustos – 22 Eylül</string>
+    <string name="sign_dates_libra">23 Eylül – 22 Ekim</string>
+    <string name="sign_dates_scorpio">23 Ekim – 21 Kasım</string>
+    <string name="sign_dates_sagittarius">22 Kasım – 21 Aralık</string>
+    <string name="sign_dates_capricorn">22 Aralık – 19 Ocak</string>
+    <string name="sign_dates_aquarius">20 Ocak – 18 Şubat</string>
+    <string name="sign_dates_pisces">19 Şubat – 20 Mart</string>
+
 </resources>

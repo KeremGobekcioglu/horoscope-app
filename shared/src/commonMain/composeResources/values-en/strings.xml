@@ -25,6 +25,7 @@
     <string name="home_error_retry">Try again</string>
     <string name="home_share_cd">Share reading</string>
     <string name="home_notification_cd">Notifications</string>
+    <string name="home_share_card_cd">Share card</string>
 
     <!-- Reading periods -->
     <string name="period_daily">Daily</string>
@@ -111,4 +112,34 @@
     <string name="sign_capricorn">Capricorn</string>
     <string name="sign_aquarius">Aquarius</string>
     <string name="sign_pisces">Pisces</string>
+
+
+    <!-- Sign names (English) -->
+    <string name="sign_name_aries">Aries</string>
+    <string name="sign_name_taurus">Taurus</string>
+    <string name="sign_name_gemini">Gemini</string>
+    <string name="sign_name_cancer">Cancer</string>
+    <string name="sign_name_leo">Leo</string>
+    <string name="sign_name_virgo">Virgo</string>
+    <string name="sign_name_libra">Libra</string>
+    <string name="sign_name_scorpio">Scorpio</string>
+    <string name="sign_name_sagittarius">Sagittarius</string>
+    <string name="sign_name_capricorn">Capricorn</string>
+    <string name="sign_name_aquarius">Aquarius</string>
+    <string name="sign_name_pisces">Pisces</string>
+
+    <!-- Sign date ranges (English) -->
+    <string name="sign_dates_aries">Mar 21 – Apr 19</string>
+    <string name="sign_dates_taurus">Apr 20 – May 20</string>
+    <string name="sign_dates_gemini">May 21 – Jun 20</string>
+    <string name="sign_dates_cancer">Jun 21 – Jul 22</string>
+    <string name="sign_dates_leo">Jul 23 – Aug 22</string>
+    <string name="sign_dates_virgo">Aug 23 – Sep 22</string>
+    <string name="sign_dates_libra">Sep 23 – Oct 22</string>
+    <string name="sign_dates_scorpio">Oct 23 – Nov 21</string>
+    <string name="sign_dates_sagittarius">Nov 22 – Dec 21</string>
+    <string name="sign_dates_capricorn">Dec 22 – Jan 19</string>
+    <string name="sign_dates_aquarius">Jan 20 – Feb 18</string>
+    <string name="sign_dates_pisces">Feb 19 – Mar 20</string>
+
 </resources>
