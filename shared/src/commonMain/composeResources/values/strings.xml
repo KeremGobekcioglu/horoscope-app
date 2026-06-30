@@ -127,6 +127,37 @@
     <string name="sign_name_aquarius">Kova</string>
     <string name="sign_name_pisces">Balık</string>
 
+    <!-- Content descriptions -->
+    <string name="cd_back">Geri</string>
+    <string name="cd_share">Paylaş</string>
+
+    <!-- Reading Detail -->
+    <string name="reading_detail_zodyakin_gizemi">ZODYAKIN GİZEMİ</string>
+    <string name="reading_detail_lucky_number_label">Şans Sayısı</string>
+    <string name="reading_detail_lucky_color_label">Şans Rengi</string>
+    <string name="reading_detail_section_general">Genel Yorum</string>
+    <string name="reading_detail_section_love">Aşk ve İlişki</string>
+    <string name="reading_detail_section_career">Kariyer ve Para</string>
+    <string name="reading_detail_section_health">Sağlık</string>
+    <string name="reading_detail_section_luck">Şans</string>
+    <string name="reading_detail_share_button">Paylaş</string>
+
+    <!-- Lucky color names -->
+    <string name="lucky_color_red">Kırmızı</string>
+    <string name="lucky_color_blue">Mavi</string>
+    <string name="lucky_color_green">Yeşil</string>
+    <string name="lucky_color_yellow">Sarı</string>
+    <string name="lucky_color_purple">Mor</string>
+    <string name="lucky_color_orange">Turuncu</string>
+    <string name="lucky_color_pink">Pembe</string>
+    <string name="lucky_color_maroon">Bordo</string>
+    <string name="lucky_color_navy">Lacivert</string>
+    <string name="lucky_color_gold">Altın</string>
+    <string name="lucky_color_silver">Gümüş</string>
+    <string name="lucky_color_turquoise">Turkuaz</string>
+    <string name="lucky_color_emerald">Zümrüt</string>
+    <string name="lucky_color_beige">Bej</string>
+
     <!-- Sign date ranges (Turkish) -->
     <string name="sign_dates_aries">21 Mart – 19 Nisan</string>
     <string name="sign_dates_taurus">20 Nisan – 20 Mayıs</string>

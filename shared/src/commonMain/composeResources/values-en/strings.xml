@@ -128,6 +128,37 @@
     <string name="sign_name_aquarius">Aquarius</string>
     <string name="sign_name_pisces">Pisces</string>
 
+    <!-- Content descriptions -->
+    <string name="cd_back">Back</string>
+    <string name="cd_share">Share</string>
+
+    <!-- Reading Detail -->
+    <string name="reading_detail_zodyakin_gizemi">SECRETS OF THE ZODIAC</string>
+    <string name="reading_detail_lucky_number_label">Lucky Number</string>
+    <string name="reading_detail_lucky_color_label">Lucky Color</string>
+    <string name="reading_detail_section_general">General</string>
+    <string name="reading_detail_section_love">Love &amp; Relationships</string>
+    <string name="reading_detail_section_career">Career &amp; Money</string>
+    <string name="reading_detail_section_health">Health</string>
+    <string name="reading_detail_section_luck">Luck</string>
+    <string name="reading_detail_share_button">Share</string>
+
+    <!-- Lucky color names -->
+    <string name="lucky_color_red">Red</string>
+    <string name="lucky_color_blue">Blue</string>
+    <string name="lucky_color_green">Green</string>
+    <string name="lucky_color_yellow">Yellow</string>
+    <string name="lucky_color_purple">Purple</string>
+    <string name="lucky_color_orange">Orange</string>
+    <string name="lucky_color_pink">Pink</string>
+    <string name="lucky_color_maroon">Maroon</string>
+    <string name="lucky_color_navy">Navy</string>
+    <string name="lucky_color_gold">Gold</string>
+    <string name="lucky_color_silver">Silver</string>
+    <string name="lucky_color_turquoise">Turquoise</string>
+    <string name="lucky_color_emerald">Emerald</string>
+    <string name="lucky_color_beige">Beige</string>
+
     <!-- Sign date ranges (English) -->
     <string name="sign_dates_aries">Mar 21 – Apr 19</string>
     <string name="sign_dates_taurus">Apr 20 – May 20</string>

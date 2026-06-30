@@ -28,6 +28,7 @@ import com.kg.yildizname.feature.onboarding.ui.OnboardingStep2Screen
 import com.kg.yildizname.feature.onboarding.ui.OnboardingStep3Screen
 import com.kg.yildizname.feature.onboarding.ui.OnboardingViewModel
 import com.kg.yildizname.feature.readingDetail.ui.ReadingDetailScreen
+import com.kg.yildizname.feature.readingDetail.ui.ReadingDetailViewModel
 import com.kg.yildizname.feature.settings.ui.SettingsScreen
 import com.kg.yildizname.feature.splash.ui.SplashEvent
 import com.kg.yildizname.feature.splash.ui.SplashScreen
@@ -44,6 +45,7 @@ import horoscope.shared.generated.resources.nav_home
 import horoscope.shared.generated.resources.nav_settings
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
+import org.koin.core.parameter.parametersOf
 
 // Routes that show the bottom nav — everything else hides it
 private val bottomNavRoutes = setOf("Home", "Calendar", "Compatibility", "Settings")
@@ -235,10 +237,15 @@ fun YildiznameNavGraph(navController: NavHostController) {
 
             composable<ReadingDetail> { backStackEntry ->
                 val route: ReadingDetail = backStackEntry.toRoute()
+                val vm: ReadingDetailViewModel = koinViewModel {
+                    parametersOf(route.sign, route.period)
+                }
+                val uiState by vm.uiState.collectAsStateWithLifecycle()
+
                 ReadingDetailScreen(
-                    sign   = route.sign,
-                    period = route.period,
-                    onBack = { navController.popBackStack() },
+                    uiState     = uiState,
+                    onBackClick = { navController.popBackStack() },
+                    onShareClick = { /* TODO: wire share sheet */ },
                 )
             }
 
