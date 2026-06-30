@@ -96,6 +96,10 @@ room {
     schemaDirectory("$projectDir/schemas")
 }
 
+compose.resources {
+    publicResClass = true
+}
+
 dependencies {
     androidRuntimeClasspath(libs.compose.uiTooling)
     add("kspAndroid", libs.room.compiler)
