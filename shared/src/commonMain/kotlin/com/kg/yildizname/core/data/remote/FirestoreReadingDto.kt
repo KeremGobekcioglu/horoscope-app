@@ -4,7 +4,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class FirestoreReadingDto(
-    val text: String = "",
+    val textTr: String = "",
+    val textEn: String = "",
     val scoreLove: Int = 0,
     val scoreWork: Int = 0,
     val scoreHealth: Int = 0,

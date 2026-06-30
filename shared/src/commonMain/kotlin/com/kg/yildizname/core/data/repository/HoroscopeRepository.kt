@@ -9,6 +9,7 @@ import com.kg.yildizname.core.data.model.ZodiacSign
 import com.kg.yildizname.core.data.remote.FirestoreReadingSource
 import com.kg.yildizname.core.data.remote.HoroscopeApiSource
 import com.kg.yildizname.core.util.PseudoScores
+import com.kg.yildizname.core.util.currentLanguageCode
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
@@ -43,7 +44,8 @@ class HoroscopeRepository(
                 sign        = sign.apiKey,
                 period      = period.apiKey,
                 date        = date,
-                text        = firestoreDto.text,
+                textTr      = firestoreDto.textTr,
+                textEn      = firestoreDto.textEn,
                 scoreLove   = firestoreDto.scoreLove,
                 scoreWork   = firestoreDto.scoreWork,
                 scoreHealth = firestoreDto.scoreHealth,
@@ -63,7 +65,8 @@ class HoroscopeRepository(
             sign        = sign.apiKey,
             period      = period.apiKey,
             date        = apiDto.date,
-            text        = apiDto.horoscope,
+            textTr      = apiDto.horoscope,
+            textEn      = apiDto.horoscope,
             scoreLove   = PseudoScores.compute(sign.apiKey, apiDto.date, "love"),
             scoreWork   = PseudoScores.compute(sign.apiKey, apiDto.date, "work"),
             scoreHealth = PseudoScores.compute(sign.apiKey, apiDto.date, "health"),
@@ -85,7 +88,7 @@ private fun ReadingEntity.toDomain(sign: ZodiacSign, period: PeriodType) = Readi
     sign        = sign,
     period      = period,
     date        = date,
-    text        = text,
+    text        = if (currentLanguageCode() == "tr") textTr.ifEmpty { textEn } else textEn.ifEmpty { textTr },
     scores      = ScoreSet(scoreLove, scoreWork, scoreHealth, scoreLuck),
     isFromCache = true,
     isFallback  = isFallback,

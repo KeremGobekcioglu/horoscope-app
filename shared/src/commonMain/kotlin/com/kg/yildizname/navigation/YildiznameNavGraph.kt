@@ -97,13 +97,15 @@ fun YildiznameNavGraph(navController: NavHostController) {
                 YzBottomNav(
                     currentRoute  = currentRoute,
                     onTabSelected = { route ->
-                        navController.navigate(route) {
-                            // Always pop back to the Home destination so the back stack
-                            // doesn't grow with every tab tap. saveState/restoreState
-                            // preserves scroll position and VM state per tab.
-                            popUpTo<Home> {
-                                saveState = true
-                            }
+                        val destination: Any = when (route) {
+                            "Home"          -> Home
+                            "Compatibility" -> Compatibility
+                            "Calendar"      -> Calendar
+                            "Settings"      -> Settings
+                            else            -> return@YzBottomNav
+                        }
+                        navController.navigate(destination) {
+                            popUpTo<Home> { saveState = true }
                             launchSingleTop = true
                             restoreState    = true
                         }
