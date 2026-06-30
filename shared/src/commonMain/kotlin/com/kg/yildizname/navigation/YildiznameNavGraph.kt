@@ -3,7 +3,6 @@ package com.kg.yildizname.navigation
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -28,12 +27,11 @@ import com.kg.yildizname.feature.onboarding.ui.OnboardingStep1Screen
 import com.kg.yildizname.feature.onboarding.ui.OnboardingStep2Screen
 import com.kg.yildizname.feature.onboarding.ui.OnboardingStep3Screen
 import com.kg.yildizname.feature.onboarding.ui.OnboardingViewModel
-import com.kg.yildizname.feature.reading.ui.ReadingDetailScreen
+import com.kg.yildizname.feature.readingDetail.ui.ReadingDetailScreen
 import com.kg.yildizname.feature.settings.ui.SettingsScreen
 import com.kg.yildizname.feature.splash.ui.SplashEvent
 import com.kg.yildizname.feature.splash.ui.SplashScreen
 import com.kg.yildizname.feature.splash.ui.SplashViewModel
-import com.kg.yildizname.platform.ForegroundObserver
 import compose.icons.FeatherIcons
 import compose.icons.feathericons.Calendar
 import compose.icons.feathericons.Heart

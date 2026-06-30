@@ -1,4 +1,4 @@
-package com.kg.yildizname.feature.reading.ui
+package com.kg.yildizname.feature.readingDetail.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

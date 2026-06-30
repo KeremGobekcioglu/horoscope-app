@@ -24,10 +24,13 @@ import com.kg.yildizname.core.ui.theme.YzGold
 import com.kg.yildizname.core.ui.theme.YzMuted
 import com.kg.yildizname.core.ui.theme.YzStarWhite
 import horoscope.shared.generated.resources.Res
+import horoscope.shared.generated.resources.app_name
 import horoscope.shared.generated.resources.scorpio_constellation_asset_2x
+import horoscope.shared.generated.resources.splash_tagline
 import kotlinx.coroutines.delay
 import kotlin.random.Random
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 
 private data class StarParticle(
     val x: Float,
@@ -189,7 +192,7 @@ fun SplashScreen(
             Spacer(Modifier.height(28.dp))
 
             Text(
-                text          = "YILDIZNAME",
+                text          = stringResource(Res.string.app_name),
                 color         = YzGold,
                 fontSize      = 28.sp,
                 fontWeight    = FontWeight.SemiBold,
@@ -201,7 +204,7 @@ fun SplashScreen(
             Spacer(Modifier.height(8.dp))
 
             Text(
-                text          = "Yıldızların sesi",
+                text          = stringResource( Res.string.splash_tagline),
                 color         = YzMuted,
                 fontSize      = 13.sp,
                 fontWeight    = FontWeight.Medium,
