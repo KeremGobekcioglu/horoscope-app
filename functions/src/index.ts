@@ -45,7 +45,7 @@ interface GeminiReadingResult {
 
 export const generateDailyReadings = onSchedule(
   {
-    schedule: "0 3 * * *",
+    schedule: "0 0 * * *",
     timeZone: "Europe/Istanbul",
     secrets: [GEMINI_API_KEY],
     timeoutSeconds: 540, // bumped from 300 — larger payload + 15s gaps per sign
