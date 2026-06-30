@@ -41,9 +41,8 @@ class HoroscopeRepository(
         val cached = dao.getReading(sign.apiKey, period.apiKey, date)
         if (cached != null) {
             emit(cached.toDomain(sign, period))
-            // Complete cache hit — nothing more to do.
-            if (cached.hasCategories || cached.isFallback) return@flow
-            // Stale pre-split row: fall through to Firestore to enrich it.
+            if (cached.hasCategories) return@flow
+            // No categories yet (fallback or pre-split) — fall through to Firestore to enrich
         }
 
         // Tier 2: Firestore
