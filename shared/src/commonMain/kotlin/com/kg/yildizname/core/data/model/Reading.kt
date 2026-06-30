@@ -6,6 +6,7 @@ data class Reading(
     val date: String,           // "yyyy-MM-dd" — from API response, NOT device clock
     val text: String,
     val scores: ScoreSet,
+    val categoryDetail: CategoryDetail? = null,
     val isFromCache: Boolean = false,
     val isFallback: Boolean = false,  // true = freehoroscopeapi fallback, not Firestore
 )

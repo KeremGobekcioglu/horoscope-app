@@ -5,7 +5,7 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.RoomDatabaseConstructor
 
-@Database(entities = [ReadingEntity::class], version = 2)
+@Database(entities = [ReadingEntity::class], version = 3)
 @ConstructedBy(YildiznameDatabaseConstructor::class)
 abstract class YildiznameDatabase : RoomDatabase() {
     abstract fun readingDao(): ReadingDao
