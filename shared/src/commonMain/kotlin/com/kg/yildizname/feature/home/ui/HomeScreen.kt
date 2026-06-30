@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.sp
 import com.kg.yildizname.core.data.model.Reading
 import com.kg.yildizname.core.data.model.ScoreSet
 import com.kg.yildizname.core.data.model.ZodiacSign
+import com.kg.yildizname.core.ui.components.StarFieldBackground
 import com.kg.yildizname.core.ui.theme.*
 import com.kg.yildizname.core.ui.utils.YzWindowWidth
 import com.kg.yildizname.core.ui.utils.rememberWindowWidth
@@ -81,6 +82,7 @@ fun HomeScreen(
             .background(YzBg),           // #080B1A
         contentAlignment = Alignment.TopCenter
     ) {
+        StarFieldBackground(Modifier.fillMaxSize())
         when (uiState) {
             is HomeUiState.Loading -> HomeLoadingContent(
                 contentMaxWidth = contentMaxWidth,
