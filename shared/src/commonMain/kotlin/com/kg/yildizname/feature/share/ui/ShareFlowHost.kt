@@ -9,7 +9,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import com.kg.yildizname.core.data.model.ZodiacSign
-import com.kg.yildizname.core.util.constellationDrawable
 import com.kg.yildizname.core.util.nameStringResource
 import kotlinx.datetime.LocalDate
 import org.jetbrains.compose.resources.stringResource
@@ -62,7 +61,7 @@ fun ShareFlowHost(state: ShareFlowState) {
         preview = {
             ShareCardPreview(
                 signDisplayName = request.signDisplayName,
-                constellationArt = request.sign.constellationDrawable(),
+                sign = request.sign,
                 date = request.date,
                 quoteText = request.quoteText,
                 modifier = Modifier.fillMaxWidth(),

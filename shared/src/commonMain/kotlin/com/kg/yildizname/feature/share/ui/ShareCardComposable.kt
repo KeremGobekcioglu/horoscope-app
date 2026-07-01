@@ -2,7 +2,6 @@ package com.kg.yildizname.feature.share.ui
 
 import DateFormatter
 import Language
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
@@ -10,6 +9,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -25,9 +25,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
@@ -37,7 +42,9 @@ import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.kg.yildizname.core.data.model.ZodiacSign
 import com.kg.yildizname.core.ui.components.StaticStarField
+import com.kg.yildizname.core.util.currentLanguageCode
 import kotlin.math.roundToInt
 import com.kg.yildizname.core.ui.theme.CardShape
 import com.kg.yildizname.core.ui.theme.YzBg
@@ -46,14 +53,13 @@ import com.kg.yildizname.core.ui.theme.YzGold
 import com.kg.yildizname.core.ui.theme.YzInk
 import com.kg.yildizname.core.ui.theme.YzMuted
 import com.kg.yildizname.core.ui.theme.YzSurface
+import com.kg.yildizname.feature.home.ui.components.ConstellationHero
 import compose.icons.FeatherIcons
 import compose.icons.feathericons.Star
 import horoscope.shared.generated.resources.Res
 import horoscope.shared.generated.resources.share_card_app_name
 import horoscope.shared.generated.resources.share_card_app_url
 import kotlinx.datetime.LocalDate
-import org.jetbrains.compose.resources.DrawableResource
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 private val ShareCardWidth = 675.dp
@@ -71,7 +77,7 @@ private val ShareCardHeight = 1200.dp
 @Composable
 fun ShareCard(
     signDisplayName: String,
-    constellationArt: DrawableResource,
+    sign: ZodiacSign,
     date: LocalDate,
     quoteText: String,
     modifier: Modifier = Modifier,
@@ -97,26 +103,26 @@ fun ShareCard(
                 color = YzGold,
                 style = MaterialTheme.typography.labelSmall,
                 fontWeight = FontWeight.SemiBold,
-                letterSpacing = 6.sp,
+                letterSpacing = 18.sp,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth(),
             )
 
             Spacer(Modifier.height(64.dp))
 
-            Image(
-                painter = painterResource(constellationArt),
-                contentDescription = null,
-                contentScale = ContentScale.Fit,
-                modifier = Modifier.size(260.dp),
+            ConstellationHero(
+                sign = sign,
+                modifier = Modifier
+                    .fillMaxWidth(0.65f)
+                    .aspectRatio(1f),
             )
 
-            Spacer(Modifier.height(56.dp))
+            Spacer(Modifier.height(80.dp))
 
             Text(
                 text = signDisplayName.uppercase(),
                 color = YzGold,
-                style = MaterialTheme.typography.displayLarge.copy(fontSize = 44.sp),
+                style = MaterialTheme.typography.displayLarge.copy(fontSize = 64.sp),
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth(),
             )
@@ -124,7 +130,10 @@ fun ShareCard(
             Spacer(Modifier.height(12.dp))
 
             Text(
-                text = DateFormatter.formatDate(date.toString(), Language.TURKISH),
+                text = DateFormatter.formatDate(
+                    date.toString(),
+                    if (currentLanguageCode() == "tr") Language.TURKISH else Language.ENGLISH,
+                ),
                 color = YzMuted,
                 style = MaterialTheme.typography.bodyLarge,
                 fontWeight = FontWeight.Normal,
@@ -132,7 +141,7 @@ fun ShareCard(
                 modifier = Modifier.fillMaxWidth(),
             )
 
-            Spacer(Modifier.weight(1f))
+            Spacer(Modifier.height(60.dp))
 
             ShareCardQuoteBlock(quoteText = quoteText)
 
@@ -165,7 +174,7 @@ private val ShareCardTrueHeight = 1200.dp
 @Composable
 fun ShareCardPreview(
     signDisplayName: String,
-    constellationArt: DrawableResource,
+    sign: ZodiacSign,
     date: LocalDate,
     quoteText: String,
     modifier: Modifier = Modifier,
@@ -178,7 +187,7 @@ fun ShareCardPreview(
         content = {
             ShareCard(
                 signDisplayName = signDisplayName,
-                constellationArt = constellationArt,
+                sign = sign,
                 date = date,
                 quoteText = quoteText,
             )
@@ -209,7 +218,11 @@ private fun ShareCardQuoteBlock(
             .fillMaxWidth()
             .height(IntrinsicSize.Min)
             .clip(CardShape)
-            .background(YzSurface)
+            .background(
+                Brush.verticalGradient(
+                    colors = listOf(Color(0xFF1C2142), Color(0xFF0F1428)),
+                ),
+            )
             .border(0.5.dp, YzBorder, CardShape),
     ) {
         Box(
@@ -222,7 +235,7 @@ private fun ShareCardQuoteBlock(
             modifier = Modifier.padding(start = 20.dp, top = 20.dp, end = 20.dp, bottom = 16.dp),
         ) {
             Text(
-                text = "“$quoteText”",
+                text = "\u201C$quoteText\u201D",
                 color = YzInk,
                 style = MaterialTheme.typography.bodyLarge.copy(
                     fontFamily = FontFamily.Serif,
