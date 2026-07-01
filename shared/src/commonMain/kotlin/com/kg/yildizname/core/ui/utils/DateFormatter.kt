@@ -1,16 +1,40 @@
-object DateFormatter {
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.isoDayNumber
+import kotlinx.datetime.number
 
-    private val monthsEn = listOf(
-        "January", "February", "March", "April",
-        "May", "June", "July", "August",
-        "September", "October", "November", "December"
-    )
+object DateFormatter {
 
     private val monthsTr = listOf(
         "Ocak", "Şubat", "Mart", "Nisan",
         "Mayıs", "Haziran", "Temmuz", "Ağustos",
         "Eylül", "Ekim", "Kasım", "Aralık"
     )
+    private val monthsEn = listOf(
+        "January", "February", "March", "April",
+        "May", "June", "July", "August",
+        "September", "October", "November", "December"
+    )
+
+    private val weekdaysTr = listOf(
+        "Pazartesi", "Salı", "Çarşamba", "Perşembe",
+        "Cuma", "Cumartesi", "Pazar"
+    )
+    private val weekdaysEn = listOf(
+        "Monday", "Tuesday", "Wednesday", "Thursday",
+        "Friday", "Saturday", "Sunday"
+    )
+
+    fun monthYear(date: LocalDate, language: Language = Language.TURKISH): String {
+        val months = if (language == Language.TURKISH) monthsTr else monthsEn
+        return "${months[date.month.number - 1]} ${date.year}"
+    }
+
+    fun fullDate(date: LocalDate, language: Language = Language.TURKISH): String {
+        val months = if (language == Language.TURKISH) monthsTr else monthsEn
+        val weekdays = if (language == Language.TURKISH) weekdaysTr else weekdaysEn
+        val weekday = weekdays[date.dayOfWeek.isoDayNumber - 1]
+        return "${date.dayOfYear} ${months[date.month.number - 1]}, $weekday"
+    }
 
     fun formatDate(
         date: String,

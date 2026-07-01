@@ -40,6 +40,10 @@
     <string name="home_notification_cd">Notifications</string>
     <string name="home_share_card_cd">Share card</string>
 
+    <string name="previous_month">Previous Month</string>
+    <string name="next_month">Next Month</string>
+
+
     <!-- Reading periods -->
     <string name="period_daily">Daily</string>
     <string name="period_weekly">Weekly</string>

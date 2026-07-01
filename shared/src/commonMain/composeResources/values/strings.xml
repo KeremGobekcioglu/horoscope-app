@@ -45,6 +45,9 @@
     <string name="period_weekly">Haftalık</string>
     <string name="period_monthly">Aylık</string>
 
+
+    <string name="previous_month">Önceki Ay</string>
+    <string name="next_month">Sonraki ay</string>
     <!-- Score labels -->
     <string name="score_love">Aşk</string>
     <string name="score_career">Kariyer</string>
