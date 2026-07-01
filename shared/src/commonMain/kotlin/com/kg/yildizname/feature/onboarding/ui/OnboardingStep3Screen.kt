@@ -50,6 +50,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kg.yildizname.core.ui.components.PageIndicator
 import com.kg.yildizname.core.ui.components.YzButton
+import com.kg.yildizname.core.ui.components.yzTextSurfaceWash
 import com.kg.yildizname.core.ui.theme.YzBorder
 import com.kg.yildizname.core.ui.theme.YzCardBg
 import com.kg.yildizname.core.ui.theme.YzGold
@@ -174,14 +175,22 @@ fun OnboardingStep3Screen(
 
             Spacer(Modifier.height(32.dp))
 
-            Text(
-                text       = stringResource(Res.string.onboarding_step3_title),
-                color      = YzGold,
-                fontSize   = 28.sp,
-                fontWeight = FontWeight.Bold,
-                fontStyle  = FontStyle.Italic,
-                lineHeight = 36.sp,
-            )
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .yzTextSurfaceWash()
+                    .padding(vertical = 14.dp),
+                contentAlignment = Alignment.CenterStart,
+            ) {
+                Text(
+                    text       = stringResource(Res.string.onboarding_step3_title),
+                    color      = YzGold,
+                    fontSize   = 28.sp,
+                    fontWeight = FontWeight.Bold,
+                    fontStyle  = FontStyle.Italic,
+                    lineHeight = 36.sp,
+                )
+            }
 
             Spacer(Modifier.height(10.dp))
 

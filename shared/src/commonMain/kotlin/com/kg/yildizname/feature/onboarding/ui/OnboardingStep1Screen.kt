@@ -44,6 +44,7 @@ import androidx.compose.ui.unit.sp
 import com.kg.yildizname.core.domain.model.ZodiacSign
 import com.kg.yildizname.core.domain.model.ZodiacSigns
 import com.kg.yildizname.core.ui.components.PageIndicator
+import com.kg.yildizname.core.ui.components.yzTextSurfaceWash
 import com.kg.yildizname.core.ui.theme.YzBg
 import com.kg.yildizname.core.ui.theme.YzBorder
 import com.kg.yildizname.core.ui.theme.YzCardBg
@@ -155,24 +156,32 @@ fun OnboardingStep1Screen(
             PageIndicator(currentStep = 0)
             Spacer(Modifier.height(32.dp))
 
-            Text(
-                text       = "Burcunu seç",
-                color      = YzGold,
-                fontSize   = if (compact) 28.sp else 32.sp,
-                fontWeight = FontWeight.Bold,
-                fontStyle  = FontStyle.Italic,
-                textAlign  = TextAlign.Center,
-            )
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .yzTextSurfaceWash()
+                    .padding(vertical = 16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                Text(
+                    text       = "Burcunu seç",
+                    color      = YzGold,
+                    fontSize   = if (compact) 28.sp else 32.sp,
+                    fontWeight = FontWeight.Bold,
+                    fontStyle  = FontStyle.Italic,
+                    textAlign  = TextAlign.Center,
+                )
 
-            Spacer(Modifier.height(8.dp))
+                Spacer(Modifier.height(8.dp))
 
-            Text(
-                text      = "Sana özel günlük rehberin başlasın",
-                color     = YzOnSurface.copy(alpha = 0.75f),
-                fontSize  = 15.sp,
-                textAlign = TextAlign.Center,
-                modifier  = Modifier.padding(horizontal = 24.dp),
-            )
+                Text(
+                    text      = "Sana özel günlük rehberin başlasın",
+                    color     = YzOnSurface.copy(alpha = 0.75f),
+                    fontSize  = 15.sp,
+                    textAlign = TextAlign.Center,
+                    modifier  = Modifier.padding(horizontal = 24.dp),
+                )
+            }
 
             Spacer(Modifier.height(24.dp))
 

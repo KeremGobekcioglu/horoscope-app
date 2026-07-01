@@ -1,8 +1,11 @@
 package com.kg.yildizname.feature.readingDetail.ui
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -20,15 +23,20 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.kg.yildizname.core.ui.components.yzTextSurfaceWash
+import com.kg.yildizname.core.ui.theme.CardShape
 import com.kg.yildizname.core.ui.theme.YzBorder
 import com.kg.yildizname.core.ui.theme.YzGold
 import com.kg.yildizname.core.ui.theme.YzMuted
+import com.kg.yildizname.core.ui.theme.YzSurface
 import com.kg.yildizname.core.ui.utils.YzWindowWidth
 import com.kg.yildizname.core.ui.utils.rememberWindowWidth
+import com.kg.yildizname.feature.home.ui.components.ConstellationHero
 import compose.icons.FeatherIcons
 import compose.icons.feathericons.Activity
 import compose.icons.feathericons.Briefcase
@@ -116,7 +124,12 @@ private fun ReadingDetailSuccessScreen(
             ) {
                 Spacer(Modifier.height(12.dp))
 
-                ConstellationHero(art = uiState.constellationArt)
+                ConstellationHero(
+                    sign = uiState.sign,
+                    modifier = Modifier
+                        .fillMaxWidth(0.65f)
+                        .aspectRatio(1f),
+                )
 
                 Spacer(Modifier.height(20.dp))
 
@@ -138,35 +151,44 @@ private fun ReadingDetailSuccessScreen(
 
                 Spacer(Modifier.height(28.dp))
 
-                ReadingSection(
-                    icon = FeatherIcons.Sun,
-                    title = stringResource(Res.string.reading_detail_section_general),
-                    body = uiState.generalText,
-                )
-                HorizontalDivider(color = YzBorder, thickness = 1.dp)
-                ReadingSection(
-                    icon = FeatherIcons.Heart,
-                    title = stringResource(Res.string.reading_detail_section_love),
-                    body = uiState.loveText,
-                )
-                HorizontalDivider(color = YzBorder, thickness = 1.dp)
-                ReadingSection(
-                    icon = FeatherIcons.Briefcase,
-                    title = stringResource(Res.string.reading_detail_section_career),
-                    body = uiState.careerText,
-                )
-                HorizontalDivider(color = YzBorder, thickness = 1.dp)
-                ReadingSection(
-                    icon = FeatherIcons.Activity,
-                    title = stringResource(Res.string.reading_detail_section_health),
-                    body = uiState.healthText,
-                )
-                HorizontalDivider(color = YzBorder, thickness = 1.dp)
-                ReadingSection(
-                    icon = FeatherIcons.Star,
-                    title = stringResource(Res.string.reading_detail_section_luck),
-                    body = uiState.luckText,
-                )
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(CardShape)
+                        .background(YzSurface)
+                        .border(0.5.dp, YzBorder, CardShape)
+                        .padding(horizontal = 20.dp),
+                ) {
+                    ReadingSection(
+                        icon = FeatherIcons.Sun,
+                        title = stringResource(Res.string.reading_detail_section_general),
+                        body = uiState.generalText,
+                    )
+                    HorizontalDivider(color = YzBorder, thickness = 1.dp)
+                    ReadingSection(
+                        icon = FeatherIcons.Heart,
+                        title = stringResource(Res.string.reading_detail_section_love),
+                        body = uiState.loveText,
+                    )
+                    HorizontalDivider(color = YzBorder, thickness = 1.dp)
+                    ReadingSection(
+                        icon = FeatherIcons.Briefcase,
+                        title = stringResource(Res.string.reading_detail_section_career),
+                        body = uiState.careerText,
+                    )
+                    HorizontalDivider(color = YzBorder, thickness = 1.dp)
+                    ReadingSection(
+                        icon = FeatherIcons.Activity,
+                        title = stringResource(Res.string.reading_detail_section_health),
+                        body = uiState.healthText,
+                    )
+                    HorizontalDivider(color = YzBorder, thickness = 1.dp)
+                    ReadingSection(
+                        icon = FeatherIcons.Star,
+                        title = stringResource(Res.string.reading_detail_section_luck),
+                        body = uiState.luckText,
+                    )
+                }
 
                 Spacer(Modifier.height(24.dp))
             }

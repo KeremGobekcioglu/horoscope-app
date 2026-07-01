@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.kg.yildizname.core.data.model.Reading
+import com.kg.yildizname.core.ui.components.yzTextSurfaceWash
 import com.kg.yildizname.core.ui.utils.YzWindowWidth
 import com.kg.yildizname.core.ui.utils.rememberWindowWidth
 import com.kg.yildizname.feature.home.ui.components.ConstellationHero
@@ -139,7 +140,9 @@ private fun HomeSuccessContent(
             // ── Sign name + date range ──
             SignHeader(
                 sign = reading.sign,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 14.dp)
             )
 
             Spacer(Modifier.height(28.dp))

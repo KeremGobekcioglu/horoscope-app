@@ -41,6 +41,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kg.yildizname.core.ui.components.PageIndicator
 import com.kg.yildizname.core.ui.components.YzButton
+import com.kg.yildizname.core.ui.components.yzTextSurfaceWash
 import com.kg.yildizname.core.ui.theme.YzBg
 import com.kg.yildizname.core.ui.theme.YzGold
 import com.kg.yildizname.core.ui.theme.YzMuted
@@ -239,24 +240,32 @@ fun OnboardingStep2Screen(
             PageIndicator(currentStep = 1)
             Spacer(Modifier.height(56.dp))
 
-            Text(
-                text       = stringResource(Res.string.onboarding_step2_title),
-                color      = YzGold,
-                fontSize   = 32.sp,
-                fontWeight = FontWeight.Bold,
-                textAlign  = TextAlign.Center,
-            )
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .yzTextSurfaceWash()
+                    .padding(vertical = 16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                Text(
+                    text       = stringResource(Res.string.onboarding_step2_title),
+                    color      = YzGold,
+                    fontSize   = 32.sp,
+                    fontWeight = FontWeight.Bold,
+                    textAlign  = TextAlign.Center,
+                )
 
-            Spacer(Modifier.height(10.dp))
+                Spacer(Modifier.height(10.dp))
 
-            Text(
-                text          = stringResource(Res.string.onboarding_step2_subtitle),
-                color         = YzMuted,
-                fontSize      = 11.sp,
-                fontWeight    = FontWeight.Medium,
-                letterSpacing = 1.5.sp,
-                textAlign     = TextAlign.Center,
-            )
+                Text(
+                    text          = stringResource(Res.string.onboarding_step2_subtitle),
+                    color         = YzMuted,
+                    fontSize      = 11.sp,
+                    fontWeight    = FontWeight.Medium,
+                    letterSpacing = 1.5.sp,
+                    textAlign     = TextAlign.Center,
+                )
+            }
 
             Spacer(Modifier.height(48.dp))
 

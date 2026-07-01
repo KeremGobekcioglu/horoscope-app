@@ -39,9 +39,9 @@ class ReadingDetailViewModel(
                 .catch { e -> _uiState.value = ReadingDetailUiState.Error(e.message ?: "error") }
                 .collect { reading ->
                     _uiState.value = ReadingDetailUiState.Success(
+                        sign             = sign,
                         signDisplayName  = sign.displayName(),
                         periodLabel      = period.displayLabel(),
-                        constellationArt = ZodiacSigns[sign.ordinal].drawable,
                         luckyNumber      = LuckyInfo.luckyNumber(sign.apiKey, today),
                         luckyColorName   = LuckyInfo.luckyColorName(sign.apiKey, today),
                         generalText      = reading.text,
