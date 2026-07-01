@@ -101,7 +101,6 @@ private fun ReadingDetailSuccessScreen(
                 signName = uiState.signDisplayName,
                 periodLabel = uiState.periodLabel,
                 onBackClick = onBackClick,
-                onShareClick = onShareClick,
             )
         },
         bottomBar = {
@@ -206,7 +205,6 @@ private fun ReadingDetailLoadingScreen(
             signName = "",
             periodLabel = "",
             onBackClick = onBackClick,
-            onShareClick = {},
             modifier = Modifier.align(Alignment.TopStart),
         )
         CircularProgressIndicator(
@@ -227,7 +225,6 @@ private fun ReadingDetailErrorScreen(
             signName = "",
             periodLabel = "",
             onBackClick = onBackClick,
-            onShareClick = {},
             modifier = Modifier.align(Alignment.TopStart),
         )
         Text(

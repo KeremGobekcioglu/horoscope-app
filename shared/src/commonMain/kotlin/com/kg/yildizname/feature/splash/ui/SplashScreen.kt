@@ -11,7 +11,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.scale
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontStyle
@@ -19,57 +18,22 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.kg.yildizname.core.ui.components.StaticStarField
 import com.kg.yildizname.core.ui.theme.YzBg
 import com.kg.yildizname.core.ui.theme.YzGold
 import com.kg.yildizname.core.ui.theme.YzMuted
-import com.kg.yildizname.core.ui.theme.YzStarWhite
 import horoscope.shared.generated.resources.Res
 import horoscope.shared.generated.resources.app_name
 import horoscope.shared.generated.resources.scorpio_constellation_asset_2x
 import horoscope.shared.generated.resources.splash_tagline
 import kotlinx.coroutines.delay
-import kotlin.random.Random
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-
-private data class StarParticle(
-    val x: Float,
-    val y: Float,
-    val radius: Float,
-    val baseAlpha: Float,
-    val isGlow: Boolean,
-)
-
-private fun generateStars(seed: Long = 42L): List<StarParticle> {
-    val rng = Random(seed)
-    return buildList {
-        repeat(90) {
-            add(StarParticle(
-                x         = rng.nextFloat(),
-                y         = rng.nextFloat(),
-                radius    = rng.nextFloat() * 0.5f + 0.5f,
-                baseAlpha = rng.nextFloat() * 0.4f + 0.2f,
-                isGlow    = false,
-            ))
-        }
-        repeat(7) {
-            add(StarParticle(
-                x         = rng.nextFloat(),
-                y         = rng.nextFloat(),
-                radius    = 1.5f,
-                baseAlpha = 0.85f,
-                isGlow    = true,
-            ))
-        }
-    }
-}
 
 @Composable
 fun SplashScreen(
     onAnimationDone: () -> Unit,
 ) {
-    val stars = remember { generateStars() }
-
     var phase by remember { mutableStateOf(0) }
     LaunchedEffect(Unit) {
         delay(100)  ; phase = 1
@@ -130,34 +94,7 @@ fun SplashScreen(
         modifier         = Modifier.fillMaxSize().background(YzBg),
         contentAlignment = Alignment.Center,
     ) {
-        Canvas(
-            modifier = Modifier.fillMaxSize().alpha(starFieldAlpha),
-        ) {
-            stars.forEach { star ->
-                val px = star.x * size.width
-                val py = star.y * size.height
-                val r  = star.radius.dp.toPx()
-                if (star.isGlow) {
-                    drawCircle(
-                        brush  = Brush.radialGradient(
-                            colors = listOf(
-                                YzStarWhite.copy(alpha = star.baseAlpha * 0.35f),
-                                Color.Transparent,
-                            ),
-                            center = Offset(px, py),
-                            radius = r * 6f,
-                        ),
-                        radius = r * 6f,
-                        center = Offset(px, py),
-                    )
-                }
-                drawCircle(
-                    color  = YzStarWhite.copy(alpha = star.baseAlpha),
-                    radius = r,
-                    center = Offset(px, py),
-                )
-            }
-        }
+        StaticStarField(modifier = Modifier.fillMaxSize().alpha(starFieldAlpha))
 
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,

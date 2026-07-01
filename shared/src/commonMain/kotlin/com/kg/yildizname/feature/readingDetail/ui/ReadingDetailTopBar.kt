@@ -16,10 +16,8 @@ import androidx.compose.ui.unit.dp
 import com.kg.yildizname.core.ui.theme.YzInk
 import compose.icons.FeatherIcons
 import compose.icons.feathericons.ArrowLeft
-import compose.icons.feathericons.Share2
 import horoscope.shared.generated.resources.Res
 import horoscope.shared.generated.resources.cd_back
-import horoscope.shared.generated.resources.cd_share
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -27,7 +25,6 @@ internal fun ReadingDetailTopBar(
     signName: String,
     periodLabel: String,
     onBackClick: () -> Unit,
-    onShareClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -52,13 +49,5 @@ internal fun ReadingDetailTopBar(
             fontWeight = FontWeight.Medium,
             modifier = Modifier.weight(1f),
         )
-
-        IconButton(onClick = onShareClick) {
-            Icon(
-                imageVector = FeatherIcons.Share2,
-                contentDescription = stringResource(Res.string.cd_share),
-                tint = YzInk,
-            )
-        }
     }
 }

@@ -23,9 +23,11 @@ import androidx.navigation.toRoute
 import com.kg.yildizname.core.ui.components.StarFieldBackground
 import com.kg.yildizname.core.ui.components.YzBottomNav
 import com.kg.yildizname.core.ui.components.YzBottomNavItemData
+import com.kg.yildizname.core.util.DateUtils
 import com.kg.yildizname.feature.calendar.ui.CalendarScreen
 import com.kg.yildizname.feature.compatability.ui.CompatibilityScreen
 import com.kg.yildizname.feature.home.ui.HomeScreen
+import com.kg.yildizname.feature.home.ui.HomeUiState
 import com.kg.yildizname.feature.home.ui.HomeViewModel
 import com.kg.yildizname.feature.onboarding.ui.OnboardingEvent
 import com.kg.yildizname.feature.onboarding.ui.OnboardingStep1Screen
@@ -33,8 +35,14 @@ import com.kg.yildizname.feature.onboarding.ui.OnboardingStep2Screen
 import com.kg.yildizname.feature.onboarding.ui.OnboardingStep3Screen
 import com.kg.yildizname.feature.onboarding.ui.OnboardingViewModel
 import com.kg.yildizname.feature.readingDetail.ui.ReadingDetailScreen
+import com.kg.yildizname.feature.readingDetail.ui.ReadingDetailUiState
 import com.kg.yildizname.feature.readingDetail.ui.ReadingDetailViewModel
 import com.kg.yildizname.feature.settings.ui.SettingsScreen
+import com.kg.yildizname.feature.share.ui.ShareCardRequest
+import com.kg.yildizname.feature.share.ui.ShareFlowHost
+import com.kg.yildizname.feature.share.ui.rememberShareFlowState
+import com.kg.yildizname.feature.share.ui.shareCardSignName
+import com.kg.yildizname.feature.share.ui.shareQuoteFrom
 import com.kg.yildizname.feature.splash.ui.SplashEvent
 import com.kg.yildizname.feature.splash.ui.SplashScreen
 import com.kg.yildizname.feature.splash.ui.SplashViewModel
@@ -71,6 +79,8 @@ fun YildiznameNavGraph(navController: NavHostController) {
     val currentRoute = navBackStackEntry?.destination?.route ?: ""
 
     val showBottomNav = bottomNavRoutes.any { currentRoute.contains(it, ignoreCase = true) }
+
+    val shareFlowState = rememberShareFlowState()
 
     val bottomNavItems = listOf(
         YzBottomNavItemData(
@@ -228,7 +238,8 @@ fun YildiznameNavGraph(navController: NavHostController) {
             composable<Home> {
                 val vm: HomeViewModel = koinViewModel()
                 val uiState by vm.uiState.collectAsStateWithLifecycle()
-
+                val homeSuccess = uiState as? HomeUiState.Success
+                val homeShareSignName = homeSuccess?.let { shareCardSignName(it.reading.sign) }
 
                 HomeScreen(
                     uiState             = uiState,
@@ -236,7 +247,18 @@ fun YildiznameNavGraph(navController: NavHostController) {
                         navController.navigate(ReadingDetail(sign = sign, period = period))
                     },
                     onShareClick        = { /* wire shareText() when Share.kt actuals are ready */ },
-                    onShareCardClick    = { /* wire shareCard() when BitmapRender.kt is ready */ },
+                    onShareCardClick    = {
+                        if (homeSuccess != null && homeShareSignName != null) {
+                            shareFlowState.open(
+                                ShareCardRequest(
+                                    signDisplayName = homeShareSignName,
+                                    sign = homeSuccess.reading.sign,
+                                    quoteText = shareQuoteFrom(homeSuccess.reading.text),
+                                    date = DateUtils.todayLocalDate(),
+                                )
+                            )
+                        }
+                    },
                     onNotificationClick = { /* future: notification settings screen */ },
                     onRetryClick        = { vm.retry() },
                 )
@@ -252,7 +274,18 @@ fun YildiznameNavGraph(navController: NavHostController) {
                 ReadingDetailScreen(
                     uiState     = uiState,
                     onBackClick = { navController.popBackStack() },
-                    onShareClick = { /* TODO: wire share sheet */ },
+                    onShareClick = {
+                        (uiState as? ReadingDetailUiState.Success)?.let { success ->
+                            shareFlowState.open(
+                                ShareCardRequest(
+                                    signDisplayName = success.signDisplayName,
+                                    sign = success.sign,
+                                    quoteText = shareQuoteFrom(success.generalText),
+                                    date = DateUtils.todayLocalDate(),
+                                )
+                            )
+                        }
+                    },
                 )
             }
 
@@ -269,5 +302,7 @@ fun YildiznameNavGraph(navController: NavHostController) {
             }
         }
     }
+
+    ShareFlowHost(state = shareFlowState)
     }
 }

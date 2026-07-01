@@ -155,6 +155,18 @@
     <string name="reading_detail_section_luck">Şans</string>
     <string name="reading_detail_share_button">Paylaş</string>
 
+    <!-- Share card / bottom sheet -->
+    <string name="share_card_app_name">YILDIZNAME</string>
+    <string name="share_card_app_url">yildizname.app</string>
+    <string name="share_bottom_sheet_title">Paylaş</string>
+    <string name="share_option_instagram_stories">Instagram\nStories</string>
+    <string name="share_option_whatsapp">WhatsApp</string>
+    <string name="share_option_facebook">Facebook</string>
+    <string name="share_option_general">Genel\nPaylaş</string>
+    <string name="share_option_copy_link">Bağlantıyı Kopyala</string>
+    <string name="share_option_save_image">Görsel Olarak Kaydet</string>
+    <string name="share_close">KAPAT</string>
+
     <!-- Lucky color names -->
     <string name="lucky_color_red">Kırmızı</string>
     <string name="lucky_color_blue">Mavi</string>

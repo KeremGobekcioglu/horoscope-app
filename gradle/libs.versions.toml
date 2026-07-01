@@ -37,6 +37,7 @@ room-compiler               = { module = "androidx.room:room-compiler",      ver
 sqlite-bundled              = { module = "androidx.sqlite:sqlite-bundled",   version.ref = "sqlite" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebase-bom" }
 compose-icons-feather = { module = "br.com.devsrsouza.compose.icons:feather", version.ref = "compose-icons" }
+compose-icons-fontawesome = { module = "br.com.devsrsouza.compose.icons:font-awesome", version.ref = "compose-icons" }
 
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 kotlin-testJunit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
