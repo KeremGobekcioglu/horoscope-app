@@ -43,6 +43,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kg.yildizname.core.domain.model.ZodiacSign
 import com.kg.yildizname.core.domain.model.ZodiacSigns
+import com.kg.yildizname.core.domain.model.localizedDateRange
+import com.kg.yildizname.core.domain.model.localizedName
 import com.kg.yildizname.core.ui.components.PageIndicator
 import com.kg.yildizname.core.ui.components.yzTextSurfaceWash
 import com.kg.yildizname.core.ui.theme.YzBg
@@ -54,7 +56,12 @@ import com.kg.yildizname.core.ui.theme.YzMuted
 import com.kg.yildizname.core.ui.theme.YzOnSurface
 import com.kg.yildizname.core.ui.utils.YzWindowWidth
 import com.kg.yildizname.core.ui.utils.rememberWindowWidth
+import horoscope.shared.generated.resources.Res
+import horoscope.shared.generated.resources.onboarding_continue
+import horoscope.shared.generated.resources.onboarding_pick_sign_subtitle
+import horoscope.shared.generated.resources.onboarding_pick_sign_title
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 private fun ZodiacCard(
@@ -67,6 +74,7 @@ private fun ZodiacCard(
     val borderWidth = if (selected) 1.5.dp else 1.dp
     val bgColor     = if (selected) YzCardBgSel else YzCardBg
     val nameColor   = if (selected) YzGold else YzOnSurface
+    val signName    = sign.localizedName()
 
     Box(
         modifier = Modifier
@@ -87,7 +95,7 @@ private fun ZodiacCard(
         ) {
             Image(
                 painter            = painterResource(sign.drawable),
-                contentDescription = sign.nameTr,
+                contentDescription = signName,
                 contentScale       = ContentScale.Fit,
                 modifier           = Modifier.size(if (compact) 48.dp else 56.dp),
             )
@@ -95,7 +103,7 @@ private fun ZodiacCard(
             Spacer(Modifier.height(if (compact) 6.dp else 10.dp))
 
             Text(
-                text       = sign.nameTr,
+                text       = signName,
                 color      = nameColor,
                 fontSize   = 13.sp,
                 fontWeight = if (selected) FontWeight.Bold else FontWeight.SemiBold,
@@ -108,7 +116,7 @@ private fun ZodiacCard(
             Spacer(Modifier.height(3.dp))
 
             Text(
-                text      = sign.dateRange,
+                text      = sign.localizedDateRange(),
                 color     = YzMuted,
                 fontSize  = 10.sp,
                 textAlign = TextAlign.Center,
@@ -164,7 +172,7 @@ fun OnboardingStep1Screen(
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Text(
-                    text       = "Burcunu seç",
+                    text       = stringResource(Res.string.onboarding_pick_sign_title),
                     color      = YzGold,
                     fontSize   = if (compact) 28.sp else 32.sp,
                     fontWeight = FontWeight.Bold,
@@ -175,7 +183,7 @@ fun OnboardingStep1Screen(
                 Spacer(Modifier.height(8.dp))
 
                 Text(
-                    text      = "Sana özel günlük rehberin başlasın",
+                    text      = stringResource(Res.string.onboarding_pick_sign_subtitle),
                     color     = YzOnSurface.copy(alpha = 0.75f),
                     fontSize  = 15.sp,
                     textAlign = TextAlign.Center,
@@ -226,7 +234,7 @@ fun OnboardingStep1Screen(
                     contentAlignment = Alignment.Center,
                 ) {
                     Text(
-                        text       = "Devam Et",
+                        text       = stringResource(Res.string.onboarding_continue),
                         color      = if (enabled) Color(0xFF1A1400) else YzMuted,
                         fontSize   = 16.sp,
                         fontWeight = FontWeight.SemiBold,

@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.getString
 
 class ReadingDetailViewModel(
     private val signKey: String,
@@ -40,7 +41,7 @@ class ReadingDetailViewModel(
                 .collect { reading ->
                     _uiState.value = ReadingDetailUiState.Success(
                         sign             = sign,
-                        signDisplayName  = sign.displayName(),
+                        signDisplayName  = getString(ZodiacSigns[sign.ordinal].nameRes),
                         periodLabel      = period.displayLabel(),
                         luckyNumber      = LuckyInfo.luckyNumber(sign.apiKey, today),
                         luckyColorName   = LuckyInfo.luckyColorName(sign.apiKey, today),
@@ -53,10 +54,6 @@ class ReadingDetailViewModel(
                 }
         }
     }
-
-    private fun ZodiacSign.displayName(): String =
-        if (currentLanguageCode() == "tr") ZodiacSigns[ordinal].nameTr
-        else apiKey.replaceFirstChar { it.uppercase() }
 
     private fun PeriodType.displayLabel(): String =
         if (currentLanguageCode() == "tr") when (this) {

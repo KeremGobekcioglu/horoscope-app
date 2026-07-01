@@ -2,16 +2,15 @@ package com.kg.yildizname.preview
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
+import com.kg.yildizname.core.data.model.ZodiacSign
 import com.kg.yildizname.core.ui.theme.YzTheme
 import com.kg.yildizname.feature.readingDetail.ui.ReadingDetailScreen
 import com.kg.yildizname.feature.readingDetail.ui.ReadingDetailUiState
-import horoscope.shared.generated.resources.Res
-import horoscope.shared.generated.resources.scorpio_constellation_icon
 
 private val previewReadingDetail = ReadingDetailUiState.Success(
+    sign = ZodiacSign.SCORPIO,
     signDisplayName = "AKREP",
     periodLabel = "GÜNLÜK YORUM",
-    constellationArt = Res.drawable.scorpio_constellation_icon,
     luckyNumber = 7,
     luckyColorName = "Kırmızı",
     generalText = "Bugün gezegenler senin lehine hizalanıyor. Sezgilerine güven, " +
