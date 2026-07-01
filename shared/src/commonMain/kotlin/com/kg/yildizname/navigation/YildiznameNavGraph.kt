@@ -1,11 +1,16 @@
 package com.kg.yildizname.navigation
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
+import androidx.compose.ui.graphics.Color
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
@@ -15,9 +20,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.navigation
 import androidx.navigation.toRoute
+import com.kg.yildizname.core.ui.components.StarFieldBackground
 import com.kg.yildizname.core.ui.components.YzBottomNav
 import com.kg.yildizname.core.ui.components.YzBottomNavItemData
-import com.kg.yildizname.core.ui.theme.YzBg
 import com.kg.yildizname.feature.calendar.ui.CalendarScreen
 import com.kg.yildizname.feature.compatability.ui.CompatibilityScreen
 import com.kg.yildizname.feature.home.ui.HomeScreen
@@ -90,8 +95,11 @@ fun YildiznameNavGraph(navController: NavHostController) {
         ),
     )
 
+    Box(Modifier.fillMaxSize()) {
+    StarFieldBackground(Modifier.fillMaxSize())
     Scaffold(
-        containerColor = YzBg,
+        containerColor = Color.Transparent,
+        contentWindowInsets = WindowInsets(0),
         bottomBar = {
             if (showBottomNav) {
                 YzBottomNav(
@@ -115,11 +123,10 @@ fun YildiznameNavGraph(navController: NavHostController) {
             }
         }
     ) { innerPadding ->
-
         NavHost(
             navController    = navController,
             startDestination = Splash,
-            modifier         = androidx.compose.ui.Modifier.padding(innerPadding)
+            modifier         = Modifier.padding(innerPadding)
         ) {
 
             composable<Splash> {
@@ -261,5 +268,6 @@ fun YildiznameNavGraph(navController: NavHostController) {
                 SettingsScreen()
             }
         }
+    }
     }
 }

@@ -13,10 +13,10 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
+import com.kg.yildizname.core.ui.utils.yzNavigationBarsPadding
+import com.kg.yildizname.core.ui.utils.yzStatusBarsPadding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -44,7 +44,6 @@ import androidx.compose.ui.unit.sp
 import com.kg.yildizname.core.domain.model.ZodiacSign
 import com.kg.yildizname.core.domain.model.ZodiacSigns
 import com.kg.yildizname.core.ui.components.PageIndicator
-import com.kg.yildizname.core.ui.components.StarFieldBackground
 import com.kg.yildizname.core.ui.theme.YzBg
 import com.kg.yildizname.core.ui.theme.YzBorder
 import com.kg.yildizname.core.ui.theme.YzCardBg
@@ -145,17 +144,11 @@ fun OnboardingStep1Screen(
         YzWindowWidth.Expanded -> 6
     }
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(YzBg),
-    ) {
-        StarFieldBackground(modifier = Modifier.fillMaxSize())
-
+    Box(modifier = Modifier.fillMaxSize()) {
         Column(
             modifier            = Modifier
                 .fillMaxSize()
-                .statusBarsPadding(),
+                .yzStatusBarsPadding(),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Spacer(Modifier.height(20.dp))
@@ -207,7 +200,7 @@ fun OnboardingStep1Screen(
                 modifier         = Modifier
                     .fillMaxWidth()
                     .background(Brush.verticalGradient(listOf(Color.Transparent, YzBg, YzBg)))
-                    .navigationBarsPadding()
+                    .yzNavigationBarsPadding()
                     .padding(horizontal = 20.dp, vertical = 20.dp),
                 contentAlignment = Alignment.Center,
             ) {

@@ -34,9 +34,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.widthIn
+import com.kg.yildizname.core.ui.utils.yzNavigationBarsPadding
+import com.kg.yildizname.core.ui.utils.yzStatusBarsPadding
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -49,9 +49,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kg.yildizname.core.ui.components.PageIndicator
-import com.kg.yildizname.core.ui.components.StarFieldBackground
 import com.kg.yildizname.core.ui.components.YzButton
-import com.kg.yildizname.core.ui.theme.YzBg
 import com.kg.yildizname.core.ui.theme.YzBorder
 import com.kg.yildizname.core.ui.theme.YzCardBg
 import com.kg.yildizname.core.ui.theme.YzGold
@@ -161,17 +159,11 @@ fun OnboardingStep3Screen(
 
     var genderExpanded by remember { mutableStateOf(false) }
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(YzBg),
-    ) {
-        StarFieldBackground(Modifier.fillMaxSize())
-
+    Box(modifier = Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .statusBarsPadding()
+                .yzStatusBarsPadding()
                 .padding(horizontal = 20.dp),
         ) {
             Spacer(Modifier.height(20.dp))
@@ -324,7 +316,7 @@ fun OnboardingStep3Screen(
             modifier            = Modifier
                 .align(Alignment.BottomCenter)
                 .fillMaxWidth()
-                .navigationBarsPadding()
+                .yzNavigationBarsPadding()
                 .padding(horizontal = 20.dp, vertical = 20.dp)
                 .widthIn(max = 480.dp),
             horizontalAlignment = Alignment.CenterHorizontally,

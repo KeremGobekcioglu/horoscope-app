@@ -10,10 +10,10 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
+import com.kg.yildizname.core.ui.utils.yzNavigationBarsPadding
+import com.kg.yildizname.core.ui.utils.yzStatusBarsPadding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -40,7 +40,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kg.yildizname.core.ui.components.PageIndicator
-import com.kg.yildizname.core.ui.components.StarFieldBackground
 import com.kg.yildizname.core.ui.components.YzButton
 import com.kg.yildizname.core.ui.theme.YzBg
 import com.kg.yildizname.core.ui.theme.YzGold
@@ -228,17 +227,11 @@ fun OnboardingStep2Screen(
         )
     }
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(YzBg),
-    ) {
-        StarFieldBackground(Modifier.fillMaxSize())
-
+    Box(modifier = Modifier.fillMaxSize()) {
         Column(
             modifier            = Modifier
                 .fillMaxSize()
-                .statusBarsPadding()
+                .yzStatusBarsPadding()
                 .padding(horizontal = 20.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
@@ -319,7 +312,7 @@ fun OnboardingStep2Screen(
                 .align(Alignment.BottomCenter)
                 .fillMaxWidth()
                 .background(Brush.verticalGradient(listOf(Color.Transparent, YzBg, YzBg)))
-                .navigationBarsPadding()
+                .yzNavigationBarsPadding()
                 .padding(horizontal = 20.dp, vertical = 20.dp),
             contentAlignment = Alignment.Center,
         ) {

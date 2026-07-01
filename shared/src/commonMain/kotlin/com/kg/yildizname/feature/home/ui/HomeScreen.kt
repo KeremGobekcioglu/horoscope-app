@@ -1,6 +1,5 @@
 package com.kg.yildizname.feature.home.ui
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -18,8 +17,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.kg.yildizname.core.data.model.Reading
-import com.kg.yildizname.core.ui.components.StarFieldBackground
-import com.kg.yildizname.core.ui.theme.YzBg
 import com.kg.yildizname.core.ui.utils.YzWindowWidth
 import com.kg.yildizname.core.ui.utils.rememberWindowWidth
 import com.kg.yildizname.feature.home.ui.components.ConstellationHero
@@ -68,12 +65,9 @@ fun HomeScreen(
     }
 
     Box(
-        modifier = modifier
-            .fillMaxSize()
-            .background(YzBg),           // #080B1A
+        modifier = modifier.fillMaxSize(),
         contentAlignment = Alignment.TopCenter
     ) {
-        StarFieldBackground(Modifier.fillMaxSize())
         when (uiState) {
             is HomeUiState.Loading -> HomeLoadingContent(
                 contentMaxWidth = contentMaxWidth,
