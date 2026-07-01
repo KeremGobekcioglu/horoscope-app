@@ -38,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kg.yildizname.core.ui.theme.CardShape
 import com.kg.yildizname.core.ui.theme.ChipShape
+import com.kg.yildizname.core.ui.theme.SheetShape
 import com.kg.yildizname.core.ui.theme.YzBorder
 import com.kg.yildizname.core.ui.theme.YzGold
 import com.kg.yildizname.core.ui.theme.YzInk
@@ -90,87 +91,118 @@ fun ShareBottomSheet(
     ModalBottomSheet(
         onDismissRequest = onDismiss,
         sheetState = sheetState,
+        shape = SheetShape,
         containerColor = YzSurface,
         tonalElevation = 0.dp,
     ) {
-        Column(Modifier.fillMaxWidth().verticalScroll(rememberScrollState()).yzNavigationBarsPadding()) {
-            Box(Modifier.fillMaxWidth().padding(vertical = 16.dp), contentAlignment = Alignment.Center) {
-                preview()   // centered, letterboxed automatically
-            }
+        ShareBottomSheetContent(
+            preview = preview,
+            onInstagramStoriesClick = onInstagramStoriesClick,
+            onWhatsAppClick = onWhatsAppClick,
+            onFacebookClick = onFacebookClick,
+            onGeneralShareClick = onGeneralShareClick,
+            onCopyLinkClick = onCopyLinkClick,
+            onSaveImageClick = onSaveImageClick,
+            onDismiss = onDismiss,
+        )
+    }
+}
 
-            Text(
-                text = stringResource(Res.string.share_bottom_sheet_title),
-                color = YzGold,
-                style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.SemiBold,
-                textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 16.dp),
+/**
+ * The sheet's scrollable body, split out from [ShareBottomSheet] so it can be previewed on its
+ * own: `ModalBottomSheet` renders its content through a Popup, which Android Studio's static
+ * `@Preview` surface never captures, so previewing [ShareBottomSheet] directly always renders
+ * blank. Compose this instead (e.g. inside a plain `Surface`) to preview the sheet's contents.
+ */
+@Composable
+fun ShareBottomSheetContent(
+    preview: @Composable () -> Unit,
+    onInstagramStoriesClick: () -> Unit,
+    onWhatsAppClick: () -> Unit,
+    onFacebookClick: () -> Unit,
+    onGeneralShareClick: () -> Unit,
+    onCopyLinkClick: () -> Unit,
+    onSaveImageClick: () -> Unit,
+    onDismiss: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Column(modifier.fillMaxWidth().verticalScroll(rememberScrollState()).yzNavigationBarsPadding()) {
+        Box(Modifier.fillMaxWidth().padding(vertical = 16.dp), contentAlignment = Alignment.Center) {
+            preview()   // centered, letterboxed automatically
+        }
+
+        Text(
+            text = stringResource(Res.string.share_bottom_sheet_title),
+            color = YzGold,
+            style = MaterialTheme.typography.titleLarge,
+            fontWeight = FontWeight.SemiBold,
+            textAlign = TextAlign.Center,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 16.dp),
+        )
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 24.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+        ) {
+            SharePlatformOption(
+                icon = FontAwesomeIcons.Brands.Instagram,
+                label = stringResource(Res.string.share_option_instagram_stories),
+                background = Brush.linearGradient(InstagramGradient),
+                onClick = onInstagramStoriesClick,
             )
-
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 24.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-            ) {
-                SharePlatformOption(
-                    icon = FontAwesomeIcons.Brands.Instagram,
-                    label = stringResource(Res.string.share_option_instagram_stories),
-                    background = Brush.linearGradient(InstagramGradient),
-                    onClick = onInstagramStoriesClick,
-                )
-                SharePlatformOption(
-                    icon = FontAwesomeIcons.Brands.Whatsapp,
-                    label = stringResource(Res.string.share_option_whatsapp),
-                    background = SolidColor(WhatsAppGreen),
-                    onClick = onWhatsAppClick,
-                )
-                SharePlatformOption(
-                    icon = FontAwesomeIcons.Brands.Facebook,
-                    label = stringResource(Res.string.share_option_facebook),
-                    background = SolidColor(FacebookBlue),
-                    onClick = onFacebookClick,
-                )
-                SharePlatformOption(
-                    icon = FeatherIcons.Share2,
-                    label = stringResource(Res.string.share_option_general),
-                    background = SolidColor(YzSurfaceAlt),
-                    iconTint = YzGold,
-                    onClick = onGeneralShareClick,
-                )
-            }
-
-            Spacer(Modifier.height(24.dp))
-            HorizontalDivider(color = YzBorder, thickness = 1.dp)
-
-            ShareTextRow(
-                icon = FeatherIcons.Link,
-                label = stringResource(Res.string.share_option_copy_link),
-                onClick = onCopyLinkClick,
+            SharePlatformOption(
+                icon = FontAwesomeIcons.Brands.Whatsapp,
+                label = stringResource(Res.string.share_option_whatsapp),
+                background = SolidColor(WhatsAppGreen),
+                onClick = onWhatsAppClick,
             )
-            ShareTextRow(
-                icon = FeatherIcons.Download,
-                label = stringResource(Res.string.share_option_save_image),
-                onClick = onSaveImageClick,
+            SharePlatformOption(
+                icon = FontAwesomeIcons.Brands.Facebook,
+                label = stringResource(Res.string.share_option_facebook),
+                background = SolidColor(FacebookBlue),
+                onClick = onFacebookClick,
             )
-
-            HorizontalDivider(color = YzBorder, thickness = 1.dp)
-
-            Text(
-                text = stringResource(Res.string.share_close),
-                color = YzGold,
-                style = MaterialTheme.typography.labelMedium,
-                fontWeight = FontWeight.SemiBold,
-                letterSpacing = 3.sp,
-                textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable(onClick = onDismiss)
-                    .padding(vertical = 20.dp),
+            SharePlatformOption(
+                icon = FeatherIcons.Share2,
+                label = stringResource(Res.string.share_option_general),
+                background = SolidColor(YzSurfaceAlt),
+                iconTint = YzGold,
+                onClick = onGeneralShareClick,
             )
         }
+
+        Spacer(Modifier.height(24.dp))
+        HorizontalDivider(color = YzBorder, thickness = 1.dp)
+
+        ShareTextRow(
+            icon = FeatherIcons.Link,
+            label = stringResource(Res.string.share_option_copy_link),
+            onClick = onCopyLinkClick,
+        )
+        ShareTextRow(
+            icon = FeatherIcons.Download,
+            label = stringResource(Res.string.share_option_save_image),
+            onClick = onSaveImageClick,
+        )
+
+        HorizontalDivider(color = YzBorder, thickness = 1.dp)
+
+        Text(
+            text = stringResource(Res.string.share_close),
+            color = YzGold,
+            style = MaterialTheme.typography.labelMedium,
+            fontWeight = FontWeight.SemiBold,
+            letterSpacing = 3.sp,
+            textAlign = TextAlign.Center,
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable(onClick = onDismiss)
+                .padding(vertical = 20.dp),
+        )
     }
 }
 
