@@ -7,7 +7,20 @@
     <string name="nav_calendar">Takvim</string>
     <string name="nav_compatibility">Uyum</string>
     <string name="nav_settings">Ayarlar</string>
-
+    <string-array name="months">
+        <item>Ocak</item>
+        <item>Şubat</item>
+        <item>Mart</item>
+        <item>Nisan</item>
+        <item>Mayıs</item>
+        <item>Haziran</item>
+        <item>Temmuz</item>
+        <item>Ağustos</item>
+        <item>Eylül</item>
+        <item>Ekim</item>
+        <item>Kasım</item>
+        <item>Aralık</item>
+    </string-array>
     <!-- Home -->
     <string name="home_daily_title">Günlük Yorum</string>
     <string name="home_weekly">Haftalık</string>

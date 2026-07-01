@@ -7,7 +7,20 @@
     <string name="nav_calendar">Calendar</string>
     <string name="nav_compatibility">Compat</string>
     <string name="nav_settings">Settings</string>
-
+    <string-array name="months">
+        <item>January</item>
+        <item>February</item>
+        <item>March</item>
+        <item>April</item>
+        <item>May</item>
+        <item>June</item>
+        <item>July</item>
+        <item>August</item>
+        <item>September</item>
+        <item>October</item>
+        <item>November</item>
+        <item>December</item>
+    </string-array>
     <!-- Home -->
     <string name="home_daily_title">Daily Reading</string>
     <string name="home_weekly">Weekly</string>
@@ -15,7 +28,7 @@
     <string name="home_reading_title">Your Daily Reading</string>
     <string name="home_score_title">Energy Scores</string>
     <string name="home_daily_commentary_label">DAILY READING</string>
-    <string name="home_daily_energy_label">TODAY\'S ENERGY</string>
+    <string name="home_daily_energy_label">TODAY'S ENERGY</string>
     <string name="home_read_more">Read more</string>
     <string name="home_score_love">LOVE</string>
     <string name="home_score_work">WORK</string>
