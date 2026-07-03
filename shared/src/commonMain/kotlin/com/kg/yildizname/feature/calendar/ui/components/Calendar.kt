@@ -67,62 +67,61 @@ fun Calendar(
      *  The lucky days bullet is shiny
      */
     Column(
-            modifier = Modifier.fillMaxSize().padding(horizontal = 32.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
+        modifier = Modifier.fillMaxSize().padding(horizontal = 32.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
 
-            Spacer(Modifier.height(32.dp))
-            // < Month Year >
-            Row(modifier = Modifier.fillMaxWidth(),
-                Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically) {
-                IconButton(
-                        onClick = { onPreviousMonth() }
-                )
-                {
-                    Icon(
-                        imageVector = FeatherIcons.ChevronLeft,
-                        contentDescription = Res.string.previous_month.toString(),
-                        tint = YzGold
-                    )
-                }
-                Text(text = DateFormatter.monthYear(date),
-                    color = YzGold
-                )
-                IconButton(
-                    onClick = { onNextMonth() }
-                )
-                {
-                    Icon(
-                        imageVector = FeatherIcons.ChevronRight,
-                        contentDescription = Res.string.next_month.toString(),
-                        tint = YzGold
-                    )
-                }
-            }
-
-            // Days
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                days.forEach {
-                        day ->
-                    Text(
-                        text = day,
-                        color = YzGold.copy(0.8f),
-                        modifier = Modifier.weight(1f)
-                    )
-                }
-            }
-
-            Column(modifier = Modifier.fillMaxWidth())
+        Spacer(Modifier.height(32.dp))
+        // < Month Year >
+        Row(modifier = Modifier.fillMaxWidth(),
+            Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically) {
+            IconButton(
+                onClick = { onPreviousMonth() }
+            )
             {
-                weeks.forEach {
-                    week ->
-                    CalendarRow(week = week , selectedDay = 30)
-                }
+                Icon(
+                    imageVector = FeatherIcons.ChevronLeft,
+                    contentDescription = Res.string.previous_month.toString(),
+                    tint = YzGold
+                )
             }
+            Text(text = DateFormatter.monthYear(date),
+                color = YzGold
+            )
+            IconButton(
+                onClick = { onNextMonth() }
+            )
+            {
+                Icon(
+                    imageVector = FeatherIcons.ChevronRight,
+                    contentDescription = Res.string.next_month.toString(),
+                    tint = YzGold
+                )
+            }
+        }
+
+        // Days
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            days.forEach {
+                    day ->
+                Text(
+                    text = day,
+                    color = YzGold.copy(0.8f),
+                    modifier = Modifier.weight(1f)
+                )
+            }
+        }
+
+        Column(modifier = Modifier.fillMaxWidth())
+        {
+            weeks.forEach {
+                    week ->
+                CalendarRow(week = week, selectedDay = 30, selectedRelation = MonthRelation.PREVIOUS)            }
+        }
     }
 }
 
@@ -131,9 +130,11 @@ data class CalendarWeek(
     val end: Int
 )
 
+enum class MonthRelation { PREVIOUS, CURRENT, NEXT }
+
 data class CalendarDay(
     val day: Int,
-    val currentMonth: Boolean,
+    val relation: MonthRelation,   // replaces currentMonth: Boolean
     val isAvailable: Boolean = false
 )
 
@@ -199,26 +200,31 @@ fun DayComposable(modifier: Modifier = Modifier, isLuckyDay: Boolean = false, is
 //                fontWeight = if(!isSelected || isNextMonth) FontWeight.Normal else FontWeight.Bold
 //            )
 
-                Box(
-                    modifier = Modifier.size(4.dp)
-                        .clip(CircleShape)
-                        .background(
-                            if(isNextMonth)  Color.Transparent else if (isSelected) YzGold else YzGold.copy(0.5f)
-                        )
-                )
+            Box(
+                modifier = Modifier.size(4.dp)
+                    .clip(CircleShape)
+                    .background(
+                        if(isNextMonth)  Color.Transparent else if (isSelected) YzGold else YzGold.copy(0.5f)
+                    )
+            )
 
         }
     }
 }
 
-
+data class SelectedDay(val day: Int, val relation: MonthRelation)
 @Composable
-fun CalendarRow(luckDays: List<Int> = mutableListOf() , week: List<CalendarDay> , selectedDay:Int)
+fun CalendarRow(luckDays: List<Int> = emptyList(), week: List<CalendarDay>, selectedDay: Int, selectedRelation: MonthRelation)
 {
     Row(modifier = Modifier.fillMaxWidth()) {
-        week.forEach {
-            day ->
-                DayComposable(modifier = Modifier.weight(1f), day = day.day , isAvailable = day.isAvailable, isSelected = day.day == selectedDay , isNextMonth = !(day.currentMonth))
+        week.forEach { day ->
+            DayComposable(
+                modifier = Modifier.weight(1f),
+                day = day.day,
+                isAvailable = day.isAvailable,
+                isSelected = day.day == selectedDay && day.relation == selectedRelation,
+                isNextMonth = day.relation != MonthRelation.CURRENT
+            )
         }
     }
 }
@@ -241,29 +247,32 @@ fun calculateCalendar(date: LocalDate) : List<List<CalendarDay>>
     val calendarDays = mutableListOf<CalendarDay>()
     val firstPreviousDay = previousMonthDayCount - leading + 1
 
-    // from firstPreviousDay we ll start adding numbers until how many day of its that month - for example if firstPrevDay is 28 , and prev month got 31 day
+    // from firstPreviousDay we ll start adding numbers until how many day of it's that month - for example if firstPrevDay is 28 , and prev month got 31 day
     // 28 29 30 31 should be added then we ll complete it to seven.
     for(day in firstPreviousDay..previousMonthDayCount)
     {
-        calendarDays.add(CalendarDay(day = day, currentMonth = false , isAvailable = true))
+        val cellDate = LocalDate(date.previousMonth().year, date.previousMonth().month, day)
+        calendarDays.add(CalendarDay(day = day, relation = MonthRelation.PREVIOUS , isAvailable = true))
     }
     for(day in 1..daysInMonth)
     {
+        val cellDate = LocalDate(date.year, date.month, day)
         val isAvailable = if(isCurrentMonth) day <= today.day else isPreviousMonth
-        calendarDays.add(CalendarDay(day = day, currentMonth = true , isAvailable = isAvailable))
+        calendarDays.add(CalendarDay(day = day, relation = MonthRelation.CURRENT , isAvailable = cellDate<=today))
     }
     for(day in 1..trailing)
     {
-        calendarDays.add(CalendarDay(day = day, currentMonth = false))
+        val cellDate = LocalDate(date.nextMonth().year, date.nextMonth().month, day)
+        calendarDays.add(CalendarDay(day = day, relation = MonthRelation.NEXT , isAvailable = cellDate<=today))
     }
     return calendarDays.chunked(7)
 }
 
 fun leadingOffset(firstOfTheMonth: LocalDate) : Int
 {
-        val isoDay = firstOfTheMonth.dayOfWeek.isoDayNumber
-        val offset = isoDay - 1
-        return offset
+    val isoDay = firstOfTheMonth.dayOfWeek.isoDayNumber
+    val offset = isoDay - 1
+    return offset
 }
 
 fun trailingOffset(leadingOffset: Int, daysInMonth: Int) : Int
