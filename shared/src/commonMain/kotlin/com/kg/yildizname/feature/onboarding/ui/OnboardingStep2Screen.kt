@@ -47,6 +47,7 @@ import com.kg.yildizname.core.ui.theme.YzGold
 import com.kg.yildizname.core.ui.theme.YzMuted
 import com.kg.yildizname.core.ui.theme.YzOnSurface
 import com.kg.yildizname.core.ui.theme.YzPickerBg
+import com.kg.yildizname.core.domain.model.ZodiacSign
 import com.kg.yildizname.feature.onboarding.BirthDate
 import horoscope.shared.generated.resources.Res
 import horoscope.shared.generated.resources.month_april
@@ -180,6 +181,7 @@ private fun DrumColumn(
 @Composable
 fun OnboardingStep2Screen(
     selectedDate: BirthDate?,
+    selectedSign: ZodiacSign?,
     onDateChanged: (BirthDate) -> Unit,
     onContinue: () -> Unit,
     onSkip: () -> Unit,
@@ -210,7 +212,9 @@ fun OnboardingStep2Screen(
         stringResource(Res.string.month_december),
     )
 
-    val date = selectedDate ?: DEFAULT_DATE
+    val date = selectedDate ?: selectedSign?.let {
+        BirthDate(day = it.startDay, month = it.startMonth, year = DEFAULT_DATE.year)
+    } ?: DEFAULT_DATE
 
     var dayIndex   by remember(date) { mutableStateOf(date.day - 1) }
     var monthIndex by remember(date) { mutableStateOf(date.month - 1) }

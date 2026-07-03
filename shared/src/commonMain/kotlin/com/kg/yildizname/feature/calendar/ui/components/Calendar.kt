@@ -141,44 +141,22 @@ data class CalendarDay(
 @Composable
 fun DayComposable(modifier: Modifier = Modifier, isLuckyDay: Boolean = false, isSelected: Boolean = false, day: Int, isNextMonth: Boolean, isAvailable: Boolean)
 {
-    // if selected shine. if luck day , shine. if selected text bold.
-    // if day belongs to next month, no dot below it and it barely visible.
-    /**
-     * day number
-     * small dot
-     * rectangle
-     */
+    val canShine = (isSelected || isLuckyDay) && isAvailable
     val shape = RoundedCornerShape(16.dp)
+
     Box(
         modifier = modifier.size(48.dp)
             .then(
-                if((isSelected || isLuckyDay ) && !isNextMonth)
-                {
-                    Modifier.shadow(
-                        elevation = 0.dp,
-                        shape = shape,
-                        ambientColor = YzGold,
-                        spotColor = YzGold
-                    )
-                }
-                else
-                {
-                    Modifier
-                }
+                if(canShine) {
+                    Modifier.shadow(elevation = 0.dp, shape = shape, ambientColor = YzGold, spotColor = YzGold)
+                } else Modifier
             )
             .clip(shape)
-//            .background(Color.Transparent)
-            .background(if((isSelected || isLuckyDay ) && !isNextMonth) YzBg.copy(0.1f) else Color.Transparent)
+            .background(if(canShine) YzBg.copy(0.1f) else Color.Transparent)
             .then(
-                if((isSelected || isLuckyDay ) && !isNextMonth)
-                {
-                    Modifier.border(
-                        width = 2.dp,
-                        color = YzGold,
-                        shape = shape
-                    )
-                }
-                else Modifier
+                if(canShine) {
+                    Modifier.border(width = 2.dp, color = YzGold, shape = shape)
+                } else Modifier
             ),
         contentAlignment = Alignment.Center
     )
@@ -191,23 +169,17 @@ fun DayComposable(modifier: Modifier = Modifier, isLuckyDay: Boolean = false, is
                 text = "$day",
                 color = if(isAvailable) YzGold else if(!isNextMonth) YzGold.copy(0.5f) else Color.LightGray.copy(0.4f),
                 fontSize = 20.sp,
-                fontWeight = if(!isSelected || isNextMonth) FontWeight.Normal else FontWeight.Bold
+                fontWeight = if(isSelected && isAvailable) FontWeight.Bold else FontWeight.Normal
             )
-//            Text(
-//                text = "$isAvailable",
-//                color = if(isAvailable) YzGold else if(!isNextMonth) YzGold.copy(0.5f) else Color.LightGray.copy(0.4f),
-//                fontSize = 20.sp,
-//                fontWeight = if(!isSelected || isNextMonth) FontWeight.Normal else FontWeight.Bold
-//            )
-
             Box(
                 modifier = Modifier.size(4.dp)
                     .clip(CircleShape)
                     .background(
-                        if(isNextMonth)  Color.Transparent else if (isSelected) YzGold else YzGold.copy(0.5f)
+                        if(isNextMonth) Color.Transparent
+                        else if(isSelected) YzGold
+                        else YzGold.copy(0.5f)
                     )
             )
-
         }
     }
 }

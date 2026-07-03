@@ -199,6 +199,7 @@ fun YildiznameNavGraph(navController: NavHostController) {
 
                     OnboardingStep2Screen(
                         selectedDate  = uiState.birthDate,
+                        selectedSign  = uiState.selectedSign,
                         onDateChanged = vm::setBirthDate,
                         onContinue    = vm::confirmBirthDate,
                         onSkip        = vm::skipBirthDate,
