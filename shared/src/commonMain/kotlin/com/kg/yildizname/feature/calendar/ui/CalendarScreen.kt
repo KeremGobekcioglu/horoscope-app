@@ -18,7 +18,9 @@ import kotlinx.datetime.plus
 
 // Prompt 08: monthly grid, energy dots, today pulse, month swipe, day-tap expand panel.
 @Composable
-fun CalendarScreen() {
+fun CalendarScreen(
+    //uiState: CalendarUIState
+) {
     var date by remember { mutableStateOf(DateUtils.todayLocalDate()) }
     val mockLuckDays = remember { listOf(3, 7, 14, 21, 27) }
 

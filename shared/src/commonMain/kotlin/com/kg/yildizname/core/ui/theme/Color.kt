@@ -19,3 +19,8 @@ val YzCardBgSel = Color(0xFF0F1222)
 val YzOnSurface = Color(0xFFE0E1F7)
 
 val YzPickerBg  = Color(0xFF141827)
+
+val LightGray = Color(0xFFE5E7EB)
+val Gray = Color(0xFF9CA3AF)
+val DarkGray = Color(0xFF4B5563)
+val Charcoal = Color(0xFF1F2937)

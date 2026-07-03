@@ -40,9 +40,11 @@ import horoscope.shared.generated.resources.previous_month
 import io.ktor.client.request.invoke
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.Month
+import kotlinx.datetime.TimeZone
 import kotlinx.datetime.isoDayNumber
 import kotlinx.datetime.number
-import kotlinx.datetime.previous
+import kotlinx.datetime.todayIn
+import kotlin.time.Clock
 
 @Composable
 fun Calendar(
@@ -64,7 +66,7 @@ fun Calendar(
      *
      *  The lucky days bullet is shiny
      */
-        Column(
+    Column(
             modifier = Modifier.fillMaxSize().padding(horizontal = 32.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
@@ -118,7 +120,7 @@ fun Calendar(
             {
                 weeks.forEach {
                     week ->
-                    CalendarRow(week = week , selectedDay = 2)
+                    CalendarRow(week = week , selectedDay = 30)
                 }
             }
     }
@@ -131,13 +133,15 @@ data class CalendarWeek(
 
 data class CalendarDay(
     val day: Int,
-    val currentMonth: Boolean
+    val currentMonth: Boolean,
+    val isAvailable: Boolean = false
 )
 
 @Composable
-fun DayComposable(modifier: Modifier = Modifier, isLuckyDay: Boolean = false, isSelected: Boolean = false, day: Int)
+fun DayComposable(modifier: Modifier = Modifier, isLuckyDay: Boolean = false, isSelected: Boolean = false, day: Int, isNextMonth: Boolean, isAvailable: Boolean)
 {
     // if selected shine. if luck day , shine. if selected text bold.
+    // if day belongs to next month, no dot below it and it barely visible.
     /**
      * day number
      * small dot
@@ -147,7 +151,7 @@ fun DayComposable(modifier: Modifier = Modifier, isLuckyDay: Boolean = false, is
     Box(
         modifier = modifier.size(48.dp)
             .then(
-                if(isSelected || isLuckyDay)
+                if((isSelected || isLuckyDay ) && !isNextMonth)
                 {
                     Modifier.shadow(
                         elevation = 0.dp,
@@ -163,9 +167,9 @@ fun DayComposable(modifier: Modifier = Modifier, isLuckyDay: Boolean = false, is
             )
             .clip(shape)
 //            .background(Color.Transparent)
-            .background(if(isSelected || isLuckyDay) YzBg.copy(0.1f) else Color.Transparent)
+            .background(if((isSelected || isLuckyDay ) && !isNextMonth) YzBg.copy(0.1f) else Color.Transparent)
             .then(
-                if(isSelected || isLuckyDay)
+                if((isSelected || isLuckyDay ) && !isNextMonth)
                 {
                     Modifier.border(
                         width = 2.dp,
@@ -184,16 +188,25 @@ fun DayComposable(modifier: Modifier = Modifier, isLuckyDay: Boolean = false, is
         ){
             Text(
                 text = "$day",
-                color = YzGold,
+                color = if(isAvailable) YzGold else if(!isNextMonth) YzGold.copy(0.5f) else Color.LightGray.copy(0.4f),
                 fontSize = 20.sp,
-                fontWeight = if(!isSelected) FontWeight.Normal else FontWeight.Bold
+                fontWeight = if(!isSelected || isNextMonth) FontWeight.Normal else FontWeight.Bold
             )
-            Box(
-                modifier = Modifier.size(4.dp)
-                    .clip(CircleShape)
-                    .background(
-                        if(isSelected) YzGold else YzGold.copy(0.5f))
-            )
+//            Text(
+//                text = "$isAvailable",
+//                color = if(isAvailable) YzGold else if(!isNextMonth) YzGold.copy(0.5f) else Color.LightGray.copy(0.4f),
+//                fontSize = 20.sp,
+//                fontWeight = if(!isSelected || isNextMonth) FontWeight.Normal else FontWeight.Bold
+//            )
+
+                Box(
+                    modifier = Modifier.size(4.dp)
+                        .clip(CircleShape)
+                        .background(
+                            if(isNextMonth)  Color.Transparent else if (isSelected) YzGold else YzGold.copy(0.5f)
+                        )
+                )
+
         }
     }
 }
@@ -205,17 +218,22 @@ fun CalendarRow(luckDays: List<Int> = mutableListOf() , week: List<CalendarDay> 
     Row(modifier = Modifier.fillMaxWidth()) {
         week.forEach {
             day ->
-                DayComposable(modifier = Modifier.weight(1f), day = day.day , isSelected = day.day == selectedDay)
+                DayComposable(modifier = Modifier.weight(1f), day = day.day , isAvailable = day.isAvailable, isSelected = day.day == selectedDay , isNextMonth = !(day.currentMonth))
         }
     }
 }
 
 fun calculateCalendar(date: LocalDate) : List<List<CalendarDay>>
 {
+    val today = Clock.System.todayIn(TimeZone.currentSystemDefault())
+    val previousMonth = today.previousMonth()
+    val isCurrentMonth = date.year == today.year && date.month == today.month
+    val isPreviousMonth = date.year == previousMonth.year && date.month == previousMonth.month
     val firstOfTheMonth = LocalDate(year = date.year,
         month = date.month,
         day = 1
     )
+
     val previousMonthDayCount = date.previousMonth().daysInMonth()
     val daysInMonth = date.daysInMonth()
     val leading: Int = leadingOffset(firstOfTheMonth)
@@ -227,11 +245,12 @@ fun calculateCalendar(date: LocalDate) : List<List<CalendarDay>>
     // 28 29 30 31 should be added then we ll complete it to seven.
     for(day in firstPreviousDay..previousMonthDayCount)
     {
-        calendarDays.add(CalendarDay(day = day, currentMonth = false))
+        calendarDays.add(CalendarDay(day = day, currentMonth = false , isAvailable = true))
     }
     for(day in 1..daysInMonth)
     {
-        calendarDays.add(CalendarDay(day = day, currentMonth = true))
+        val isAvailable = if(isCurrentMonth) day <= today.day else isPreviousMonth
+        calendarDays.add(CalendarDay(day = day, currentMonth = true , isAvailable = isAvailable))
     }
     for(day in 1..trailing)
     {
