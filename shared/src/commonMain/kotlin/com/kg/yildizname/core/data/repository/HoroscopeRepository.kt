@@ -2,6 +2,9 @@ package com.kg.yildizname.core.data.repository
 
 import com.kg.yildizname.core.data.local.ReadingDao
 import com.kg.yildizname.core.data.local.ReadingEntity
+import com.kg.yildizname.core.data.local.hasCategories
+import com.kg.yildizname.core.data.local.isComplete
+import com.kg.yildizname.core.data.local.toDomain
 import com.kg.yildizname.core.data.model.PeriodType
 import com.kg.yildizname.core.data.model.Reading
 import com.kg.yildizname.core.data.model.CategoryDetail
@@ -41,7 +44,7 @@ class HoroscopeRepository(
         val cached = dao.getReading(sign.apiKey, period.apiKey, date)
         if (cached != null) {
             emit(cached.toDomain(sign, period))
-            if (cached.hasCategories) return@flow
+            if (cached.isComplete(period)) return@flow
             // No categories yet (fallback or pre-split) — fall through to Firestore to enrich
         }
 
@@ -81,16 +84,18 @@ class HoroscopeRepository(
 
         val apiDto = apiSource.getReading(sign, period)
             ?: throw Exception("No reading available for ${sign.apiKey}")
+        val hasScoreCategories = period != PeriodType.MONTHLY
+
         val entity = ReadingEntity(
             sign        = sign.apiKey,
             period      = period.apiKey,
             date        = apiDto.date,
             textTr      = apiDto.horoscope,
             textEn      = apiDto.horoscope,
-            scoreLove   = PseudoScores.compute(sign.apiKey, apiDto.date, "love"),
-            scoreWork   = PseudoScores.compute(sign.apiKey, apiDto.date, "work"),
-            scoreHealth = PseudoScores.compute(sign.apiKey, apiDto.date, "health"),
-            scoreLuck   = PseudoScores.compute(sign.apiKey, apiDto.date, "luck"),
+            scoreLove   = if (hasScoreCategories) PseudoScores.compute(sign.apiKey, apiDto.date, "love") else 0,
+            scoreWork   = if (hasScoreCategories) PseudoScores.compute(sign.apiKey, apiDto.date, "work") else 0,
+            scoreHealth = if (hasScoreCategories) PseudoScores.compute(sign.apiKey, apiDto.date, "health") else 0,
+            scoreLuck   = if (hasScoreCategories) PseudoScores.compute(sign.apiKey, apiDto.date, "luck") else 0,
             isFallback  = true,
         )
         dao.upsertReading(entity)
@@ -104,32 +109,5 @@ class HoroscopeRepository(
     }
 }
 
-private val ReadingEntity.hasCategories: Boolean
-    get() = !textLoveTr.isNullOrEmpty() && !textLoveEn.isNullOrEmpty() &&
-            !textWorkTr.isNullOrEmpty() && !textWorkEn.isNullOrEmpty() &&
-            !textHealthTr.isNullOrEmpty() && !textHealthEn.isNullOrEmpty() &&
-            !textLuckTr.isNullOrEmpty() && !textLuckEn.isNullOrEmpty()
 
-private fun ReadingEntity.toDomain(sign: ZodiacSign, period: PeriodType): Reading {
-    val isTr = currentLanguageCode() == "tr"
 
-    val detail = if (hasCategories) {
-        CategoryDetail(
-            love   = if (isTr) textLoveTr!! else textLoveEn!!,
-            work   = if (isTr) textWorkTr!! else textWorkEn!!,
-            health = if (isTr) textHealthTr!! else textHealthEn!!,
-            luck   = if (isTr) textLuckTr!! else textLuckEn!!,
-        )
-    } else null
-
-    return Reading(
-        sign           = sign,
-        period         = period,
-        date           = date,
-        text           = if (isTr) textTr.ifEmpty { textEn } else textEn.ifEmpty { textTr },
-        scores         = ScoreSet(scoreLove, scoreWork, scoreHealth, scoreLuck),
-        categoryDetail = detail,
-        isFromCache    = true,
-        isFallback     = isFallback,
-    )
-}

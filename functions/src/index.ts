@@ -184,6 +184,126 @@ async function rewriteWithGemini(
   return null; // signal failure — caller skips the write
 }
 
+// generalTr = translation of the API's monthly English paragraph.
+// No category split — monthly stays one undifferentiated blob per your decision.
+const MONTHLY_RESPONSE_SCHEMA = {
+  type: "object",
+  properties: {
+    monthlyTr: { type: "string", description: "İngilizce aylık yorumun Türkçe çevirisi. Tam çeviri, özet değil." },
+  },
+  required: ["monthlyTr"],
+};
+
+interface GeminiMonthlyResult {
+  monthlyTr: string;
+}
+
+export const generateMonthlyReadings = onSchedule(
+  {
+    schedule: "10 0 1 * *", // 1st of month, 00:10 Europe/Istanbul
+    timeZone: "Europe/Istanbul",
+    secrets: [GEMINI_API_KEY],
+    timeoutSeconds: 540,
+  },
+  async () => {
+    const db = admin.firestore();
+    // Istanbul-local year-month, YYYY-MM — matches app's month key convention.
+    const currentMonth = new Intl.DateTimeFormat("en-CA", {
+      timeZone: "Europe/Istanbul",
+      year: "numeric",
+      month: "2-digit",
+    }).format(new Date()).slice(0, 7); // en-CA gives YYYY-MM-DD, slice to YYYY-MM
+
+    const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY.value() });
+
+    for (const sign of SIGNS) {
+      const docId = `${sign}_${currentMonth}_monthly`;
+
+      try {
+        const existing = await db.collection("readings").doc(docId).get();
+        if (existing.exists) {
+          console.log(`Skip (exists): ${docId}`);
+          continue;
+        }
+
+        await sleep(15000);
+
+        const res = await fetch(
+          `https://freehoroscopeapi.com/api/v1/get-horoscope/monthly?sign=${sign}`
+        );
+        if (!res.ok) throw new Error(`API ${res.status} for ${sign}`);
+
+        const json = await res.json();
+        const rawText: string = json?.data?.horoscope ?? "";
+        if (!rawText.trim()) throw new Error(`Empty horoscope for ${sign}`);
+
+        const result = await rewriteMonthlyWithGemini(ai, rawText, sign);
+
+        if (result === null) {
+          console.error(`Skip write (generation failed): ${docId}`);
+          continue;
+        }
+
+        await db.collection("readings").doc(docId).set({
+          textTr: result.monthlyTr,
+          textEn: rawText,
+          translated: true,
+        });
+
+        console.log(`Written: ${docId}`);
+      } catch (e) {
+        console.error(`Failed for ${sign}:`, e);
+      }
+    }
+  }
+);
+
+async function rewriteMonthlyWithGemini(
+  ai: GoogleGenAI,
+  text: string,
+  sign: string
+): Promise<GeminiMonthlyResult | null> {
+  const prompt =
+    `Sen bir astroloji uzmanısın. Aşağıda bir burç için İngilizce aylık ` +
+    `yorum var. Bu yorumu Türkçeye çevir (monthlyTr) — tam çeviri, özet yapma. ` +
+    `Samimi, akıcı ve ilham verici bir dil kullan.\n\n` +
+    `Burç: ${sign}\nİngilizce aylık yorum: ${text}`;
+
+  for (const model of MODELS) {
+    for (let attempt = 1; attempt <= 3; attempt++) {
+      try {
+        const result = await ai.models.generateContent({
+          model,
+          contents: prompt,
+          config: {
+            responseMimeType: "application/json",
+            responseSchema: MONTHLY_RESPONSE_SCHEMA,
+          },
+        });
+
+        const raw = result.text;
+        if (!raw) continue;
+
+        const parsed = JSON.parse(raw) as Partial<GeminiMonthlyResult>;
+        if (typeof parsed.monthlyTr === "string" && parsed.monthlyTr.trim()) {
+          return { monthlyTr: parsed.monthlyTr.trim() };
+        }
+      } catch (e) {
+        const msg = String(e);
+        const rateLimited = msg.includes("429") || /quota|rate.?limit/i.test(msg);
+        console.warn(`${model} attempt ${attempt} failed:`, e);
+
+        if (rateLimited) break;
+        if (attempt < 3) await sleep(2000 * attempt);
+      }
+    }
+    console.warn(`${model} exhausted, trying next model`);
+  }
+
+  return null;
+}
+
+
 function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
