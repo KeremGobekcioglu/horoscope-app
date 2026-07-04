@@ -5,9 +5,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.kg.yildizname.core.ui.theme.YzTheme
 import com.kg.yildizname.feature.calendar.ui.CalendarScreen
 
-@Preview(name = "Calendar", showBackground = true, heightDp = 800)
+@Preview(name = "Calendar", showBackground = true)
 @Composable
-private fun CalendarScreenPreview() {
+public fun CalendarScreenPrevie() {
     YzTheme {
         CalendarScreen()
     }
