@@ -1,6 +1,5 @@
 package com.kg.yildizname.preview
 
-import android.view.Surface
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Surface
