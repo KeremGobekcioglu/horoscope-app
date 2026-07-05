@@ -18,20 +18,11 @@ import androidx.compose.ui.unit.dp
 import com.kg.yildizname.core.ui.theme.YzBg
 import com.kg.yildizname.core.ui.theme.YzTheme
 import com.kg.yildizname.core.util.DateUtils
-import com.kg.yildizname.feature.calendar.ui.CalendarScreen
 import com.kg.yildizname.feature.calendar.ui.components.Calendar
 import com.kg.yildizname.feature.calendar.ui.components.MonthlyReadingCard
 import com.kg.yildizname.feature.calendar.ui.components.SelectedDailyReadingCard
 import kotlinx.datetime.DatePeriod
 import kotlinx.datetime.plus
-
-//@Preview(name = "Calendar", showBackground = true)
-//@Composable
-//public fun CalendarScreenPrevie() {
-//    YzTheme {
-//        CalendarScreen()
-//    }
-//}
 
 @Preview(name = "Calendar — with reading cards", showBackground = true, heightDp = 1000)
 @Composable
@@ -61,14 +52,14 @@ private fun CalendarWithReadingCardsPreview() {
                 scoreHealth = 7,
                 scoreLuck = 9,
                 dailyComment = "Bugün gezegenler senin lehine hizalanıyor. Sezgilerine güven, " +
-                    "özellikle ilişkilerinde sabırlı olman gereken bir konu gündeme gelebilir.",
+                        "özellikle ilişkilerinde sabırlı olman gereken bir konu gündeme gelebilir.",
                 toReadingDetail = {},
                 date = "5 Temmuz"
             )
 
             MonthlyReadingCard(
                 monthlyComment = "Bu ay genel olarak kariyerinde yükseliş var. Temmuz ayı boyunca " +
-                    "yeni fırsatlar seni bulacak, açık fikirli olmaya devam et."
+                        "yeni fırsatlar seni bulacak, açık fikirli olmaya devam et."
             )
         }
     }
