@@ -20,11 +20,19 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.navigation
 import androidx.navigation.toRoute
+import com.kg.yildizname.core.data.model.PeriodType
+import com.kg.yildizname.core.data.model.Reading
+import com.kg.yildizname.core.data.model.ScoreSet
+import com.kg.yildizname.core.data.model.ZodiacSign
 import com.kg.yildizname.core.ui.components.StarFieldBackground
 import com.kg.yildizname.core.ui.components.YzBottomNav
 import com.kg.yildizname.core.ui.components.YzBottomNavItemData
 import com.kg.yildizname.core.util.DateUtils
+import com.kg.yildizname.feature.calendar.ui.CalendarDay
 import com.kg.yildizname.feature.calendar.ui.CalendarScreen
+import com.kg.yildizname.feature.calendar.ui.CalendarUiState
+import com.kg.yildizname.feature.calendar.ui.MonthRelation
+import com.kg.yildizname.feature.calendar.ui.PageTab
 import com.kg.yildizname.feature.compatability.ui.CompatibilityScreen
 import com.kg.yildizname.feature.home.ui.HomeScreen
 import com.kg.yildizname.feature.home.ui.HomeUiState
@@ -56,6 +64,8 @@ import horoscope.shared.generated.resources.nav_calendar
 import horoscope.shared.generated.resources.nav_compatibility
 import horoscope.shared.generated.resources.nav_home
 import horoscope.shared.generated.resources.nav_settings
+import kotlinx.datetime.DatePeriod
+import kotlinx.datetime.plus
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
@@ -291,7 +301,65 @@ fun YildiznameNavGraph(navController: NavHostController) {
             }
 
             composable<Calendar> {
-                CalendarScreen()
+
+                val mockDailyReading = Reading(
+                    sign = ZodiacSign.SCORPIO,
+                    period = PeriodType.DAILY,
+                    date = DateUtils.today(),
+                    text = "Bugün gezegenler senin lehine hizalanıyor. Sezgilerine güven, özellikle ilişkilerinde sabırlı olman gereken bir konu gündeme gelebilir.",
+                    scores = ScoreSet(love = 8, work = 6, health = 7, luck = 9)
+                )
+
+                val mockMonthlyReading = Reading(
+                    sign = ZodiacSign.SCORPIO,
+                    period = PeriodType.MONTHLY,
+                    date = DateUtils.today(),
+                    text = "Temmuz ayı boyunca yeni fırsatlar seni bulacak, açık fikirli olmaya devam et. Özellikle ay ortasından sonra finansal konularda şansının arttığını göreceksin.",
+                    scores = ScoreSet(love = 7, work = 8, health = 6, luck = 7)
+                )
+
+                val mockCalendarUiState: CalendarUiState = CalendarUiState.Success(
+                    date = DateUtils.todayLocalDate(),
+                    selectedDay = null,
+                    selectedTab = PageTab.MONTHLY,
+                    luckDays = listOf(3, 7, 14, 21, 27),
+                    dailyReading = mockDailyReading,
+                    monthlyReading = mockMonthlyReading
+                )
+                var uiState = mockCalendarUiState
+                CalendarScreen(
+                    uiState = mockCalendarUiState,
+                    onNextMonth = {
+                        (uiState as? CalendarUiState.Success)?.let { current ->
+                            uiState = current.copy(date = current.date.plus(DatePeriod(months = 1)))
+                        }
+                    },
+                    onPreviousMonth = {
+                        (uiState as? CalendarUiState.Success)?.let { current ->
+                            uiState = current.copy(date = current.date.plus(DatePeriod(months = -1)))
+                        }
+                    },
+                    onDaySelectedDay = { day ->
+                        (uiState as? CalendarUiState.Success)?.let { current ->
+                            uiState = current.copy(selectedDay = day, selectedTab = PageTab.DAILY)
+                        }
+                    },
+                    onTabChange = { tab ->
+                        (uiState as? CalendarUiState.Success)?.let { current ->
+                            val resolvedDay = if (tab == PageTab.DAILY && current.selectedDay == null) {
+                                val today = DateUtils.todayLocalDate()
+                                CalendarDay(
+                                    day = today.dayOfMonth,
+                                    relation = MonthRelation.CURRENT,
+                                    isAvailable = true
+                                )
+                            } else current.selectedDay
+                            uiState = current.copy(selectedTab = tab, selectedDay = resolvedDay)
+                        }
+                    },
+                    onReadMoreClick = { _, _ -> },
+                    onRetryClick = {}
+                )
             }
 
             composable<Compatibility> {
