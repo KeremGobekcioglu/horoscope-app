@@ -1,5 +1,8 @@
 package com.kg.yildizname.feature.calendar.ui.components
 
+import androidx.compose.animation.core.EaseOutCubic
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -18,7 +21,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.LineBreak
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kg.yildizname.core.ui.theme.YzBorder
@@ -34,6 +39,7 @@ fun MonthlyReadingCard(
     monthlyComment: String
 )
 {
+    println(monthlyComment)
     val shape = RoundedCornerShape(20.dp)
     val sentences  = remember(monthlyComment)
     {
@@ -45,9 +51,23 @@ fun MonthlyReadingCard(
     {
         visible  = true
     }
+
+    val cardAlpha by animateFloatAsState(
+        targetValue = if(visible) 1f else 0f,
+        animationSpec = tween(400)
+    )
+    val cardOffsetY by animateFloatAsState(
+        targetValue = if(visible) 0f else 16f,
+        animationSpec = tween(400, easing = EaseOutCubic)
+    )
+
     Box(
         modifier = Modifier
             .fillMaxWidth()
+            .graphicsLayer {
+                alpha = cardAlpha
+                translationY = cardOffsetY.dp.toPx()
+            }
             .clip(shape)
             .background(YzCardBg.copy(0.6f))
             //.border(0.5.dp,YzBorder,shape)
@@ -62,11 +82,26 @@ fun MonthlyReadingCard(
                 style = MaterialTheme.typography.headlineSmall,
                 color = YzGold)
 
-            Text(
-                text = monthlyComment,
-                style = MaterialTheme.typography.bodyLarge,
-                color = YzOnSurface
-            )
+//            Text(
+//                text = monthlyComment,
+//                style = MaterialTheme.typography.bodyMedium.copy(lineBreak = LineBreak.Simple),
+//                color = YzOnSurface,
+//            )
+            
+            sentences.forEachIndexed { index, string ->
+
+                val alpha by animateFloatAsState(
+                    targetValue = if(visible) 1f else 0f,
+                    animationSpec = tween(400, delayMillis = 400 + index * 100)
+                )
+
+                Text(
+                    modifier = Modifier.graphicsLayer { this.alpha = alpha },
+                    text = "$string.",
+                    style = MaterialTheme.typography.bodyLarge.copy(lineBreak = LineBreak.Paragraph),
+                    color = YzOnSurface,
+                )
+            }
 
         }
     }
