@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -60,6 +61,7 @@ fun Calendar(
         "Pzt","Sa","Ça","Pe","Cu","Cmt","Pzr"
     )
     val weeks  = calculateCalendar(date)
+    val rowCount = weeks.size          // 5 or 6, varies by month
     /**
      * < Month Year >
      *
@@ -69,7 +71,7 @@ fun Calendar(
      *  The lucky days bullet is shiny
      */
     Column(
-        modifier = Modifier.fillMaxSize().padding(16.dp),
+        modifier = Modifier.padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
 
@@ -118,16 +120,16 @@ fun Calendar(
                 )
             }
         }
-
-        Column(modifier = Modifier.fillMaxWidth())
-        {
-            weeks.forEach {
-                    week ->
-                CalendarRow(week = week, selectedDay = 30, selectedRelation = MonthRelation.PREVIOUS)            }
+        BoxWithConstraints {
+            val cellSize = minOf(maxWidth / 7, maxHeight / rowCount)
+            Column(modifier = Modifier.fillMaxWidth())
+            {
+                weeks.forEach {
+                        week ->
+                    CalendarRow(week = week, selectedDay = 30, selectedRelation = MonthRelation.PREVIOUS, cellSize = cellSize)
+                }
+            }
         }
-
-//        SelectedDailyReadingCard()
-//        MonthlyReadingCard()
     }
 }
 
@@ -138,7 +140,7 @@ fun DayComposable(modifier: Modifier = Modifier, isLuckyDay: Boolean = false, is
     val shape = RoundedCornerShape(16.dp)
 
     Box(
-        modifier = modifier.size(48.dp)
+        modifier = modifier
             .then(
                 if(canShine) {
                     Modifier.shadow(elevation = 0.dp, shape = shape, ambientColor = YzGold, spotColor = YzGold)
@@ -178,12 +180,12 @@ fun DayComposable(modifier: Modifier = Modifier, isLuckyDay: Boolean = false, is
 }
 
 @Composable
-fun CalendarRow(luckDays: List<Int> = emptyList(), week: List<CalendarDay>, selectedDay: Int, selectedRelation: MonthRelation)
+fun CalendarRow(luckDays: List<Int> = emptyList(), week: List<CalendarDay>, selectedDay: Int, selectedRelation: MonthRelation, cellSize: androidx.compose.ui.unit.Dp)
 {
     Row(modifier = Modifier.fillMaxWidth()) {
         week.forEach { day ->
             DayComposable(
-                modifier = Modifier.weight(1f),
+                modifier = Modifier.size(cellSize),
                 day = day.day,
                 isAvailable = day.isAvailable,
                 isSelected = day.day == selectedDay && day.relation == selectedRelation,

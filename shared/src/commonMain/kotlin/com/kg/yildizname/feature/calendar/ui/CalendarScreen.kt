@@ -59,7 +59,7 @@ fun CalendarScreen(
                 .padding(horizontal = 16.dp, vertical = 16.dp),
             verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
-            Box(modifier = Modifier.weight(0.4f))
+            Box()
             {
                 Calendar(
                     date = date,
@@ -69,7 +69,7 @@ fun CalendarScreen(
                 )
             }
 
-            Box(modifier = Modifier.weight(0.4f))
+            Box()
             {
                 SelectedDailyReadingCard(
                     scoreLove = 8,
@@ -82,7 +82,7 @@ fun CalendarScreen(
                     date = "5 Temmuz"
                 )
             }
-            Box(modifier = Modifier.weight(0.2f)) {
+            Box() {
                 MonthlyReadingCard(
                     monthlyComment = "Temmuz ayı boyunca yeni fırsatlar seni bulacak, açık fikirli olmaya devam et."
                 )
