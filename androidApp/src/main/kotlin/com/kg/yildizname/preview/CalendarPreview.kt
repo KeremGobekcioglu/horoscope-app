@@ -2,6 +2,7 @@ package com.kg.yildizname.preview
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -46,6 +47,7 @@ private fun CalendarWithReadingCardsPreview() {
                 onPreviousMonth = { date = date.plus(DatePeriod(months = -1)) }
             )
 
+            Box() {
             SelectedDailyReadingCard(
                 scoreLove = 8,
                 scoreWork = 6,
@@ -56,7 +58,7 @@ private fun CalendarWithReadingCardsPreview() {
                 toReadingDetail = {},
                 date = "5 Temmuz"
             )
-
+        }
             MonthlyReadingCard(
                 monthlyComment = "Bu ay genel olarak kariyerinde yükseliş var. Temmuz ayı boyunca " +
                         "yeni fırsatlar seni bulacak, açık fikirli olmaya devam et."

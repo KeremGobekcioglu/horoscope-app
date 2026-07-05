@@ -69,7 +69,7 @@ fun Calendar(
      *  The lucky days bullet is shiny
      */
     Column(
-        modifier = Modifier.fillMaxSize().padding(horizontal = 32.dp),
+        modifier = Modifier.fillMaxSize().padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
 
@@ -106,7 +106,8 @@ fun Calendar(
         // Days
         Row(
             modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
+
         ) {
             days.forEach {
                     day ->
