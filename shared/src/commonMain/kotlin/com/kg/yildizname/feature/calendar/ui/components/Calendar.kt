@@ -2,6 +2,7 @@ package com.kg.yildizname.feature.calendar.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -51,9 +52,11 @@ import kotlin.time.Clock
 @Composable
 fun Calendar(
     date: LocalDate,
-    luckDays: List<Int> = mutableListOf<Int>(),
+    luckDays: List<Int> = emptyList(),
+    selectedDay: CalendarDay?,
     onNextMonth: () -> Unit,
-    onPreviousMonth: () -> Unit
+    onPreviousMonth: () -> Unit,
+    onDaySelected: (CalendarDay) -> Unit
 )
 {
     val days : List<String> = listOf(
@@ -123,7 +126,13 @@ fun Calendar(
         {
             weeks.forEach {
                     week ->
-                CalendarRow(week = week, selectedDay = 30, selectedRelation = MonthRelation.PREVIOUS)            }
+                CalendarRow(
+                    week = week,
+                    selectedDay = selectedDay?.day ?: -1,
+                    selectedRelation = selectedDay?.relation ?: MonthRelation.CURRENT,
+                    onDayClick = onDaySelected
+                    )
+            }
         }
 
 //        SelectedDailyReadingCard()
@@ -132,13 +141,18 @@ fun Calendar(
 }
 
 @Composable
-fun DayComposable(modifier: Modifier = Modifier, isLuckyDay: Boolean = false, isSelected: Boolean = false, day: Int, isNextMonth: Boolean, isAvailable: Boolean)
+fun DayComposable(
+    modifier: Modifier = Modifier, isLuckyDay: Boolean = false,
+    isSelected: Boolean = false, day: Int, isNextMonth: Boolean, isAvailable: Boolean,
+    onClick: () -> Unit
+    )
 {
     val canShine = (isSelected || isLuckyDay) && isAvailable
     val shape = RoundedCornerShape(16.dp)
 
     Box(
-        modifier = modifier.size(48.dp)
+        modifier = modifier.clickable(isAvailable, onClick = onClick)
+            .size(48.dp)
             .then(
                 if(canShine) {
                     Modifier.shadow(elevation = 0.dp, shape = shape, ambientColor = YzGold, spotColor = YzGold)
@@ -178,7 +192,12 @@ fun DayComposable(modifier: Modifier = Modifier, isLuckyDay: Boolean = false, is
 }
 
 @Composable
-fun CalendarRow(luckDays: List<Int> = emptyList(), week: List<CalendarDay>, selectedDay: Int, selectedRelation: MonthRelation)
+fun CalendarRow(
+    luckDays: List<Int> = emptyList(),
+    week: List<CalendarDay>,
+    selectedDay: Int, selectedRelation: MonthRelation,
+    onDayClick: (CalendarDay) -> Unit
+    )
 {
     Row(modifier = Modifier.fillMaxWidth()) {
         week.forEach { day ->
@@ -187,7 +206,8 @@ fun CalendarRow(luckDays: List<Int> = emptyList(), week: List<CalendarDay>, sele
                 day = day.day,
                 isAvailable = day.isAvailable,
                 isSelected = day.day == selectedDay && day.relation == selectedRelation,
-                isNextMonth = day.relation != MonthRelation.CURRENT
+                isNextMonth = day.relation != MonthRelation.CURRENT,
+                onClick = { onDayClick(day) }
             )
         }
     }
