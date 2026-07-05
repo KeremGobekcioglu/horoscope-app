@@ -45,6 +45,8 @@
     <string name="period_weekly">Haftalık</string>
     <string name="period_monthly">Aylık</string>
 
+    <string name="this_month">Bu ay</string>
+    <string name="read_full">Tam yorumu oku    ❯</string>
 
     <string name="previous_month">Önceki Ay</string>
     <string name="next_month">Sonraki ay</string>

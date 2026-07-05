@@ -54,6 +54,8 @@
     <string name="score_career">Career</string>
     <string name="score_health">Health</string>
     <string name="score_general">General</string>
+    <string name="this_month">This month</string>
+    <string name="read_full">Read full comment    ❯</string>
 
     <!-- Onboarding -->
     <string name="onboarding_pick_sign_title">Choose Your Sign</string>
