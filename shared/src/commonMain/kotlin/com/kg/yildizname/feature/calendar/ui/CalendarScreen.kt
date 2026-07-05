@@ -26,6 +26,7 @@ import com.kg.yildizname.feature.calendar.ui.components.CalendarLoadingContent
 import com.kg.yildizname.feature.calendar.ui.components.MonthlyReadingCard
 import com.kg.yildizname.feature.calendar.ui.components.SelectedDailyReadingCard
 import kotlinx.datetime.DatePeriod
+import kotlinx.datetime.LocalDate
 import kotlinx.datetime.plus
 
 // Prompt 08: monthly grid, energy dots, today pulse, month swipe, day-tap expand panel.
@@ -44,8 +45,25 @@ fun CalendarScreen(
     {
         is CalendarUiState.Loading -> CalendarLoadingContent()
         is CalendarUiState.Error -> CalendarErrorContent(uiState.message, onRetry = onRetryClick)
-        is CalendarUiState.Success ->
-        {
+        is CalendarUiState.Success -> CalendarScreenSuccessContent(
+            uiState = uiState,
+            onNextMonth = onNextMonth,
+            onPreviousMonth = onPreviousMonth,
+            onDaySelected = onDaySelectedDay,
+            onReadMoreClick = onReadMoreClick
+        )
+    }
+}
+
+@Composable
+private fun CalendarScreenSuccessContent(
+    uiState: CalendarUiState.Success,
+    onNextMonth: () -> Unit,
+    onPreviousMonth: () -> Unit,
+    onDaySelected: (CalendarDay) -> Unit,
+    onReadMoreClick: (sign: String, period: String) -> Unit,
+) {
+
             Box(
                 modifier         = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center
@@ -78,7 +96,7 @@ fun CalendarScreen(
                             luckDays = uiState.luckDays,
                             onNextMonth = onNextMonth,
                             onPreviousMonth = onPreviousMonth,
-                            onDaySelected = { day -> onDaySelectedDay(day) },
+                            onDaySelected = { day -> onDaySelected(day) },
                             selectedDay = uiState.selectedDay
                         )
                     }
@@ -86,31 +104,22 @@ fun CalendarScreen(
                     Box(modifier = Modifier.weight(0.4f))
                     {
                         SelectedDailyReadingCard(
-                            scoreLove = 8,
-                            scoreWork = 6,
-                            scoreHealth = 7,
-                            scoreLuck = 9,
-                            dailyComment = "Bugün gezegenler senin lehine hizalanıyor. Sezgilerine güven, " +
-                                    "özellikle ilişkilerinde sabırlı olman gereken bir konu gündeme gelebilir.",
-                            toReadingDetail = {},
-                            date = "5 Temmuz"
+                            scoreLove = uiState.dailyReading.scores.love,
+                            scoreWork = uiState.dailyReading.scores.work,
+                            scoreHealth = uiState.dailyReading.scores.health,
+                            scoreLuck = uiState.dailyReading.scores.luck,
+                            dailyComment = uiState.dailyReading.text,
+                            toReadingDetail = {
+                                onReadMoreClick(uiState.dailyReading.sign.apiKey, uiState.dailyReading.period.apiKey)
+                            },
+                            date = DateFormatter.fullDate(LocalDate.parse(uiState.dailyReading.date))
                         )
                     }
                     Box(modifier = Modifier.weight(0.2f)) {
                         MonthlyReadingCard(
-                            monthlyComment = "Temmuz ayı boyunca yeni fırsatlar seni bulacak, açık fikirli olmaya devam et."
+                            monthlyComment = uiState.monthlyReading.text
                         )
                     }
                 }
             }
-        }
-    }
-}
-
-@Composable
-private fun CalendarScreenSuccessContent(
-
-)
-{
-
 }
