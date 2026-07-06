@@ -128,7 +128,8 @@ fun Calendar(
                     week = week,
                     selectedDay = selectedDay?.day ?: -1,
                     selectedRelation = selectedDay?.relation ?: MonthRelation.CURRENT,
-                    onDayClick = onDaySelected
+                    onDayClick = onDaySelected,
+                    modifier = Modifier.weight(1f)
                     )
             }
         }
@@ -150,7 +151,7 @@ fun DayComposable(
 
     Box(
         modifier = modifier.clickable(isAvailable, onClick = onClick)
-            //.size(42.dp)
+//            .size(42.dp)
             .then(
                 if(canShine) {
                     Modifier.shadow(elevation = 0.dp, shape = shape, ambientColor = YzGold, spotColor = YzGold)
@@ -191,13 +192,14 @@ fun DayComposable(
 
 @Composable
 fun CalendarRow(
+    modifier: Modifier = Modifier,
     luckDays: List<Int> = emptyList(),
     week: List<CalendarDay>,
     selectedDay: Int, selectedRelation: MonthRelation,
     onDayClick: (CalendarDay) -> Unit
     )
 {
-    Row(modifier = Modifier.fillMaxWidth()) {
+    Row(modifier = modifier.fillMaxWidth()) {
         week.forEach { day ->
             DayComposable(
                 modifier = Modifier.weight(1f),

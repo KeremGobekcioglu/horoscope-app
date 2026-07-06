@@ -159,8 +159,9 @@ private fun CalendarScreenSuccessContent(
 
             SecondaryTabRow(
                 selectedTabIndex = pagerState.currentPage,
-                containerColor = Color.Red,
-                contentColor = YzGold
+                containerColor = Color.Transparent,
+                contentColor = YzGold,
+//                divider = {}
             )
             {
                 Tab(
@@ -199,7 +200,7 @@ private fun CalendarScreenSuccessContent(
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
-                        .verticalScroll(rememberScrollState())
+//                        .verticalScroll(rememberScrollState())
                 ) {
                     when (page) {
                         PageTab.MONTHLY.page -> {

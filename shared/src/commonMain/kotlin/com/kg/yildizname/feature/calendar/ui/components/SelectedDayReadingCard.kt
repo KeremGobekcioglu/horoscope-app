@@ -77,15 +77,14 @@ fun SelectedDailyReadingCard(
             .clip(shape)
             .background(YzCardBg)
             .border(0.5.dp,YzBorder,shape)
-            .padding(horizontal = 20.dp)
+            .padding(horizontal = 20.dp, vertical = 8.dp)
     )
     {
         Column(
-            modifier = Modifier.padding(bottom = 4.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
+            modifier = Modifier.padding(top = 8.dp, bottom = 4.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
         )
         {
-            Spacer(Modifier.height(12.dp))
             Text(
                 text = date,
                 color = YzGold,
