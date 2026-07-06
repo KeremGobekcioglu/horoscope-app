@@ -4,10 +4,14 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
@@ -27,11 +31,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.kg.yildizname.core.ui.components.StarFieldBackground
 import com.kg.yildizname.core.ui.theme.YzBg
 import com.kg.yildizname.core.ui.theme.YzGold
 import com.kg.yildizname.core.ui.theme.YzInk
+import com.kg.yildizname.core.ui.utils.YzWindowWidth
+import com.kg.yildizname.core.ui.utils.rememberWindowWidth
 import com.kg.yildizname.core.util.DateUtils
 import com.kg.yildizname.feature.calendar.ui.components.Calendar
 import com.kg.yildizname.feature.calendar.ui.components.CalendarErrorContent
@@ -99,11 +107,18 @@ private fun CalendarScreenSuccessContent(
         }
     }
 
+    val windowWidth = rememberWindowWidth()
+    val contentMaxWidth = when (windowWidth) {
+        YzWindowWidth.Compact -> Dp.Unspecified
+        YzWindowWidth.Medium -> 600.dp
+        YzWindowWidth.Expanded -> 720.dp
+    }
+    StarFieldBackground(Modifier.fillMaxSize())
+
     Box(
         modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
+        contentAlignment = Alignment.TopCenter
     ) {
-        StarFieldBackground()
         /**
          * Title Burç takvimi
          *
@@ -115,22 +130,22 @@ private fun CalendarScreenSuccessContent(
          *
          *  card of the month
          */
-
-
         Column(
             modifier = Modifier
-                .fillMaxSize().statusBarsPadding()
-//                .background(YzBg)
-                //.verticalScroll(rememberScrollState())
+                .fillMaxSize()
+                .widthIn(max = contentMaxWidth)
                 .padding(horizontal = 16.dp, vertical = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-                Text(
-                    text = stringResource(Res.string.calendar_title),
-                    style = MaterialTheme.typography.headlineMedium,
-                    color = YzGold
-                )
+            Spacer(Modifier.height(16.dp))
+            Text(
+                text = stringResource(Res.string.calendar_title),
+                style = MaterialTheme.typography.headlineMedium,
+                color = YzGold
+            )
+            Box(modifier = Modifier.weight(1f) , contentAlignment = Alignment.TopCenter)
+            {
                 Calendar(
                     date = uiState.date,
                     luckDays = uiState.luckDays,
@@ -139,11 +154,12 @@ private fun CalendarScreenSuccessContent(
                     onDaySelected = onDaySelected,
                     selectedDay = uiState.selectedDay
                 )
+            }
 
 
             SecondaryTabRow(
                 selectedTabIndex = pagerState.currentPage,
-                //containerColor = YzBg,
+                containerColor = Color.Red,
                 contentColor = YzGold
             )
             {
@@ -174,29 +190,37 @@ private fun CalendarScreenSuccessContent(
             }
 
             HorizontalPager(
-                state = pagerState
+                state = pagerState,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
             )
             { page ->
-                when(page)
-                {
-                    PageTab.MONTHLY.page -> {
-                        MonthlyReadingCard(
-                            monthlyComment = uiState.monthlyReading.text
-                        )
-                    }
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .verticalScroll(rememberScrollState())
+                ) {
+                    when (page) {
+                        PageTab.MONTHLY.page -> {
+                            MonthlyReadingCard(
+                                monthlyComment = uiState.monthlyReading.text
+                            )
+                        }
 
-                    PageTab.DAILY.page -> {
-                        SelectedDailyReadingCard(
-                            scoreLove = uiState.dailyReading.scores.love,
-                            scoreWork = uiState.dailyReading.scores.work,
-                            scoreHealth = uiState.dailyReading.scores.health,
-                            scoreLuck = uiState.dailyReading.scores.luck,
-                            dailyComment = uiState.dailyReading.text,
-                            toReadingDetail = {
-                                onReadMoreClick(uiState.dailyReading.sign.apiKey, uiState.dailyReading.period.apiKey)
-                            },
-                            date = DateFormatter.fullDate(LocalDate.parse(uiState.dailyReading.date))
-                        )
+                        PageTab.DAILY.page -> {
+                            SelectedDailyReadingCard(
+                                scoreLove = uiState.dailyReading.scores.love,
+                                scoreWork = uiState.dailyReading.scores.work,
+                                scoreHealth = uiState.dailyReading.scores.health,
+                                scoreLuck = uiState.dailyReading.scores.luck,
+                                dailyComment = uiState.dailyReading.text,
+                                toReadingDetail = {
+                                    onReadMoreClick(uiState.dailyReading.sign.apiKey, uiState.dailyReading.period.apiKey)
+                                },
+                                date = DateFormatter.fullDate(LocalDate.parse(uiState.dailyReading.date))
+                            )
+                        }
                     }
                 }
             }

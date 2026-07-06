@@ -81,6 +81,7 @@ fun SelectedDailyReadingCard(
     )
     {
         Column(
+            modifier = Modifier.padding(bottom = 4.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         )
         {
@@ -113,6 +114,7 @@ fun SelectedDailyReadingCard(
                 overflow = TextOverflow.Ellipsis,
             )
             Row(modifier = Modifier.clickable(true, onClick = { toReadingDetail() })) {
+
                 Text(
                     text = stringResource(Res.string.read_full),
                     color = YzGold.copy(0.7f)

@@ -73,7 +73,7 @@ fun Calendar(
      */
     Column(
         modifier = Modifier.padding(horizontal = 16.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
+        verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         // < Month Year >
         Row(modifier = Modifier.fillMaxWidth(),
@@ -106,7 +106,7 @@ fun Calendar(
 
         // Days
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
             verticalAlignment = Alignment.CenterVertically,
 
         ) {
@@ -120,7 +120,7 @@ fun Calendar(
             }
         }
 
-        Column(modifier = Modifier.fillMaxWidth())
+        Column(modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(4.dp))
         {
             weeks.forEach {
                     week ->
@@ -150,7 +150,7 @@ fun DayComposable(
 
     Box(
         modifier = modifier.clickable(isAvailable, onClick = onClick)
-            .size(48.dp)
+            //.size(42.dp)
             .then(
                 if(canShine) {
                     Modifier.shadow(elevation = 0.dp, shape = shape, ambientColor = YzGold, spotColor = YzGold)
