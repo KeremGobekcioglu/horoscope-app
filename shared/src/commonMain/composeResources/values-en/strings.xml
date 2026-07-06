@@ -43,7 +43,7 @@
     <string name="previous_month">Previous Month</string>
     <string name="next_month">Next Month</string>
 
-
+    <string name="calendar_title">Zodiac Calendar</string>
     <!-- Reading periods -->
     <string name="period_daily">Daily</string>
     <string name="period_weekly">Weekly</string>

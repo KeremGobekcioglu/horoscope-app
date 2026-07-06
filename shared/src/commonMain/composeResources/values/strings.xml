@@ -149,6 +149,7 @@
     <string name="cd_back">Geri</string>
     <string name="cd_share">Paylaş</string>
 
+    <string name="calendar_title">Burç takvimi</string>
     <!-- Reading Detail -->
     <string name="reading_detail_zodyakin_gizemi">ZODYAKIN GİZEMİ</string>
     <string name="reading_detail_lucky_number_label">Şans Sayısı</string>

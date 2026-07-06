@@ -77,17 +77,18 @@ fun SelectedDailyReadingCard(
             .clip(shape)
             .background(YzCardBg)
             .border(0.5.dp,YzBorder,shape)
-            .padding(20.dp)
+            .padding(horizontal = 20.dp)
     )
     {
         Column(
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            verticalArrangement = Arrangement.spacedBy(12.dp)
         )
         {
+            Spacer(Modifier.height(12.dp))
             Text(
                 text = date,
                 color = YzGold,
-                fontSize = 24.sp
+                fontSize = 20.sp
             )
             /*
             * Label grids

@@ -72,11 +72,9 @@ fun Calendar(
      *  The lucky days bullet is shiny
      */
     Column(
-        modifier = Modifier.fillMaxSize().padding(16.dp),
+        modifier = Modifier.padding(horizontal = 16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-
-        Spacer(Modifier.height(32.dp))
         // < Month Year >
         Row(modifier = Modifier.fillMaxWidth(),
             Arrangement.SpaceBetween,
