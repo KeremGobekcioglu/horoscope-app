@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -150,7 +151,8 @@ fun DayComposable(
     val shape = RoundedCornerShape(16.dp)
     println("day = $day and avavilable info = $isAvailable")
     Box(
-        modifier = modifier.clickable(isAvailable, onClick = onClick)
+        modifier = modifier.aspectRatio(1f)
+            .clickable(isAvailable, onClick = onClick)
 //            .size(42.dp)
             .then(
                 if(canShine) {
