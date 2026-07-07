@@ -1,21 +1,5 @@
 package com.kg.yildizname.preview
 
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.kg.yildizname.core.data.model.PeriodType
-import com.kg.yildizname.core.data.model.Reading
-import com.kg.yildizname.core.data.model.ScoreSet
-import com.kg.yildizname.core.data.model.ZodiacSign
-import com.kg.yildizname.core.ui.components.StarFieldBackground
-import com.kg.yildizname.core.ui.theme.YzTheme
-import com.kg.yildizname.core.util.DateUtils
-import com.kg.yildizname.feature.calendar.ui.CalendarScreen
-import com.kg.yildizname.feature.calendar.ui.CalendarUiState
-import com.kg.yildizname.feature.home.ui.HomeScreen
-import com.kg.yildizname.feature.home.ui.HomeUiState
-
 //private val previewReading = Reading(
 //    sign = ZodiacSign.SCORPIO,
 //    period = PeriodType.DAILY,
@@ -73,36 +57,3 @@ import com.kg.yildizname.feature.home.ui.HomeUiState
 //        )
 //    }
 //}
-
-private val previewCalendarReading = Reading(
-    sign = ZodiacSign.SCORPIO,
-    period = PeriodType.DAILY,
-    date = "2026-07-01",
-    text = "Bugün gezegenler senin lehine hizalanıyor. Sezgilerine güven, " +
-        "özellikle ilişkilerinde sabırlı olman gereken bir konu gündeme gelebilir.",
-    scores = ScoreSet(love = 8, work = 6, health = 7, luck = 9),
-)
-
-@Preview(name = "Calendar", showBackground = true)
-@Composable
-public fun CalendarScreenPreview() {
-    YzTheme {
-        StarFieldBackground(Modifier.fillMaxSize())
-
-        CalendarScreen(
-            uiState = CalendarUiState.Success(
-                date = DateUtils.todayLocalDate(),
-                selectedDay = null,
-                luckDays = listOf(3, 7, 14, 21, 27),
-                dailyReading = previewCalendarReading,
-                monthlyReading = previewCalendarReading,
-            ),
-            onNextMonth = {},
-            onPreviousMonth = {},
-            onDaySelectedDay = {},
-            onTabChange = {},
-            onReadMoreClick = { _, _ -> },
-            onRetryClick = {},
-        )
-    }
-}

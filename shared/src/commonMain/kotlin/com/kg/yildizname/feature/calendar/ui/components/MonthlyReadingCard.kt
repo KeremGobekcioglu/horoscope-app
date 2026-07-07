@@ -23,6 +23,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.LineBreak
 import androidx.compose.ui.unit.dp
@@ -47,7 +48,8 @@ fun MonthlyReadingCard(
         monthlyComment.split(".").map { it.trim() }.filter { it.isNotEmpty() }
     }
 
-    var visible by remember { mutableStateOf(false) }
+    val inPreview = LocalInspectionMode.current
+    var visible by remember { mutableStateOf(inPreview) }
     LaunchedEffect(Unit)
     {
         visible  = true

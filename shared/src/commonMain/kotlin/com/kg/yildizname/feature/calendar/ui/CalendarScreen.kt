@@ -96,7 +96,7 @@ private fun CalendarScreenSuccessContent(
     onReadMoreClick: (sign: String, period: String) -> Unit,
     onTabChange: (PageTab) -> Unit
 ) {
-    val pagerState: PagerState = rememberPagerState { 2 }
+    val pagerState: PagerState = rememberPagerState(initialPage = uiState.selectedTab.page) { 2 }
     val scope = rememberCoroutineScope()
     LaunchedEffect(pagerState)
     {
