@@ -132,7 +132,6 @@ private fun CalendarScreenSuccessContent(
             verticalArrangement = Arrangement.spacedBy(8.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Spacer(Modifier.height(16.dp))
             Text(
                 text = stringResource(Res.string.calendar_title),
                 style = MaterialTheme.typography.headlineMedium,
