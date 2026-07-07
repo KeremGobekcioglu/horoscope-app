@@ -148,7 +148,7 @@ fun DayComposable(
 {
     val canShine = (isSelected || isLuckyDay) && isAvailable
     val shape = RoundedCornerShape(16.dp)
-
+    println("day = $day and avavilable info = $isAvailable")
     Box(
         modifier = modifier.clickable(isAvailable, onClick = onClick)
 //            .size(42.dp)

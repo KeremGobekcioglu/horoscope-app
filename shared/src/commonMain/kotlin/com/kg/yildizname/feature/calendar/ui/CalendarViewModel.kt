@@ -37,7 +37,8 @@ class CalendarViewModel(
     private var lastFetchedData : String? = null
 
     init {
-
+        println("CalendarViewModel: init, loading monthly reading for ${DateUtils.todayLocalDate()}")
+        loadMonthlyReading(DateUtils.todayLocalDate())
     }
 
     private fun loadMonthlyReading(month: LocalDate)
