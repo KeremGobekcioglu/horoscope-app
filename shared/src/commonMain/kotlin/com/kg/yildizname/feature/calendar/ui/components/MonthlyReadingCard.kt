@@ -101,7 +101,7 @@ fun MonthlyReadingCard(
                 Text(
                     modifier = Modifier.graphicsLayer { this.alpha = alpha },
                     text = "$string.",
-                    style = MaterialTheme.typography.bodyLarge.copy(lineBreak = LineBreak.Paragraph),
+                    style = MaterialTheme.typography.bodySmall.copy(lineBreak = LineBreak.Paragraph),
                     color = YzOnSurface,
                 )
             }

@@ -33,6 +33,7 @@ import com.kg.yildizname.core.ui.theme.YzMuted
 import com.kg.yildizname.core.ui.utils.DateFormatter
 import com.kg.yildizname.core.ui.utils.YzWindowWidth
 import com.kg.yildizname.core.ui.utils.rememberWindowWidth
+import com.kg.yildizname.core.ui.utils.yzStatusBarsPadding
 import com.kg.yildizname.feature.calendar.ui.components.Calendar
 import com.kg.yildizname.feature.calendar.ui.components.CalendarErrorContent
 import com.kg.yildizname.feature.calendar.ui.components.CalendarLoadingContent
@@ -126,6 +127,7 @@ private fun CalendarScreenSuccessContent(
             modifier = Modifier
                 .fillMaxSize()
                 .widthIn(max = contentMaxWidth)
+                .yzStatusBarsPadding()
                 .padding(horizontal = 16.dp, vertical = 16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
             horizontalAlignment = Alignment.CenterHorizontally
