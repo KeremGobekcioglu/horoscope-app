@@ -31,6 +31,7 @@ import com.kg.yildizname.core.util.DateUtils
 import com.kg.yildizname.feature.calendar.ui.CalendarDay
 import com.kg.yildizname.feature.calendar.ui.CalendarScreen
 import com.kg.yildizname.feature.calendar.ui.CalendarUiState
+import com.kg.yildizname.feature.calendar.ui.CalendarViewModel
 import com.kg.yildizname.feature.calendar.ui.MonthRelation
 import com.kg.yildizname.feature.calendar.ui.PageTab
 import com.kg.yildizname.feature.compatability.ui.CompatibilityScreen
@@ -301,64 +302,18 @@ fun YildiznameNavGraph(navController: NavHostController) {
             }
 
             composable<Calendar> {
-
-                val mockDailyReading = Reading(
-                    sign = ZodiacSign.SCORPIO,
-                    period = PeriodType.DAILY,
-                    date = DateUtils.today(),
-                    text = "Bugün gezegenler senin lehine hizalanıyor. Sezgilerine güven, özellikle ilişkilerinde sabırlı olman gereken bir konu gündeme gelebilir.",
-                    scores = ScoreSet(love = 8, work = 6, health = 7, luck = 9)
-                )
-
-                val mockMonthlyReading = Reading(
-                    sign = ZodiacSign.SCORPIO,
-                    period = PeriodType.MONTHLY,
-                    date = DateUtils.today(),
-                    text = "Temmuz ayı boyunca yeni fırsatlar seni bulacak, açık fikirli olmaya devam et. Özellikle ay ortasından sonra finansal konularda şansının arttığını göreceksin.",
-                    scores = ScoreSet(love = 7, work = 8, health = 6, luck = 7)
-                )
-
-                val mockCalendarUiState: CalendarUiState = CalendarUiState.Success(
-                    date = DateUtils.todayLocalDate(),
-                    selectedDay = null,
-                    selectedTab = PageTab.MONTHLY,
-                    luckDays = listOf(3, 7, 14, 21, 27),
-                    dailyReading = mockDailyReading,
-                    monthlyReading = mockMonthlyReading
-                )
-                var uiState = mockCalendarUiState
+                val viewModel: CalendarViewModel = koinViewModel()
+                val uiState by viewModel.uiState.collectAsStateWithLifecycle()
                 CalendarScreen(
-                    uiState = mockCalendarUiState,
-                    onNextMonth = {
-                        (uiState as? CalendarUiState.Success)?.let { current ->
-                            uiState = current.copy(date = current.date.plus(DatePeriod(months = 1)))
-                        }
+                    uiState = uiState,
+                    onNextMonth = viewModel::onNextMonth,
+                    onRetryClick = {},
+                    onReadMoreClick = {sign,period ->
+                        navController.navigate(ReadingDetail(sign,period))
                     },
-                    onPreviousMonth = {
-                        (uiState as? CalendarUiState.Success)?.let { current ->
-                            uiState = current.copy(date = current.date.plus(DatePeriod(months = -1)))
-                        }
-                    },
-                    onDaySelectedDay = { day ->
-                        (uiState as? CalendarUiState.Success)?.let { current ->
-                            uiState = current.copy(selectedDay = day, selectedTab = PageTab.DAILY)
-                        }
-                    },
-                    onTabChange = { tab ->
-                        (uiState as? CalendarUiState.Success)?.let { current ->
-                            val resolvedDay = if (tab == PageTab.DAILY && current.selectedDay == null) {
-                                val today = DateUtils.todayLocalDate()
-                                CalendarDay(
-                                    day = today.dayOfMonth,
-                                    relation = MonthRelation.CURRENT,
-                                    isAvailable = true
-                                )
-                            } else current.selectedDay
-                            uiState = current.copy(selectedTab = tab, selectedDay = resolvedDay)
-                        }
-                    },
-                    onReadMoreClick = { _, _ -> },
-                    onRetryClick = {}
+                    onPreviousMonth = viewModel::onPreviousMonth,
+                    onDaySelectedDay = viewModel::onDaySelected,
+                    onTabChange = viewModel::onTabChange
                 )
             }
 

@@ -205,21 +205,26 @@ private fun CalendarScreenSuccessContent(
                     when (page) {
                         PageTab.MONTHLY.page -> {
                             MonthlyReadingCard(
-                                monthlyComment = uiState.monthlyReading.text
+                                monthlyComment = uiState.monthlyReading?.text ?: "Monthly comment is empty"
                             )
                         }
 
                         PageTab.DAILY.page -> {
                             SelectedDailyReadingCard(
-                                scoreLove = uiState.dailyReading.scores.love,
-                                scoreWork = uiState.dailyReading.scores.work,
-                                scoreHealth = uiState.dailyReading.scores.health,
-                                scoreLuck = uiState.dailyReading.scores.luck,
-                                dailyComment = uiState.dailyReading.text,
+                                scoreLove = uiState.dailyReading?.scores?.love ?: 0,
+                                scoreWork = uiState.dailyReading?.scores?.work ?: 0,
+                                scoreHealth = uiState.dailyReading?.scores?.health ?: 0,
+                                scoreLuck = uiState.dailyReading?.scores?.luck ?: 0,
+                                dailyComment = uiState.dailyReading?.text ?: "Daily comment is empty.",
                                 toReadingDetail = {
-                                    onReadMoreClick(uiState.dailyReading.sign.apiKey, uiState.dailyReading.period.apiKey)
+                                    onReadMoreClick(
+                                        uiState.dailyReading?.sign?.apiKey ?: "",
+                                        uiState.dailyReading?.period?.apiKey ?: ""
+                                    )
                                 },
-                                date = DateFormatter.fullDate(LocalDate.parse(uiState.dailyReading.date))
+                                date = DateFormatter.fullDate(
+                                    LocalDate.parse(uiState.dailyReading?.date ?: DateUtils.todayLocalDate().toString())
+                                )
                             )
                         }
                     }

@@ -12,8 +12,8 @@ sealed interface CalendarUiState{
         val selectedDay: CalendarDay?,
         val selectedTab: PageTab = PageTab.MONTHLY,
         val luckDays: List<Int> = emptyList(),
-        val dailyReading: Reading,
-        val monthlyReading: Reading
+        val dailyReading: Reading?,
+        val monthlyReading: Reading?
     ) : CalendarUiState
 
     data class Error(val message: String) : CalendarUiState

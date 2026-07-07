@@ -1,6 +1,7 @@
 package com.kg.yildizname.di
 
 import com.kg.yildizname.core.data.prefs.UserPreferencesDataSource
+import com.kg.yildizname.feature.calendar.ui.CalendarViewModel
 import com.kg.yildizname.feature.home.ui.HomeViewModel
 import com.kg.yildizname.feature.onboarding.ui.OnboardingViewModel
 import com.kg.yildizname.feature.readingDetail.ui.ReadingDetailViewModel
@@ -14,5 +15,6 @@ val appModule: Module = module {
     viewModel { SplashViewModel(get()) }
     viewModel { OnboardingViewModel(get()) }
     viewModel { HomeViewModel(get(), get()) }
+    viewModel { CalendarViewModel(get(),get()) }
     viewModel { params -> ReadingDetailViewModel(params.get(), params.get(), get()) }
 }
