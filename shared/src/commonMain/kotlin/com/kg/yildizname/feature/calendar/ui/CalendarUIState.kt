@@ -19,13 +19,6 @@ sealed interface CalendarUiState{
     data class Error(val message: String) : CalendarUiState
 }
 
-//data class CalendarUIState(
-//    val date: LocalDate,
-//    val selectedDay: CalendarDay?,
-//    val selectedTab: PageTab = PageTab.MONTHLY,
-//    val mockLuckDays: List<Int> = emptyList()
-//)
-
 enum class PageTab(val page: Int)
 {
     DAILY(1),
