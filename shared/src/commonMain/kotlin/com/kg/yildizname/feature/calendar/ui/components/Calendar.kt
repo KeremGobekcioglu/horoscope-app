@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.sp
 import com.kg.yildizname.core.ui.theme.YzBg
 import com.kg.yildizname.core.ui.theme.YzGold
 import com.kg.yildizname.core.ui.theme.YzOnSurface
+import com.kg.yildizname.core.ui.utils.DateFormatter
 import com.kg.yildizname.feature.calendar.ui.CalendarDay
 import com.kg.yildizname.feature.calendar.ui.MonthRelation
 import compose.icons.FeatherIcons
@@ -60,9 +61,7 @@ fun Calendar(
     onDaySelected: (CalendarDay) -> Unit
 )
 {
-    val days : List<String> = listOf(
-        "Pzt","Sa","Ça","Pe","Cu","Cmt","Pzr"
-    )
+    val days : List<String> = DateFormatter.weekdayAbbreviations()
     val weeks  = calculateCalendar(date)
     /**
      * < Month Year >

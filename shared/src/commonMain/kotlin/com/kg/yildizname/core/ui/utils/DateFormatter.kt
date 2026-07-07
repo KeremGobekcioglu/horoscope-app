@@ -1,6 +1,12 @@
+package com.kg.yildizname.core.ui.utils
+
+import com.kg.yildizname.core.util.currentLanguageCode
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.isoDayNumber
 import kotlinx.datetime.number
+
+private fun deviceLanguage(): Language =
+    if (currentLanguageCode() == "tr") Language.TURKISH else Language.ENGLISH
 
 object DateFormatter {
 
@@ -24,21 +30,31 @@ object DateFormatter {
         "Friday", "Saturday", "Sunday"
     )
 
-    fun monthYear(date: LocalDate, language: Language = Language.TURKISH): String {
+    private val weekdayAbbreviationsTr = listOf(
+        "Pzt", "Sa", "Ça", "Pe", "Cu", "Cmt", "Pzr"
+    )
+    private val weekdayAbbreviationsEn = listOf(
+        "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"
+    )
+
+    fun weekdayAbbreviations(language: Language = deviceLanguage()): List<String> =
+        if (language == Language.TURKISH) weekdayAbbreviationsTr else weekdayAbbreviationsEn
+
+    fun monthYear(date: LocalDate, language: Language = deviceLanguage()): String {
         val months = if (language == Language.TURKISH) monthsTr else monthsEn
         return "${months[date.month.number - 1]} ${date.year}"
     }
 
-    fun fullDate(date: LocalDate, language: Language = Language.TURKISH): String {
+    fun fullDate(date: LocalDate, language: Language = deviceLanguage()): String {
         val months = if (language == Language.TURKISH) monthsTr else monthsEn
         val weekdays = if (language == Language.TURKISH) weekdaysTr else weekdaysEn
         val weekday = weekdays[date.dayOfWeek.isoDayNumber - 1]
-        return "${date.dayOfYear} ${months[date.month.number - 1]}, $weekday"
+        return "${date.day} ${months[date.month.number - 1]}, $weekday"
     }
 
     fun formatDate(
         date: String,
-        language: Language = Language.ENGLISH
+        language: Language = deviceLanguage()
     ): String {
 
         val parts = date.split("-")
