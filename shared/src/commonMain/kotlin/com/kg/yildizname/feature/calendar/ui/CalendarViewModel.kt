@@ -155,10 +155,15 @@ class CalendarViewModel(
     {
         val current = _uiState.value as? CalendarUiState.Success ?: return
         val resolvedDate = resolveDate(day,current.date)
+        if(day.isAvailable)
+        {
+            loadDailyReading(resolvedDate)
+        }
         _uiState.value = current.copy(
             selectedDay = day,
             selectedTab = PageTab.DAILY
         )
+
     }
     fun onTabChange(pageTab: PageTab)
     {

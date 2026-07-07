@@ -44,6 +44,8 @@
     <string name="next_month">Next Month</string>
 
     <string name="calendar_title">Zodiac Calendar</string>
+    <string name="calendar_future_month_message">No reading available for this month yet.</string>
+    <string name="calendar_pick_a_day_message">Select a day to see its daily reading.</string>
     <!-- Reading periods -->
     <string name="period_daily">Daily</string>
     <string name="period_weekly">Weekly</string>

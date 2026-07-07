@@ -32,12 +32,15 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.kg.yildizname.core.ui.components.StarFieldBackground
 import com.kg.yildizname.core.ui.theme.YzBg
 import com.kg.yildizname.core.ui.theme.YzGold
 import com.kg.yildizname.core.ui.theme.YzInk
+import com.kg.yildizname.core.ui.theme.YzMuted
 import com.kg.yildizname.core.ui.utils.YzWindowWidth
 import com.kg.yildizname.core.ui.utils.rememberWindowWidth
 import com.kg.yildizname.core.util.DateUtils
@@ -47,6 +50,8 @@ import com.kg.yildizname.feature.calendar.ui.components.CalendarLoadingContent
 import com.kg.yildizname.feature.calendar.ui.components.MonthlyReadingCard
 import com.kg.yildizname.feature.calendar.ui.components.SelectedDailyReadingCard
 import horoscope.shared.generated.resources.Res
+import horoscope.shared.generated.resources.calendar_future_month_message
+import horoscope.shared.generated.resources.calendar_pick_a_day_message
 import horoscope.shared.generated.resources.calendar_title
 import horoscope.shared.generated.resources.period_daily
 import horoscope.shared.generated.resources.period_monthly
@@ -204,32 +209,51 @@ private fun CalendarScreenSuccessContent(
                 ) {
                     when (page) {
                         PageTab.MONTHLY.page -> {
-                            MonthlyReadingCard(
-                                monthlyComment = uiState.monthlyReading?.text ?: "Monthly comment is empty"
-                            )
+                            val monthly = uiState.monthlyReading
+                            if (monthly != null) {
+                                MonthlyReadingCard(monthlyComment = monthly.text)
+                            } else {
+                                CalendarEmptyStateContent(message = stringResource(Res.string.calendar_future_month_message))
+                            }
                         }
-
                         PageTab.DAILY.page -> {
-                            SelectedDailyReadingCard(
-                                scoreLove = uiState.dailyReading?.scores?.love ?: 0,
-                                scoreWork = uiState.dailyReading?.scores?.work ?: 0,
-                                scoreHealth = uiState.dailyReading?.scores?.health ?: 0,
-                                scoreLuck = uiState.dailyReading?.scores?.luck ?: 0,
-                                dailyComment = uiState.dailyReading?.text ?: "Daily comment is empty.",
-                                toReadingDetail = {
-                                    onReadMoreClick(
-                                        uiState.dailyReading?.sign?.apiKey ?: "",
-                                        uiState.dailyReading?.period?.apiKey ?: ""
-                                    )
-                                },
-                                date = DateFormatter.fullDate(
-                                    LocalDate.parse(uiState.dailyReading?.date ?: DateUtils.todayLocalDate().toString())
+                            val daily = uiState.dailyReading
+                            if (daily != null) {
+                                SelectedDailyReadingCard(
+                                    scoreLove = daily.scores.love,
+                                    scoreWork = daily.scores.work,
+                                    scoreHealth = daily.scores.health,
+                                    scoreLuck = daily.scores.luck,
+                                    dailyComment = daily.text,
+                                    toReadingDetail = { onReadMoreClick(daily.sign.apiKey, daily.period.apiKey) },
+                                    date = DateFormatter.fullDate(LocalDate.parse(daily.date))
                                 )
-                            )
+                            } else {
+                                CalendarEmptyStateContent(message = stringResource(Res.string.calendar_pick_a_day_message))
+                            }
                         }
                     }
                 }
             }
+        }
+    }
+}
+@Composable
+private fun CalendarEmptyStateContent(message: String, modifier: Modifier = Modifier) {
+    Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+            modifier = Modifier.padding(32.dp)
+        ) {
+            Text(text = "✦", color = YzGold.copy(alpha = 0.4f), fontSize = 28.sp)
+            Text(
+                text = message,
+                color = YzMuted,
+                fontSize = 14.sp,
+                lineHeight = 22.sp,
+                textAlign = TextAlign.Center
+            )
         }
     }
 }

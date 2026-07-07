@@ -150,6 +150,8 @@
     <string name="cd_share">Paylaş</string>
 
     <string name="calendar_title">Burç takvimi</string>
+    <string name="calendar_future_month_message">Bu ay için henüz bir yorum bulunmuyor.</string>
+    <string name="calendar_pick_a_day_message">Günlük yorumu görmek için bir gün seçin.</string>
     <!-- Reading Detail -->
     <string name="reading_detail_zodyakin_gizemi">ZODYAKIN GİZEMİ</string>
     <string name="reading_detail_lucky_number_label">Şans Sayısı</string>
