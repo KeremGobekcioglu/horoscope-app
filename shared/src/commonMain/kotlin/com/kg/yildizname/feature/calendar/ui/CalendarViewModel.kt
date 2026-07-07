@@ -13,6 +13,7 @@ import com.kg.yildizname.core.data.repository.UserRepository
 import com.kg.yildizname.core.util.DateUtils
 import com.kg.yildizname.feature.calendar.ui.components.nextMonth
 import com.kg.yildizname.feature.calendar.ui.components.previousMonth
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -36,6 +37,8 @@ class CalendarViewModel(
     private var sign: ZodiacSign? = null
     private var lastFetchedData : String? = null
 
+    private var dailyJob: Job? = null
+    private var monthlyJob: Job? = null
     init {
         println("CalendarViewModel: init, loading monthly reading for ${DateUtils.todayLocalDate()}")
         loadMonthlyReading(DateUtils.todayLocalDate())
@@ -43,7 +46,8 @@ class CalendarViewModel(
 
     private fun loadMonthlyReading(month: LocalDate)
     {
-        viewModelScope.launch {
+        monthlyJob?.cancel()
+        monthlyJob = viewModelScope.launch {
             val existing = _uiState.value as? CalendarUiState.Success
             if(existing == null)
                 _uiState.value = CalendarUiState.Loading
@@ -91,7 +95,8 @@ class CalendarViewModel(
 
     private fun loadDailyReading(date: LocalDate)
     {
-        viewModelScope.launch {
+        dailyJob?.cancel()
+        dailyJob = viewModelScope.launch {
             val existing = _uiState.value as? CalendarUiState.Success
             if(existing == null)
                 _uiState.value = CalendarUiState.Loading
@@ -127,7 +132,8 @@ class CalendarViewModel(
             date = newMonth,
             selectedDay = null,
             selectedTab = PageTab.MONTHLY,
-            monthlyReading = null
+            monthlyReading = null,
+            dailyReading = null
         )
         if(!isFutureMonth(newMonth))
         {
@@ -142,7 +148,8 @@ class CalendarViewModel(
             date = newMonth,
             selectedDay = null,
             selectedTab = PageTab.MONTHLY,
-            monthlyReading = null
+            monthlyReading = null,
+            dailyReading = null
         )
         loadMonthlyReading(newMonth)
     }
@@ -155,15 +162,14 @@ class CalendarViewModel(
     {
         val current = _uiState.value as? CalendarUiState.Success ?: return
         val resolvedDate = resolveDate(day,current.date)
-        if(day.isAvailable)
-        {
-            loadDailyReading(resolvedDate)
-        }
         _uiState.value = current.copy(
             selectedDay = day,
             selectedTab = PageTab.DAILY
         )
-
+        if(day.isAvailable)
+        {
+            loadDailyReading(resolvedDate)
+        }
     }
     fun onTabChange(pageTab: PageTab)
     {

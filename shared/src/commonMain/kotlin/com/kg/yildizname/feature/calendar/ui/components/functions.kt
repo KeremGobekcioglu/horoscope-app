@@ -35,7 +35,7 @@ fun calculateCalendar(date: LocalDate) : List<List<CalendarDay>>
     for(day in firstPreviousDay..previousMonthDayCount)
     {
         val cellDate = LocalDate(date.previousMonth().year, date.previousMonth().month, day)
-        calendarDays.add(CalendarDay(day = day, relation = MonthRelation.PREVIOUS , isAvailable = true))
+        calendarDays.add(CalendarDay(day = day, relation = MonthRelation.PREVIOUS , isAvailable = cellDate <= today))
     }
     for(day in 1..daysInMonth)
     {
