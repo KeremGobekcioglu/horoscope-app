@@ -46,7 +46,8 @@ private fun CalendarWithReadingCardsPreview() {
                 selectedDay = null,
                 onNextMonth = { date = date.plus(DatePeriod(months = 1)) },
                 onPreviousMonth = { date = date.plus(DatePeriod(months = -1)) },
-                onDaySelected = {}
+                onDaySelected = {},
+                canGoToPreviousMonth = false
             )
 
             Box() {

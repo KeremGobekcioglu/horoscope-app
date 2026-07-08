@@ -6,5 +6,5 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
-actual fun Modifier.yzStatusBarsPadding(): Modifier = padding(top = 16.dp)
+actual fun Modifier.yzStatusBarsPadding(): Modifier = padding(top = 32.dp)
 actual fun Modifier.yzNavigationBarsPadding(): Modifier = navigationBarsPadding()
