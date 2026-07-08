@@ -23,6 +23,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
@@ -58,7 +59,9 @@ fun Calendar(
     selectedDay: CalendarDay?,
     onNextMonth: () -> Unit,
     onPreviousMonth: () -> Unit,
-    onDaySelected: (CalendarDay) -> Unit
+    onDaySelected: (CalendarDay) -> Unit,
+    canGoToPreviousMonth: Boolean,   // new param
+
 )
 {
     val days : List<String> = DateFormatter.weekdayAbbreviations()
@@ -79,14 +82,12 @@ fun Calendar(
         Row(modifier = Modifier.fillMaxWidth(),
             Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically) {
-            IconButton(
-                onClick = { onPreviousMonth() }
-            )
-            {
+            IconButton(onClick = { onPreviousMonth() }, enabled = canGoToPreviousMonth) {
                 Icon(
                     imageVector = FeatherIcons.ChevronLeft,
                     contentDescription = Res.string.previous_month.toString(),
-                    tint = YzGold
+                    tint = YzGold,
+                    modifier = Modifier.alpha(if (canGoToPreviousMonth) 1f else 0f)
                 )
             }
             Text(text = DateFormatter.monthYear(date),

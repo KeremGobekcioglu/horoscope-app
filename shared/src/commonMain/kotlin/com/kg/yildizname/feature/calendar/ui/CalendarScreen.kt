@@ -12,6 +12,8 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SecondaryTabRow
 import androidx.compose.material3.Tab
@@ -22,12 +24,14 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kg.yildizname.core.ui.components.StarFieldBackground
+import com.kg.yildizname.core.ui.theme.PillShape
 import com.kg.yildizname.core.ui.theme.YzGold
 import com.kg.yildizname.core.ui.theme.YzMuted
 import com.kg.yildizname.core.ui.utils.DateFormatter
@@ -145,7 +149,8 @@ private fun CalendarScreenSuccessContent(
                     onNextMonth = onNextMonth,
                     onPreviousMonth = onPreviousMonth,
                     onDaySelected = onDaySelected,
-                    selectedDay = uiState.selectedDay
+                    selectedDay = uiState.selectedDay,
+                    canGoToPreviousMonth = uiState.canGoToPreviousMonth
                 )
             }
 
@@ -154,10 +159,11 @@ private fun CalendarScreenSuccessContent(
                 selectedTabIndex = pagerState.currentPage,
                 containerColor = Color.Transparent,
                 contentColor = YzGold,
-//                divider = {}
+                divider = {}
             )
             {
                 Tab(
+                    modifier = Modifier.clip(PillShape),
                     selected = pagerState.currentPage == PageTab.MONTHLY.page,
                     onClick = {
                         scope.launch { pagerState.animateScrollToPage(PageTab.MONTHLY.page) }
@@ -171,6 +177,7 @@ private fun CalendarScreenSuccessContent(
 
 
                 Tab(
+                    modifier = Modifier.clip(PillShape),
                     selected = pagerState.currentPage == PageTab.DAILY.page,
                     onClick = {
                         scope.launch { pagerState.animateScrollToPage(PageTab.DAILY.page) }
@@ -193,7 +200,7 @@ private fun CalendarScreenSuccessContent(
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
-//                        .verticalScroll(rememberScrollState())
+                        .verticalScroll(rememberScrollState())
                 ) {
                     when (page) {
                         PageTab.MONTHLY.page -> {

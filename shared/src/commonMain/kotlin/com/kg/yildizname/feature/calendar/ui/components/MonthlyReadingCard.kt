@@ -73,7 +73,7 @@ fun MonthlyReadingCard(
             }
             .clip(shape)
             .background(YzCardBg.copy(0.6f))
-            //.border(0.5.dp,YzBorder,shape)
+            .border(0.5.dp,YzBorder,shape)
             .padding(20.dp)
     )
     {

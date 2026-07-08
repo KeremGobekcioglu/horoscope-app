@@ -140,17 +140,11 @@ class CalendarViewModel(
             loadMonthlyReading(newMonth)
         }
     }
-    fun onPreviousMonth()
-    {
+    fun onPreviousMonth() {
         val current = _uiState.value as? CalendarUiState.Success ?: return
         val newMonth = current.date.minus(DatePeriod(months = 1))
-        _uiState.value = current.copy(
-            date = newMonth,
-            selectedDay = null,
-            selectedTab = PageTab.MONTHLY,
-            monthlyReading = null,
-            dailyReading = null
-        )
+        if (newMonth < DateUtils.earliestAvailableDate) return
+        _uiState.value = current.copy(date = newMonth, selectedDay = null, selectedTab = PageTab.MONTHLY, monthlyReading = null, dailyReading = null)
         loadMonthlyReading(newMonth)
     }
     private fun isFutureMonth(month: LocalDate): Boolean {
@@ -177,7 +171,7 @@ class CalendarViewModel(
         if(pageTab == PageTab.MONTHLY)
         {
             // switch to monthly
-            _uiState.value = current.copy(selectedTab = pageTab)
+            _uiState.value = current.copy(selectedTab = pageTab , selectedDay = null)
         }
         else {
             val today = DateUtils.todayLocalDate()

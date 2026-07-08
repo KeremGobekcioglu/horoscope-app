@@ -1,7 +1,9 @@
 package com.kg.yildizname.feature.calendar.ui
 
 import com.kg.yildizname.core.data.model.Reading
+import com.kg.yildizname.core.util.DateUtils
 import kotlinx.datetime.LocalDate
+import kotlinx.datetime.number
 
 
 sealed interface CalendarUiState{
@@ -15,6 +17,12 @@ sealed interface CalendarUiState{
         val dailyReading: Reading?,
         val monthlyReading: Reading?
     ) : CalendarUiState
+    {
+        val canGoToPreviousMonth: Boolean
+            get() = date.year > DateUtils.earliestAvailableDate.year ||
+                    (date.year == DateUtils.earliestAvailableDate.year &&
+                            date.month.number > DateUtils.earliestAvailableDate.month.number)
+    }
 
     data class Error(val message: String) : CalendarUiState
 }

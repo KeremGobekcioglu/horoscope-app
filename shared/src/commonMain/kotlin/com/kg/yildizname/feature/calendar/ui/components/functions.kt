@@ -1,5 +1,6 @@
 package com.kg.yildizname.feature.calendar.ui.components
 
+import com.kg.yildizname.core.util.DateUtils
 import com.kg.yildizname.feature.calendar.ui.CalendarDay
 import com.kg.yildizname.feature.calendar.ui.MonthRelation
 import kotlinx.datetime.LocalDate
@@ -35,18 +36,19 @@ fun calculateCalendar(date: LocalDate) : List<List<CalendarDay>>
     for(day in firstPreviousDay..previousMonthDayCount)
     {
         val cellDate = LocalDate(date.previousMonth().year, date.previousMonth().month, day)
-        calendarDays.add(CalendarDay(day = day, relation = MonthRelation.PREVIOUS , isAvailable = cellDate <= today))
-    }
+        calendarDays.add(CalendarDay(day = day, relation = MonthRelation.PREVIOUS,
+            isAvailable = cellDate in DateUtils.earliestAvailableDate..today))    }
     for(day in 1..daysInMonth)
     {
         val cellDate = LocalDate(date.year, date.month, day)
-        val isAvailable = if(isCurrentMonth) day <= today.day else isPreviousMonth
-        calendarDays.add(CalendarDay(day = day, relation = MonthRelation.CURRENT , isAvailable = cellDate<=today))
+        calendarDays.add(CalendarDay(day = day, relation = MonthRelation.CURRENT,
+            isAvailable = cellDate in DateUtils.earliestAvailableDate..today))
     }
     for(day in 1..trailing)
     {
         val cellDate = LocalDate(date.nextMonth().year, date.nextMonth().month, day)
-        calendarDays.add(CalendarDay(day = day, relation = MonthRelation.NEXT , isAvailable = cellDate<=today))
+        calendarDays.add(CalendarDay(day = day, relation = MonthRelation.NEXT,
+            isAvailable = cellDate in DateUtils.earliestAvailableDate..today))
     }
     return calendarDays.chunked(7)
 }

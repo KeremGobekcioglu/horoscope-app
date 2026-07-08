@@ -48,8 +48,12 @@ object DateFormatter {
     fun fullDate(date: LocalDate, language: Language = deviceLanguage()): String {
         val months = if (language == Language.TURKISH) monthsTr else monthsEn
         val weekdays = if (language == Language.TURKISH) weekdaysTr else weekdaysEn
+        val month = months[date.month.number - 1]
         val weekday = weekdays[date.dayOfWeek.isoDayNumber - 1]
-        return "${date.day} ${months[date.month.number - 1]}, $weekday"
+        return when (language) {
+            Language.TURKISH -> "${date.day} $month $weekday"
+            Language.ENGLISH -> "$month ${date.day}, $weekday"
+        }
     }
 
     fun formatDate(
@@ -69,7 +73,10 @@ object DateFormatter {
             Language.TURKISH -> monthsTr
         }
 
-        return "$day ${months[month - 1]} $year"
+        return when (language) {
+            Language.TURKISH -> "$day ${months[month - 1]} $year"
+            Language.ENGLISH -> "${months[month - 1]} $day, $year"
+        }
     }
 }
 
