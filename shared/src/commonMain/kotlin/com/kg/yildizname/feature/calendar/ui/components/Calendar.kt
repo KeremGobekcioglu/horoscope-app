@@ -28,6 +28,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kg.yildizname.core.ui.theme.YzBg
@@ -116,6 +117,7 @@ fun Calendar(
                 Text(
                     text = day,
                     color = YzGold.copy(0.8f),
+                    textAlign = TextAlign.Center,
                     modifier = Modifier.weight(1f)
                 )
             }
