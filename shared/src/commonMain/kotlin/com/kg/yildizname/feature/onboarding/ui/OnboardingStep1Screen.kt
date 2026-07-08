@@ -41,10 +41,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.kg.yildizname.core.domain.model.ZodiacSign
-import com.kg.yildizname.core.domain.model.ZodiacSigns
-import com.kg.yildizname.core.domain.model.localizedDateRange
-import com.kg.yildizname.core.domain.model.localizedName
+import com.kg.yildizname.core.data.model.ZodiacSign
+import com.kg.yildizname.core.data.model.localizedDateRange
+import com.kg.yildizname.core.data.model.localizedName
 import com.kg.yildizname.core.ui.components.PageIndicator
 import com.kg.yildizname.core.ui.components.yzTextSurfaceWash
 import com.kg.yildizname.core.ui.theme.YzBg
@@ -202,7 +201,7 @@ fun OnboardingStep1Screen(
                 horizontalArrangement = Arrangement.spacedBy(10.dp),
                 verticalArrangement   = Arrangement.spacedBy(10.dp),
             ) {
-                items(ZodiacSigns) { sign ->
+                items(ZodiacSign.entries) { sign ->
                     ZodiacCard(
                         sign     = sign,
                         selected = sign == selectedSign,

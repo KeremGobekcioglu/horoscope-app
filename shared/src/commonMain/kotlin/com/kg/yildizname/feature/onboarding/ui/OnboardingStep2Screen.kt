@@ -47,7 +47,7 @@ import com.kg.yildizname.core.ui.theme.YzGold
 import com.kg.yildizname.core.ui.theme.YzMuted
 import com.kg.yildizname.core.ui.theme.YzOnSurface
 import com.kg.yildizname.core.ui.theme.YzPickerBg
-import com.kg.yildizname.core.domain.model.ZodiacSign
+import com.kg.yildizname.core.data.model.ZodiacSign
 import com.kg.yildizname.feature.onboarding.BirthDate
 import horoscope.shared.generated.resources.Res
 import horoscope.shared.generated.resources.month_april
