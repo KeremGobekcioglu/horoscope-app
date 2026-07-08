@@ -21,19 +21,6 @@ import androidx.compose.ui.layout.ContentScale
 import com.kg.yildizname.core.data.model.ZodiacSign
 import com.kg.yildizname.core.ui.theme.YzGold
 import com.kg.yildizname.core.ui.theme.YzViolet
-import horoscope.shared.generated.resources.Res
-import horoscope.shared.generated.resources.aquarius_constellation_icon
-import horoscope.shared.generated.resources.aries_constellation_icon
-import horoscope.shared.generated.resources.cancer_constellation_icon
-import horoscope.shared.generated.resources.capricorn_constellation_icon
-import horoscope.shared.generated.resources.gemini_constellation_icon
-import horoscope.shared.generated.resources.leo_constellation_icon
-import horoscope.shared.generated.resources.libra_constellation_icon
-import horoscope.shared.generated.resources.pisces_constellation_icon
-import horoscope.shared.generated.resources.sagittarius_constellation_icon
-import horoscope.shared.generated.resources.scorpio_constellation_icon
-import horoscope.shared.generated.resources.taurus_constellation_icon
-import horoscope.shared.generated.resources.virgo_constellation_icon
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
@@ -43,20 +30,7 @@ internal fun ConstellationHero(
 ) {
     // Resolve PNG resource by sign — drop files as constellation_scorpio.png etc.
     // into composeResources/drawable/
-    val painter: Painter = when (sign) {
-        ZodiacSign.ARIES        -> painterResource(Res.drawable.aries_constellation_icon)
-        ZodiacSign.TAURUS       -> painterResource(Res.drawable.taurus_constellation_icon)
-        ZodiacSign.GEMINI       -> painterResource(Res.drawable.gemini_constellation_icon)
-        ZodiacSign.CANCER       -> painterResource(Res.drawable.cancer_constellation_icon)
-        ZodiacSign.LEO          -> painterResource(Res.drawable.leo_constellation_icon)
-        ZodiacSign.VIRGO        -> painterResource(Res.drawable.virgo_constellation_icon)
-        ZodiacSign.LIBRA        -> painterResource(Res.drawable.libra_constellation_icon)
-        ZodiacSign.SCORPIO      -> painterResource(Res.drawable.scorpio_constellation_icon)
-        ZodiacSign.SAGITTARIUS  -> painterResource(Res.drawable.sagittarius_constellation_icon)
-        ZodiacSign.CAPRICORN    -> painterResource(Res.drawable.capricorn_constellation_icon)
-        ZodiacSign.AQUARIUS     -> painterResource(Res.drawable.aquarius_constellation_icon)
-        ZodiacSign.PISCES       -> painterResource(Res.drawable.pisces_constellation_icon)
-    }
+    val painter: Painter = painterResource(sign.drawable)
 
     val glowTransition = rememberInfiniteTransition(label = "heroGlow")
     val glowAlpha by glowTransition.animateFloat(

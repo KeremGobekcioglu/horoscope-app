@@ -3,7 +3,7 @@ package com.kg.yildizname.feature.onboarding.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kg.yildizname.core.data.prefs.UserPreferencesDataSource
-import com.kg.yildizname.core.domain.model.ZodiacSign
+import com.kg.yildizname.core.data.model.ZodiacSign
 import com.kg.yildizname.feature.onboarding.BirthDate
 import com.kg.yildizname.feature.onboarding.OnboardingOptionalData
 import kotlinx.coroutines.channels.Channel
@@ -32,7 +32,7 @@ class OnboardingViewModel(
         val sign = _uiState.value.selectedSign ?: return
         viewModelScope.launch {
             try {
-                prefs.saveZodiacSign(sign.key)
+                prefs.saveZodiacSign(sign.turkishKey)
                 _events.send(OnboardingEvent.NavigateToStep2)
             } catch (e: Exception) {
                 _uiState.update { it.copy(error = e.message) }

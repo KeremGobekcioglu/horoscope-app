@@ -9,14 +9,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import com.kg.yildizname.core.data.model.ZodiacSign
-import com.kg.yildizname.core.util.nameStringResource
+import com.kg.yildizname.core.data.model.localizedName
 import kotlinx.datetime.LocalDate
-import org.jetbrains.compose.resources.stringResource
 
 /** Localized, all-caps sign name — matches the format ShareCard expects. */
 @Composable
 fun shareCardSignName(sign: ZodiacSign): String =
-    stringResource(sign.nameStringResource()).uppercase()
+    sign.localizedName().uppercase()
 
 /** Everything ShareCard/ShareBottomSheet need to render for one share request. */
 data class ShareCardRequest(
