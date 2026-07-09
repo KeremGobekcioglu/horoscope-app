@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
@@ -45,6 +46,8 @@ import com.kg.yildizname.core.ui.theme.SquareShape
 import com.kg.yildizname.core.ui.theme.YzBg
 import com.kg.yildizname.core.ui.theme.YzGold
 import com.kg.yildizname.core.ui.theme.YzInk
+import com.kg.yildizname.core.ui.theme.YzOnSurface
+import com.kg.yildizname.core.ui.theme.YzSurface
 import com.kg.yildizname.core.ui.utils.yzStatusBarsPadding
 import horoscope.shared.generated.resources.Res
 import horoscope.shared.generated.resources.compat_person_one_label
@@ -72,51 +75,44 @@ import kotlin.math.sign
 fun selectSignComposable(modifier: Modifier = Modifier, selectSign: () -> Unit, canShine: Boolean, textBelow: String) {
     val shape = SquareShape
     Box(
-        modifier = modifier.aspectRatio(1f)
+        modifier = modifier
             .clickable(true, onClick = selectSign)
-//            .then(
-//                if (canShine) {
-//                    Modifier.shadow(
-//                        elevation = 1.dp,
-//                        shape = shape,
-//                        ambientColor = YzGold,
-//                        spotColor = YzGold
-//                    )
-//                } else Modifier
-//            )
+            .then(
+                if (canShine) {
+                    Modifier.shadow(
+                        elevation = 1.dp,
+                        shape = shape,
+                        ambientColor = YzGold,
+                        spotColor = YzGold
+                    )
+                } else Modifier
+            )
             .border(width = 2.dp , shape = shape , color = YzGold)
             .clip(shape)
-            .background(YzBg.copy(0.1f)),
+            .background(YzOnSurface.copy(0.15f)),
         contentAlignment = Alignment.Center
     )
     {
         Column(
-            horizontalAlignment = Alignment.CenterHorizontally)
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+            )
 
         {
             // plus icon
             // text
-            Icon(
-                imageVector = Icons.Default.Add,
-                contentDescription = null,
-                tint = YzGold,
-                modifier = Modifier.size(16.dp)
-            )
-            Spacer(Modifier.height(8.dp))
+            Box {
+                Icon(Icons.Default.Add, contentDescription = null, tint = YzGold, modifier = Modifier.size(24.dp).offset(0.5.dp, 0.dp))
+                Icon(Icons.Default.Add, contentDescription = null, tint = YzGold, modifier = Modifier.size(24.dp))
+            }
             Text(
                 text = stringResource(Res.string.compat_select_sign),
                 color = YzGold,
                 fontWeight = FontWeight.Bold,
-                fontSize = 8.sp
+                fontSize = 12.sp
             )
         }
     }
-    Spacer(Modifier.height(8.dp))
-    Text(
-        text = textBelow,
-        color = YzInk,
-        fontSize = 12.sp
-    )
 }
 
 /***
@@ -171,8 +167,37 @@ fun CompatibilityScreen() {
                 modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)
             )
             {
-                selectSignComposable(modifier = Modifier.size(96.dp), textBelow = stringResource(Res.string.compat_person_one_label) , canShine = true , selectSign = {})
-                selectSignComposable(modifier = Modifier.size(96.dp), textBelow = stringResource(Res.string.compat_person_two_label) , canShine = true , selectSign = {})
+                Column(
+                    modifier = Modifier.weight(1f).fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(4.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+                    selectSignComposable(
+                        modifier = Modifier.size(96.dp),
+                        textBelow = stringResource(Res.string.compat_person_one_label),
+                        canShine = true, selectSign = {}
+                    )
+                    Spacer(Modifier.height(8.dp))
+                    Text(
+                        text = stringResource(Res.string.compat_person_one_label),
+                        color = YzInk,
+                        fontSize = 12.sp
+                    )
+                }
+                Column(
+                    modifier = Modifier.weight(1f).fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(4.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+                    selectSignComposable(
+                        modifier = Modifier.size(96.dp),
+                        textBelow = stringResource(Res.string.compat_person_one_label),
+                        canShine = true, selectSign = {}
+                    )
+                    Spacer(Modifier.height(8.dp))
+                    Text(
+                        text = stringResource(Res.string.compat_person_two_label),
+                        color = YzInk,
+                        fontSize = 12.sp
+                    )
+                }
+
             }
         }
     }
