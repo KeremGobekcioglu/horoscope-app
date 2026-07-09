@@ -106,7 +106,18 @@
     <string name="compat_title">Compatibility Analysis</string>
     <string name="compat_your_sign">Your Sign</string>
     <string name="compat_partner_sign">Partner\'s Sign</string>
-
+    <string name="compat_subtitle">Cosmic Resonance Test</string>
+    <string name="compat_person_one_label">First Person</string>
+    <string name="compat_person_two_label">Second Person</string>
+    <string name="compat_select_two_signs_hint">Select two signs to continue</string>
+    <string name="compat_analyze_button">Analyze</string>
+    <string name="compat_element_balance_title">Element Balance</string>
+    <string name="compat_element_balance_description">We map your spiritual compatibility by examining the balance of Fire, Earth, Air, and Water in your signs.</string>
+    <string name="compat_angular_relationship_title">Angular Relationship</string>
+    <string name="compat_angular_relationship_description">We analyze the attraction energy between you by calculating the positional angles across the zodiac belt.</string>
+    <string name="compat_pick_sign_placeholder">Choose a sign</string>
+    <string name="compat_confirm_selection">Confirm Selection</string>
+    <string name="compat_select_sign">Select Sign</string>
     <!-- Settings -->
     <string name="settings_title">Settings</string>
     <string name="settings_language">Language</string>

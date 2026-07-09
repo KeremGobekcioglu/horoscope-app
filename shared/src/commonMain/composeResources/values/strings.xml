@@ -103,6 +103,18 @@
     <string name="compat_title">Uyum Analizi</string>
     <string name="compat_your_sign">Burcunuz</string>
     <string name="compat_partner_sign">Partnerinizin Burcu</string>
+    <string name="compat_subtitle">Kozmik Rezonans Testi</string>
+    <string name="compat_person_one_label">İlk Kişi</string>
+    <string name="compat_person_two_label">İkinci Kişi</string>
+    <string name="compat_select_two_signs_hint">Devam etmek için iki burç seçin</string>
+    <string name="compat_analyze_button">Analiz Et</string>
+    <string name="compat_element_balance_title">Element Dengesi</string>
+    <string name="compat_element_balance_description">Burçlarınızın Ateş, Toprak, Hava ve Su dengesini inceleyerek ruhsal uyumunuzu haritalandırıyoruz.</string>
+    <string name="compat_angular_relationship_title">Açısal İlişki</string>
+    <string name="compat_angular_relationship_description">Zodyak kuşağındaki konumsal açıları hesaplayarak aranızdaki çekim enerjisini analiz ediyoruz.</string>
+    <string name="compat_pick_sign_placeholder">Burç seçin</string>
+    <string name="compat_confirm_selection">Seçimi onayla</string>
+    <string name="compat_select_sign">Burç seç</string>
 
     <!-- Settings -->
     <string name="settings_title">Ayarlar</string>
