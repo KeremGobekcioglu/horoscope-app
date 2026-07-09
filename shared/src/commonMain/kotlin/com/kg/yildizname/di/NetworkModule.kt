@@ -1,6 +1,6 @@
 package com.kg.yildizname.di
 
-import com.kg.yildizname.core.data.remote.FirestoreReadingSource
+import com.kg.yildizname.core.data.remote.FirestoreSource
 import com.kg.yildizname.core.data.remote.HoroscopeApiSource
 import dev.gitlive.firebase.Firebase
 import dev.gitlive.firebase.firestore.firestore
@@ -19,5 +19,5 @@ val networkModule = module {
         }
     }
     single { HoroscopeApiSource(get()) }
-    single { FirestoreReadingSource(Firebase.firestore) }
+    single { FirestoreSource(Firebase.firestore) }
 }

@@ -66,6 +66,18 @@ enum class ZodiacSign(
     PISCES("pisces", "pisces", "balik", Res.string.sign_name_pisces, Res.string.sign_dates_pisces, Res.drawable.pisces_constellation_icon, startDay = 19, startMonth = 2);
 
     companion object {
+        // NOTE: matches against apiKey / turkishKey only — does NOT check firestoreKey.
+        // This currently works for Firestore data too because firestoreKey == apiKey
+        // for every sign (see the enum entries above). If that ever stops being true
+        // (e.g. a sign is added/renamed and firestoreKey diverges from apiKey), this
+        // will silently fall through to the SCORPIO fallback below instead of matching
+        // correctly. Used by CompatibilityMappers.kt / CompatibilityRoomMappers.kt to
+        // convert Firestore's `signs: List<String>` into ZodiacSign — if compatibility
+        // pairs ever start showing up wrong (e.g. everything resolving to Scorpio),
+        // check here first.
+        //
+        // Falls back to SCORPIO on no match instead of throwing/returning null — a bad
+        // or unrecognized key is silently mislabeled rather than surfaced as an error.
         fun fromKey(key: String): ZodiacSign {
             val lower = key.lowercase()
             return entries.firstOrNull { it.apiKey == lower || it.turkishKey == lower } ?: SCORPIO

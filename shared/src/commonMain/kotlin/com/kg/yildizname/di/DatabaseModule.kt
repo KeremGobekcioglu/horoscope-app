@@ -16,4 +16,5 @@ val databaseModule = module {
             .build()
     }
     single { get<YildiznameDatabase>().readingDao() }
+    single { get<YildiznameDatabase>().compatibilityDao() }
 }

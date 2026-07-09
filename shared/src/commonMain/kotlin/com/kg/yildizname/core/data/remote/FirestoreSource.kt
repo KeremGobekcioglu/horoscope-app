@@ -2,9 +2,10 @@ package com.kg.yildizname.core.data.remote
 
 import com.kg.yildizname.core.data.model.PeriodType
 import com.kg.yildizname.core.data.model.ZodiacSign
+import com.kg.yildizname.core.util.pairId
 import dev.gitlive.firebase.firestore.FirebaseFirestore
 
-class FirestoreReadingSource(
+class FirestoreSource(
     private val firestore: FirebaseFirestore,
 ) {
     suspend fun getReading(
@@ -18,5 +19,18 @@ class FirestoreReadingSource(
             .document(docId)
             .get()
         return if (snapshot.exists) snapshot.data<FirestoreReadingDto>() else null
+    }
+
+    suspend fun getCompatibilityResult(
+        signA : ZodiacSign,
+        signB : ZodiacSign
+    ): CompatibilityResultDto?
+    {
+        val docId = pairId(signA,signB)
+        val snapshot = firestore
+            .collection("compatibility")
+            .document(docId)
+            .get()
+        return if(snapshot.exists) snapshot.data<CompatibilityResultDto>() else null
     }
 }

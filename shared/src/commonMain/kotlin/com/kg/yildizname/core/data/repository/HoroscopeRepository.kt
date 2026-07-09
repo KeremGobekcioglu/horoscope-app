@@ -10,7 +10,7 @@ import com.kg.yildizname.core.data.model.Reading
 import com.kg.yildizname.core.data.model.CategoryDetail
 import com.kg.yildizname.core.data.model.ScoreSet
 import com.kg.yildizname.core.data.model.ZodiacSign
-import com.kg.yildizname.core.data.remote.FirestoreReadingSource
+import com.kg.yildizname.core.data.remote.FirestoreSource
 import com.kg.yildizname.core.data.remote.HoroscopeApiSource
 import com.kg.yildizname.core.util.PseudoScores
 import com.kg.yildizname.core.util.currentLanguageCode
@@ -19,7 +19,7 @@ import kotlinx.coroutines.flow.flow
 
 class HoroscopeRepository(
     private val dao: ReadingDao,
-    private val firestoreSource: FirestoreReadingSource,
+    private val firestoreSource: FirestoreSource,
     private val apiSource: HoroscopeApiSource,
 ) {
     /**

@@ -4,11 +4,14 @@ import androidx.room.ConstructedBy
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.RoomDatabaseConstructor
+import androidx.room.TypeConverters
 
-@Database(entities = [ReadingEntity::class], version = 3)
+@Database(entities = [ReadingEntity::class, CompatibilityEntity::class], version = 4)
+@TypeConverters(CompatibilityConverters::class)
 @ConstructedBy(YildiznameDatabaseConstructor::class)
 abstract class YildiznameDatabase : RoomDatabase() {
     abstract fun readingDao(): ReadingDao
+    abstract fun compatibilityDao(): CompatibilityDao
 }
 
 // KSP generates the actual implementations for each platform target.
