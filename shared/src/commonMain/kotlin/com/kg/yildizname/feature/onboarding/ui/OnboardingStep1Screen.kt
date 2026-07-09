@@ -160,7 +160,7 @@ fun OnboardingStep1Screen(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Spacer(Modifier.height(20.dp))
-            PageIndicator(currentStep = 0)
+//            PageIndicator(currentStep = 0)
             Spacer(Modifier.height(32.dp))
 
             Column(

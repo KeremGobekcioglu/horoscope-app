@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.kg.yildizname.core.data.model.ZodiacSign
 import com.kg.yildizname.core.data.repository.UserRepository
 import com.kg.yildizname.core.domain.usecase.GetDailyReadingUseCase
+import com.kg.yildizname.core.ui.utils.DateFormatter
 import com.kg.yildizname.core.util.DateUtils
 import com.kg.yildizname.platform.ForegroundObserver
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -52,7 +53,7 @@ class HomeViewModel(
                     .collect { reading ->
                         _uiState.value = HomeUiState.Success(
                             reading    = reading,
-                            todayLabel = today,
+                            todayLabel = DateFormatter.fullDate(DateUtils.todayLocalDate()),
                         )
                     }
             } catch (e: Exception) {

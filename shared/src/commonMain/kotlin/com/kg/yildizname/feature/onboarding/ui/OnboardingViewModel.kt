@@ -33,7 +33,8 @@ class OnboardingViewModel(
         viewModelScope.launch {
             try {
                 prefs.saveZodiacSign(sign.turkishKey)
-                _events.send(OnboardingEvent.NavigateToStep2)
+                prefs.markOnboardingComplete()
+                _events.send(OnboardingEvent.NavigateToHome)
             } catch (e: Exception) {
                 _uiState.update { it.copy(error = e.message) }
             }

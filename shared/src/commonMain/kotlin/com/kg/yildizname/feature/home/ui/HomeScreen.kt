@@ -174,7 +174,7 @@ private fun HomeSuccessContent(
 
         // ── Share FAB — floats bottom-right ──
         HomeShareFab(
-            onClick = { onShareClick(reading.text) },
+            onClick = onShareCardClick,
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .padding(end = 20.dp, bottom = 20.dp)

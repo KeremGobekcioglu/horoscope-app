@@ -178,9 +178,12 @@ fun YildiznameNavGraph(navController: NavHostController) {
                     LaunchedEffect(vm) {
                         vm.events.collect { event ->
                             when (event) {
-                                OnboardingEvent.NavigateToStep2 -> navController.navigate(OnboardingStep2)
+                                OnboardingEvent.NavigateToStep2 -> Unit
                                 OnboardingEvent.NavigateToStep3 -> Unit
-                                OnboardingEvent.NavigateToHome  -> Unit
+                                // v1: steps 2/3 bypassed, sign is the only required field — see July 9, Thursday
+                                OnboardingEvent.NavigateToHome  -> navController.navigate(Home) {
+                                    popUpTo<OnboardingGraph> { inclusive = true }
+                                }
                             }
                         }
                     }
