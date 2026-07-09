@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -49,14 +50,17 @@ import com.kg.yildizname.core.ui.theme.YzInk
 import com.kg.yildizname.core.ui.theme.YzOnSurface
 import com.kg.yildizname.core.ui.theme.YzSurface
 import com.kg.yildizname.core.ui.utils.yzStatusBarsPadding
+import com.kg.yildizname.core.util.pairId
 import horoscope.shared.generated.resources.Res
 import horoscope.shared.generated.resources.compat_person_one_label
 import horoscope.shared.generated.resources.compat_person_two_label
 import horoscope.shared.generated.resources.compat_select_sign
 import horoscope.shared.generated.resources.compat_subtitle
 import horoscope.shared.generated.resources.compat_title
+import horoscope.shared.generated.resources.infinity
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.koinInject
 import kotlin.math.sign
@@ -161,9 +165,10 @@ fun CompatibilityScreen() {
                 color = YzInk,
                 style = MaterialTheme.typography.headlineMedium
             )
-            Spacer(Modifier.height(32.dp))
+            Spacer(Modifier.height(64.dp))
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)
             )
             {
@@ -175,13 +180,21 @@ fun CompatibilityScreen() {
                         textBelow = stringResource(Res.string.compat_person_one_label),
                         canShine = true, selectSign = {}
                     )
-                    Spacer(Modifier.height(8.dp))
+                    Spacer(Modifier.height(4.dp))
                     Text(
                         text = stringResource(Res.string.compat_person_one_label),
                         color = YzInk,
                         fontSize = 12.sp
                     )
                 }
+                Icon(
+                    painter = painterResource(Res.drawable.infinity),
+                    contentDescription = null,
+                    tint = YzGold,
+                    modifier = Modifier
+                        .size(64.dp)
+                        .offset(y = (-16).dp) // move left
+                )
                 Column(
                     modifier = Modifier.weight(1f).fillMaxWidth(),
                     verticalArrangement = Arrangement.spacedBy(4.dp), horizontalAlignment = Alignment.CenterHorizontally) {
@@ -190,7 +203,7 @@ fun CompatibilityScreen() {
                         textBelow = stringResource(Res.string.compat_person_one_label),
                         canShine = true, selectSign = {}
                     )
-                    Spacer(Modifier.height(8.dp))
+                    Spacer(Modifier.height(4.dp))
                     Text(
                         text = stringResource(Res.string.compat_person_two_label),
                         color = YzInk,
