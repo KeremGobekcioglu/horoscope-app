@@ -65,6 +65,7 @@ import com.kg.yildizname.core.ui.theme.YzSurface
 import com.kg.yildizname.core.ui.utils.yzStatusBarsPadding
 import com.kg.yildizname.core.util.pairId
 import com.kg.yildizname.feature.compatability.ui.components.AnalyzeButton
+import com.kg.yildizname.feature.compatability.ui.components.InfoCard
 import com.kg.yildizname.feature.compatability.ui.components.SelectSignButton
 import horoscope.shared.generated.resources.Res
 import horoscope.shared.generated.resources.angle_relationship
@@ -202,47 +203,6 @@ fun CompatibilityScreen() {
                 icon = Res.drawable.angle_relationship,
                 headlineAndIconColor = CosmicPurple
             )
-        }
-    }
-}
-
-@Composable
-fun InfoCard(headline: StringResource, text: StringResource, icon: DrawableResource, headlineAndIconColor: Color)
-{
-    val shape = SquareShape
-    Box(
-        modifier = Modifier.padding(horizontal = 32.dp)
-            .background(YzBg)
-            .border(1.dp, color = DarkGray, shape = shape)
-            .padding(vertical = 24.dp)
-    )
-    {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-            Icon(
-                painter = painterResource(icon),
-                tint = Color.Unspecified,
-                modifier = Modifier.size(64.dp),
-                contentDescription = null
-            )
-            Column(
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(
-                    text = stringResource(headline),
-                    color = headlineAndIconColor,
-                    style = MaterialTheme.typography.headlineSmall
-                )
-                Text(
-                    text = stringResource(text),
-                    color = YzInk,
-                    style = MaterialTheme.typography.bodySmall
-                )
-            }
         }
     }
 }
