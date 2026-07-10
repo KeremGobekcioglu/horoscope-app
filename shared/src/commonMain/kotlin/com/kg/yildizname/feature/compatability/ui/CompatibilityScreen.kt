@@ -7,6 +7,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsFocusedAsState
+import androidx.compose.foundation.interaction.collectIsHoveredAsState
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -57,6 +59,8 @@ import com.kg.yildizname.core.ui.theme.YzOnSurface
 import com.kg.yildizname.core.ui.theme.YzSurface
 import com.kg.yildizname.core.ui.utils.yzStatusBarsPadding
 import com.kg.yildizname.core.util.pairId
+import com.kg.yildizname.feature.compatability.ui.components.AnalyzeButton
+import com.kg.yildizname.feature.compatability.ui.components.SelectSignButton
 import horoscope.shared.generated.resources.Res
 import horoscope.shared.generated.resources.compat_person_one_label
 import horoscope.shared.generated.resources.compat_person_two_label
@@ -80,102 +84,6 @@ import kotlin.math.sign
  * screen once the repository is confirmed working against real Firestore/Room.
  *
  * Hardcoded to Aries + Leo — change the two ZodiacSign values below to test other pairs.
- */
-@Composable
-fun selectSignComposable(modifier: Modifier = Modifier, selectSign: () -> Unit, canShine: Boolean, textBelow: String) {
-    val shape = SquareShape
-
-    val interactionSource = remember { MutableInteractionSource() }
-    val isPressed by interactionSource.collectIsPressedAsState()
-
-    val scale by animateFloatAsState(
-        targetValue = if(isPressed) 1.15f else 1f,
-        animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy, stiffness = Spring.StiffnessMedium)
-    )
-    val rotationX by animateFloatAsState(
-        targetValue = if(isPressed) 8f else 0f,
-        animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy),
-        label = "rotationX"
-    )
-    val iconRotation by animateFloatAsState(
-        targetValue = if(isPressed) 90f else 0f,
-        animationSpec = spring(dampingRatio = Spring.DampingRatioLowBouncy, stiffness = Spring.StiffnessLow),
-        label = "iconRotation"
-    )
-    val borderAlpha by animateFloatAsState(
-        targetValue = if(isPressed) 1f else 0.6f,
-        label = "borderAlpha",
-    )
-    Box(
-        modifier = modifier
-            .graphicsLayer{
-                scaleX = scale
-                scaleY = scale
-                this.rotationX = rotationX
-                cameraDistance = 12f * density
-            }
-            .clickable(
-//                enabled = true,
-                interactionSource = interactionSource,
-                indication = null,
-                onClick = selectSign)
-            .then(
-                if (canShine) {
-                    Modifier.shadow(
-                        elevation = 1.dp,
-                        shape = shape,
-                        ambientColor = YzGold,
-                        spotColor = YzGold
-                    )
-                } else Modifier
-            )
-            .border(width = 2.dp , shape = shape , color = YzGold.copy(alpha = borderAlpha))
-            .clip(shape)
-            .background(YzOnSurface.copy(0.15f)),
-        contentAlignment = Alignment.Center
-    )
-    {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-            )
-
-        {
-            // plus icon
-            // text
-            Box(modifier = Modifier.graphicsLayer { rotationZ = iconRotation }) {
-                Icon(Icons.Default.Add, contentDescription = null, tint = YzGold, modifier = Modifier.size(24.dp).offset(0.5.dp, 0.dp))
-                Icon(Icons.Default.Add, contentDescription = null, tint = YzGold, modifier = Modifier.size(24.dp))
-            }
-            Text(
-                text = stringResource(Res.string.compat_select_sign),
-                color = YzGold,
-                fontWeight = FontWeight.Bold,
-                fontSize = 12.sp
-            )
-        }
-    }
-}
-
-/***
- *     Box(
- *         modifier = modifier.aspectRatio(1f)
- *             .clickable(isAvailable, onClick = onClick)
- * //            .size(42.dp)
- *             .then(
- *                 if(canShine) {
- *                     Modifier.shadow(elevation = 0.dp, shape = shape, ambientColor = YzGold, spotColor = YzGold)
- *                 } else Modifier
- *             )
- *             .clip(shape)
- *             .background(if(canShine) YzBg.copy(0.1f) else Color.Transparent)
- *             .then(
- *                 if(canShine) {
- *                     Modifier.border(width = 2.dp, color = YzGold, shape = shape)
- *                 } else Modifier
- *             ),
- *         contentAlignment = Alignment.Center
- *     )
  */
 @Composable
 fun CompatibilityScreen() {
@@ -213,7 +121,7 @@ fun CompatibilityScreen() {
                 Column(
                     modifier = Modifier.weight(1f).fillMaxWidth(),
                     verticalArrangement = Arrangement.spacedBy(4.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-                    selectSignComposable(
+                    SelectSignButton(
                         modifier = Modifier.size(96.dp),
                         textBelow = stringResource(Res.string.compat_person_one_label),
                         canShine = true,
@@ -237,7 +145,7 @@ fun CompatibilityScreen() {
                 Column(
                     modifier = Modifier.weight(1f).fillMaxWidth(),
                     verticalArrangement = Arrangement.spacedBy(4.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-                    selectSignComposable(
+                    SelectSignButton(
                         modifier = Modifier.size(96.dp),
                         textBelow = stringResource(Res.string.compat_person_one_label),
                         canShine = true,
@@ -253,6 +161,8 @@ fun CompatibilityScreen() {
                 }
 
             }
+            Spacer(Modifier.height(64.dp))
+            AnalyzeButton(true, onClick = {})
         }
     }
 }

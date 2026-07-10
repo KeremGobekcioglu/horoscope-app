@@ -24,3 +24,13 @@ val LightGray = Color(0xFFE5E7EB)
 val Gray = Color(0xFF9CA3AF)
 val DarkGray = Color(0xFF4B5563)
 val Charcoal = Color(0xFF1F2937)
+
+
+val NeonPurple = Color(0xFFB026FF)      // Ultra-vibrant electric purple
+val RadiantAmethyst = Color(0xFFBB86FC) // The classic Material Dark primary purple
+val ElectricViolet = Color(0xFF8A2BE2)  // Deep but highly saturated bright violet
+
+
+val BrightOrchid = Color(0xFFDA70D6)    // Warm purple with a touch of pink/magenta
+val CosmicPurple = Color(0xFFA45EE5)    // A balanced, royal-leaning cosmic purple
+val HeliotropeGlow = Color(0xFFDF73FF)  // High-visibility psychic/neon purple
