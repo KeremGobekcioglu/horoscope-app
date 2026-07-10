@@ -44,6 +44,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -51,6 +53,9 @@ import androidx.compose.ui.unit.sp
 import com.kg.yildizname.core.data.model.ZodiacSign
 import com.kg.yildizname.core.data.repository.CompatibilityRepository
 import com.kg.yildizname.core.ui.components.StarFieldBackground
+import com.kg.yildizname.core.ui.theme.CosmicPurple
+import com.kg.yildizname.core.ui.theme.DarkGray
+import com.kg.yildizname.core.ui.theme.Gray
 import com.kg.yildizname.core.ui.theme.SquareShape
 import com.kg.yildizname.core.ui.theme.YzBg
 import com.kg.yildizname.core.ui.theme.YzGold
@@ -62,14 +67,23 @@ import com.kg.yildizname.core.util.pairId
 import com.kg.yildizname.feature.compatability.ui.components.AnalyzeButton
 import com.kg.yildizname.feature.compatability.ui.components.SelectSignButton
 import horoscope.shared.generated.resources.Res
+import horoscope.shared.generated.resources.angle_relationship
 import horoscope.shared.generated.resources.compat_person_one_label
 import horoscope.shared.generated.resources.compat_person_two_label
 import horoscope.shared.generated.resources.compat_select_sign
+import horoscope.shared.generated.resources.compat_select_two_signs_hint
 import horoscope.shared.generated.resources.compat_subtitle
 import horoscope.shared.generated.resources.compat_title
+import horoscope.shared.generated.resources.desc_angular_relationship
+import horoscope.shared.generated.resources.desc_element_balance
+import horoscope.shared.generated.resources.element_icon
 import horoscope.shared.generated.resources.infinity
+import horoscope.shared.generated.resources.title_angular_relationship
+import horoscope.shared.generated.resources.title_element_balance
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.DrawableResource
+import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.koinInject
@@ -167,6 +181,68 @@ fun CompatibilityScreen() {
                 modifier = Modifier.padding(horizontal = 28.dp),
                 onClick = {}
             )
+            Spacer(Modifier.height(8.dp))
+            Text(
+                text = stringResource(Res.string.compat_select_two_signs_hint),
+                color = DarkGray.copy(0.8f),
+                fontSize = 12.sp,
+                fontWeight = FontWeight.Bold
+            )
+            Spacer(Modifier.height(64.dp))
+            InfoCard(
+                headline = Res.string.title_element_balance,
+                text = Res.string.desc_element_balance,
+                icon = Res.drawable.element_icon,
+                headlineAndIconColor = YzGold
+            )
+            Spacer(Modifier.height(16.dp))
+            InfoCard(
+                headline = Res.string.title_angular_relationship,
+                text = Res.string.desc_angular_relationship,
+                icon = Res.drawable.angle_relationship,
+                headlineAndIconColor = CosmicPurple
+            )
+        }
+    }
+}
+
+@Composable
+fun InfoCard(headline: StringResource, text: StringResource, icon: DrawableResource, headlineAndIconColor: Color)
+{
+    val shape = SquareShape
+    Box(
+        modifier = Modifier.padding(horizontal = 32.dp)
+            .background(YzBg)
+            .border(1.dp, color = DarkGray, shape = shape)
+            .padding(vertical = 24.dp)
+    )
+    {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            Icon(
+                painter = painterResource(icon),
+                tint = Color.Unspecified,
+                modifier = Modifier.size(64.dp),
+                contentDescription = null
+            )
+            Column(
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = stringResource(headline),
+                    color = headlineAndIconColor,
+                    style = MaterialTheme.typography.headlineSmall
+                )
+                Text(
+                    text = stringResource(text),
+                    color = YzInk,
+                    style = MaterialTheme.typography.bodySmall
+                )
+            }
         }
     }
 }

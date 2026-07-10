@@ -115,7 +115,13 @@
     <string name="compat_pick_sign_placeholder">Burç seçin</string>
     <string name="compat_confirm_selection">Seçimi onayla</string>
     <string name="compat_select_sign">Burç seç</string>
+    <!-- Element Dengesi Card -->
+    <string name="title_element_balance">Element Dengesi</string>
+    <string name="desc_element_balance">Burçlarınızın Ateş, Toprak, Hava ve Su dengesini inceleyerek ruhsal uyumunuzu haritalandırıyoruz.</string>
 
+    <!-- Açısal İlişki Card -->
+    <string name="title_angular_relationship">Açısal İlişki</string>
+    <string name="desc_angular_relationship">Zodyak kuşağındaki konumsal açıları hesaplayarak aranızdaki çekim enerjisini analiz ediyoruz.</string>
     <!-- Settings -->
     <string name="settings_title">Ayarlar</string>
     <string name="settings_language">Dil</string>
