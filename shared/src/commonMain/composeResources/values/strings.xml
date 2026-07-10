@@ -223,4 +223,10 @@
     <string name="sign_dates_aquarius">20 Ocak – 18 Şubat</string>
     <string name="sign_dates_pisces">19 Şubat – 20 Mart</string>
 
+    <!-- Element names (Turkish) -->
+    <string name="element_name_fire">Ateş</string>
+    <string name="element_name_earth">Toprak</string>
+    <string name="element_name_air">Hava</string>
+    <string name="element_name_water">Su</string>
+
 </resources>

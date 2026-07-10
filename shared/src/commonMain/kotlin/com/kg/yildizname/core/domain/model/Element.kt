@@ -1,24 +1,20 @@
 package com.kg.yildizname.core.domain.model
 
+import androidx.compose.runtime.Composable
+import horoscope.shared.generated.resources.Res
+import horoscope.shared.generated.resources.element_name_air
+import horoscope.shared.generated.resources.element_name_earth
+import horoscope.shared.generated.resources.element_name_fire
+import horoscope.shared.generated.resources.element_name_water
+import org.jetbrains.compose.resources.StringResource
+import org.jetbrains.compose.resources.stringResource
 
-enum class SignToElement(val element: Element) {
-    ARIES(Element.FIRE),
-    TAURUS(Element.EARTH),
-    GEMINI(Element.AIR),
-    CANCER(Element.WATER),
-    LEO(Element.FIRE),
-    VIRGO(Element.EARTH),
-    LIBRA(Element.AIR),
-    SCORPIO(Element.WATER),
-    SAGITTARIUS(Element.FIRE),
-    CAPRICORN(Element.EARTH),
-    AQUARIUS(Element.AIR),
-    PISCES(Element.WATER)
+enum class Element(val nameRes: StringResource) {
+    FIRE(Res.string.element_name_fire),
+    EARTH(Res.string.element_name_earth),
+    AIR(Res.string.element_name_air),
+    WATER(Res.string.element_name_water)
 }
 
-enum class Element {
-    FIRE,
-    EARTH,
-    AIR,
-    WATER
-}
+@Composable
+fun Element.localizedName(): String = stringResource(nameRes)
