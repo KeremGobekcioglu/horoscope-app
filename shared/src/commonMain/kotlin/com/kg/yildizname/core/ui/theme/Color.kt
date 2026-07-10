@@ -34,3 +34,6 @@ val ElectricViolet = Color(0xFF8A2BE2)  // Deep but highly saturated bright viol
 val BrightOrchid = Color(0xFFDA70D6)    // Warm purple with a touch of pink/magenta
 val CosmicPurple = Color(0xFFA45EE5)    // A balanced, royal-leaning cosmic purple
 val HeliotropeGlow = Color(0xFFDF73FF)  // High-visibility psychic/neon purple
+
+val TwilightPlum = Color(0xFF241436)    // Near-black plum, for dark button/surface gradients
+val DeepAmethyst = Color(0xFF4A2E7A)    // Darker saturated purple, sits well against dark backgrounds

@@ -24,11 +24,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.kg.yildizname.core.ui.theme.ButtonShape
-import com.kg.yildizname.core.ui.theme.NeonPurple
+import com.kg.yildizname.core.ui.theme.DeepAmethyst
+import com.kg.yildizname.core.ui.theme.TwilightPlum
 import com.kg.yildizname.core.ui.theme.YzBg
 import com.kg.yildizname.core.ui.theme.YzGold
 import com.kg.yildizname.core.ui.theme.YzInk
@@ -42,18 +44,22 @@ fun AnalyzeButton(isEnabled: Boolean, modifier: Modifier = Modifier, onClick: ()
     val shape = ButtonShape
 
     val contentColor by animateColorAsState(
-        targetValue = if(isEnabled) YzGold else YzInk.copy(0.5f),
+        targetValue = if(isEnabled) YzInk else YzInk.copy(0.5f),
         animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy),
         label = "contentColor"
     )
 
-    val backgroundColor by animateColorAsState(
-        targetValue = if(isEnabled) NeonPurple/*YzGold.copy(0.6f) */else YzBg.copy(0.6f),
-        label = "backgroundColor"
+    val gradientStart by animateColorAsState(
+        targetValue = if(isEnabled) TwilightPlum else YzBg.copy(0.6f),
+        label = "gradientStart"
+    )
+    val gradientEnd by animateColorAsState(
+        targetValue = if(isEnabled) DeepAmethyst else YzBg.copy(0.6f),
+        label = "gradientEnd"
     )
 
     val borderAlpha by animateFloatAsState(
-        targetValue = if(isEnabled) 1f else 0f,
+        targetValue = if(isEnabled) 0.5f else 0f,
         animationSpec = spring(Spring.DampingRatioMediumBouncy),
         label = "borderAlpha"
     )
@@ -63,7 +69,7 @@ fun AnalyzeButton(isEnabled: Boolean, modifier: Modifier = Modifier, onClick: ()
         label = ""
     )
     val shineElevation by animateFloatAsState(
-        targetValue = if(isEnabled) 4f else 0f,
+        targetValue = if(isEnabled) 2f else 0f,
         animationSpec = spring(Spring.DampingRatioMediumBouncy, stiffness = Spring.StiffnessLow),
         label = ""
     )
@@ -75,15 +81,15 @@ fun AnalyzeButton(isEnabled: Boolean, modifier: Modifier = Modifier, onClick: ()
                 scaleX = scale
                 scaleY = scale
             }
+            .shadow(
+                elevation = shineElevation.dp,
+                shape = shape,
+                ambientColor = DeepAmethyst.copy(alpha = 0.3f),
+                spotColor = DeepAmethyst.copy(alpha = 0.3f)
+            )
             .clip(shape)
-            .background(backgroundColor)
-            .border(1.dp, color = YzGold.copy(borderAlpha),shape = shape)
-//            .shadow(
-//                elevation = shineElevation.dp,
-//                shape = shape,
-//                ambientColor = YzGold,
-//                spotColor = YzGold
-//            )
+            .background(Brush.verticalGradient(listOf(gradientStart, gradientEnd)))
+            .border(1.dp, color = YzGold.copy(alpha = borderAlpha), shape = shape)
             .clickable(
                 enabled = isEnabled,
                 onClick = onClick
