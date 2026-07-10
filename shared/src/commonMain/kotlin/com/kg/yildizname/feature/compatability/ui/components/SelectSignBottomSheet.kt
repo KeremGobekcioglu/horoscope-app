@@ -134,6 +134,7 @@ fun SelectSignBottomSheet(
                 onClick = {
                     selectedSign?.let(onSignConfirmed)
                 },
+                iconVisible = false
             )
 
             Spacer(Modifier.height(16.dp))

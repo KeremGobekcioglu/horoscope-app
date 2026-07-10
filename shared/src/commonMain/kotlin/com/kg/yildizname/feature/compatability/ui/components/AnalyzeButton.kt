@@ -46,6 +46,7 @@ fun AnalyzeButton(
     modifier: Modifier = Modifier,
     text: String = stringResource(Res.string.compat_analyze_button),
     onClick: () -> Unit,
+    iconVisible: Boolean = true
 )
 {
     val shape = ButtonShape
@@ -110,12 +111,14 @@ fun AnalyzeButton(
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         )
         {
-            Icon(
-                imageVector = Icons.Default.Analytics,
-                contentDescription = null,
-                tint = contentColor,
-                modifier = Modifier.size(20.dp)
-            )
+            if(iconVisible) {
+                Icon(
+                    imageVector = Icons.Default.Analytics,
+                    contentDescription = null,
+                    tint = contentColor,
+                    modifier = Modifier.size(20.dp)
+                )
+            }
             Text(
                 text = text,
                 color = contentColor,
