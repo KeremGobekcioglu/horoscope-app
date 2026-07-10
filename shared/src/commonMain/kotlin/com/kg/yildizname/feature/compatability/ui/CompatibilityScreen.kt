@@ -1,8 +1,13 @@
 package com.kg.yildizname.feature.compatability.ui
 
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -36,6 +41,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -78,9 +84,41 @@ import kotlin.math.sign
 @Composable
 fun selectSignComposable(modifier: Modifier = Modifier, selectSign: () -> Unit, canShine: Boolean, textBelow: String) {
     val shape = SquareShape
+
+    val interactionSource = remember { MutableInteractionSource() }
+    val isPressed by interactionSource.collectIsPressedAsState()
+
+    val scale by animateFloatAsState(
+        targetValue = if(isPressed) 1.15f else 1f,
+        animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy, stiffness = Spring.StiffnessMedium)
+    )
+    val rotationX by animateFloatAsState(
+        targetValue = if(isPressed) 8f else 0f,
+        animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy),
+        label = "rotationX"
+    )
+    val iconRotation by animateFloatAsState(
+        targetValue = if(isPressed) 90f else 0f,
+        animationSpec = spring(dampingRatio = Spring.DampingRatioLowBouncy, stiffness = Spring.StiffnessLow),
+        label = "iconRotation"
+    )
+    val borderAlpha by animateFloatAsState(
+        targetValue = if(isPressed) 1f else 0.6f,
+        label = "borderAlpha",
+    )
     Box(
         modifier = modifier
-            .clickable(true, onClick = selectSign)
+            .graphicsLayer{
+                scaleX = scale
+                scaleY = scale
+                this.rotationX = rotationX
+                cameraDistance = 12f * density
+            }
+            .clickable(
+//                enabled = true,
+                interactionSource = interactionSource,
+                indication = null,
+                onClick = selectSign)
             .then(
                 if (canShine) {
                     Modifier.shadow(
@@ -91,7 +129,7 @@ fun selectSignComposable(modifier: Modifier = Modifier, selectSign: () -> Unit, 
                     )
                 } else Modifier
             )
-            .border(width = 2.dp , shape = shape , color = YzGold)
+            .border(width = 2.dp , shape = shape , color = YzGold.copy(alpha = borderAlpha))
             .clip(shape)
             .background(YzOnSurface.copy(0.15f)),
         contentAlignment = Alignment.Center
@@ -105,7 +143,7 @@ fun selectSignComposable(modifier: Modifier = Modifier, selectSign: () -> Unit, 
         {
             // plus icon
             // text
-            Box {
+            Box(modifier = Modifier.graphicsLayer { rotationZ = iconRotation }) {
                 Icon(Icons.Default.Add, contentDescription = null, tint = YzGold, modifier = Modifier.size(24.dp).offset(0.5.dp, 0.dp))
                 Icon(Icons.Default.Add, contentDescription = null, tint = YzGold, modifier = Modifier.size(24.dp))
             }
@@ -142,7 +180,7 @@ fun selectSignComposable(modifier: Modifier = Modifier, selectSign: () -> Unit, 
 @Composable
 fun CompatibilityScreen() {
     StarFieldBackground(Modifier.fillMaxSize())
-
+    var selectedLabel by remember { mutableStateOf<String?>(null) }
     Box(
         modifier = Modifier.fillMaxSize().yzStatusBarsPadding(),
         contentAlignment = Alignment.TopCenter,
@@ -178,7 +216,8 @@ fun CompatibilityScreen() {
                     selectSignComposable(
                         modifier = Modifier.size(96.dp),
                         textBelow = stringResource(Res.string.compat_person_one_label),
-                        canShine = true, selectSign = {}
+                        canShine = true,
+                        selectSign = { selectedLabel = "Aries" } // hardcoded stand-in
                     )
                     Spacer(Modifier.height(4.dp))
                     Text(
@@ -201,7 +240,9 @@ fun CompatibilityScreen() {
                     selectSignComposable(
                         modifier = Modifier.size(96.dp),
                         textBelow = stringResource(Res.string.compat_person_one_label),
-                        canShine = true, selectSign = {}
+                        canShine = true,
+                        selectSign = { selectedLabel = "Aries" } // hardcoded stand-in
+
                     )
                     Spacer(Modifier.height(4.dp))
                     Text(
