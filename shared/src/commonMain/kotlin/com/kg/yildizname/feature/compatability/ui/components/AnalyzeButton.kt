@@ -41,7 +41,12 @@ import horoscope.shared.generated.resources.compat_analyze_button
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
-fun AnalyzeButton(isEnabled: Boolean, modifier: Modifier = Modifier, onClick: () -> Unit)
+fun AnalyzeButton(
+    isEnabled: Boolean,
+    modifier: Modifier = Modifier,
+    text: String = stringResource(Res.string.compat_analyze_button),
+    onClick: () -> Unit,
+)
 {
     val shape = ButtonShape
 
@@ -112,7 +117,7 @@ fun AnalyzeButton(isEnabled: Boolean, modifier: Modifier = Modifier, onClick: ()
                 modifier = Modifier.size(20.dp)
             )
             Text(
-                text = stringResource(Res.string.compat_analyze_button),
+                text = text,
                 color = contentColor,
                 fontWeight = FontWeight.Bold,
                 style = MaterialTheme.typography.titleMedium

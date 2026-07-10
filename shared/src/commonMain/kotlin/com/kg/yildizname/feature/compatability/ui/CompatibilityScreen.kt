@@ -66,6 +66,7 @@ import com.kg.yildizname.core.ui.utils.yzStatusBarsPadding
 import com.kg.yildizname.core.util.pairId
 import com.kg.yildizname.feature.compatability.ui.components.AnalyzeButton
 import com.kg.yildizname.feature.compatability.ui.components.InfoCard
+import com.kg.yildizname.feature.compatability.ui.components.SelectSignBottomSheet
 import com.kg.yildizname.feature.compatability.ui.components.SelectSignButton
 import horoscope.shared.generated.resources.Res
 import horoscope.shared.generated.resources.angle_relationship
@@ -100,10 +101,14 @@ import kotlin.math.sign
  *
  * Hardcoded to Aries + Leo — change the two ZodiacSign values below to test other pairs.
  */
+private enum class SignSlot { ONE, TWO }
+
 @Composable
 fun CompatibilityScreen() {
     StarFieldBackground(Modifier.fillMaxSize())
-    var selectedLabel by remember { mutableStateOf<String?>(null) }
+    var personOneSign by remember { mutableStateOf<ZodiacSign?>(null) }
+    var personTwoSign by remember { mutableStateOf<ZodiacSign?>(null) }
+    var pickingSlot by remember { mutableStateOf<SignSlot?>(null) }
     Box(
         modifier = Modifier.fillMaxSize().yzStatusBarsPadding(),
         contentAlignment = Alignment.TopCenter,
@@ -111,7 +116,8 @@ fun CompatibilityScreen() {
         Column(modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .padding(horizontal = 16.dp),
+            .padding(horizontal = 16.dp)
+            .padding(bottom = 16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Spacer(Modifier.height(16.dp))
@@ -140,7 +146,8 @@ fun CompatibilityScreen() {
                         modifier = Modifier.size(96.dp),
                         textBelow = stringResource(Res.string.compat_person_one_label),
                         canShine = true,
-                        selectSign = { selectedLabel = "Aries" } // hardcoded stand-in
+                        selectedSign = personOneSign,
+                        selectSign = { pickingSlot = SignSlot.ONE }
                     )
                     Spacer(Modifier.height(4.dp))
                     Text(
@@ -162,10 +169,10 @@ fun CompatibilityScreen() {
                     verticalArrangement = Arrangement.spacedBy(4.dp), horizontalAlignment = Alignment.CenterHorizontally) {
                     SelectSignButton(
                         modifier = Modifier.size(96.dp),
-                        textBelow = stringResource(Res.string.compat_person_one_label),
+                        textBelow = stringResource(Res.string.compat_person_two_label),
                         canShine = true,
-                        selectSign = { selectedLabel = "Aries" } // hardcoded stand-in
-
+                        selectedSign = personTwoSign,
+                        selectSign = { pickingSlot = SignSlot.TWO }
                     )
                     Spacer(Modifier.height(4.dp))
                     Text(
@@ -178,7 +185,7 @@ fun CompatibilityScreen() {
             }
             Spacer(Modifier.height(28.dp))
             AnalyzeButton(
-                false,
+                isEnabled = personOneSign != null && personTwoSign != null,
                 modifier = Modifier.padding(horizontal = 28.dp),
                 onClick = {}
             )
@@ -202,6 +209,19 @@ fun CompatibilityScreen() {
                 text = Res.string.desc_angular_relationship,
                 icon = Res.drawable.angle_relationship,
                 headlineAndIconColor = CosmicPurple
+            )
+        }
+
+        pickingSlot?.let { slot ->
+            SelectSignBottomSheet(
+                onSignConfirmed = { sign ->
+                    when (slot) {
+                        SignSlot.ONE -> personOneSign = sign
+                        SignSlot.TWO -> personTwoSign = sign
+                    }
+                    pickingSlot = null
+                },
+                onDismiss = { pickingSlot = null },
             )
         }
     }
