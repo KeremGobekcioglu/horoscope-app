@@ -25,13 +25,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.kg.yildizname.core.ui.theme.ButtonShape
+import com.kg.yildizname.core.ui.theme.DarkGray
 import com.kg.yildizname.core.ui.theme.DeepAmethyst
+import com.kg.yildizname.core.ui.theme.Gray
 import com.kg.yildizname.core.ui.theme.TwilightPlum
-import com.kg.yildizname.core.ui.theme.YzBg
 import com.kg.yildizname.core.ui.theme.YzGold
 import com.kg.yildizname.core.ui.theme.YzInk
 import horoscope.shared.generated.resources.Res
@@ -50,11 +52,11 @@ fun AnalyzeButton(isEnabled: Boolean, modifier: Modifier = Modifier, onClick: ()
     )
 
     val gradientStart by animateColorAsState(
-        targetValue = if(isEnabled) TwilightPlum else YzBg.copy(0.6f),
+        targetValue = if(isEnabled) TwilightPlum else Color.DarkGray,
         label = "gradientStart"
     )
     val gradientEnd by animateColorAsState(
-        targetValue = if(isEnabled) DeepAmethyst else YzBg.copy(0.6f),
+        targetValue = if(isEnabled) DeepAmethyst else DarkGray,
         label = "gradientEnd"
     )
 
@@ -89,21 +91,18 @@ fun AnalyzeButton(isEnabled: Boolean, modifier: Modifier = Modifier, onClick: ()
             )
             .clip(shape)
             .background(Brush.verticalGradient(listOf(gradientStart, gradientEnd)))
-            .border(1.dp, color = YzGold.copy(alpha = borderAlpha), shape = shape)
+            .border(1.3.dp, color = YzGold.copy(alpha = borderAlpha), shape = shape)
             .clickable(
                 enabled = isEnabled,
                 onClick = onClick
             )
-            .padding(horizontal = 32.dp, vertical = 16.dp)
+            .padding(horizontal = 32.dp, vertical = 16.dp),
+        contentAlignment = Alignment.Center
     )
     {
-        /* now two content , one icon and one text in a row
-        * */
         Row(
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 32.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(12.dp)
-
         )
         {
             Icon(

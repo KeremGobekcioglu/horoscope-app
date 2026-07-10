@@ -161,8 +161,12 @@ fun CompatibilityScreen() {
                 }
 
             }
-            Spacer(Modifier.height(64.dp))
-            AnalyzeButton(true, onClick = {})
+            Spacer(Modifier.height(28.dp))
+            AnalyzeButton(
+                false,
+                modifier = Modifier.padding(horizontal = 28.dp),
+                onClick = {}
+            )
         }
     }
 }
