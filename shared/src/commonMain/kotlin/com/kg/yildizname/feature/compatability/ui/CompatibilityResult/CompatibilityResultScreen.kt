@@ -1,12 +1,5 @@
-package com.kg.yildizname.feature.compatability.ui
+package com.kg.yildizname.feature.compatability.ui.CompatibilityResult
 
-import androidx.compose.animation.core.EaseOutCubic
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.tween
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,10 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -32,36 +22,21 @@ import com.kg.yildizname.core.ui.theme.YzInk
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Air
 import androidx.compose.material.icons.rounded.Landscape
-import androidx.compose.material.icons.rounded.LocalFireDepartment
-import androidx.compose.material.icons.rounded.WaterDrop
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.sp
+import com.kg.yildizname.core.data.model.compatGridIcon
+import com.kg.yildizname.core.data.model.elementIcon
+import com.kg.yildizname.core.data.model.localizedElementName
+import com.kg.yildizname.core.data.model.localizedName
 import com.kg.yildizname.core.ui.components.StarFieldBackground
-import com.kg.yildizname.core.ui.theme.DarkGray
-import com.kg.yildizname.core.ui.theme.YzBg
-import com.kg.yildizname.core.ui.theme.YzSurfaceAlt
 import com.kg.yildizname.core.ui.utils.yzStatusBarsPadding
 import com.kg.yildizname.feature.compatability.ui.components.CompatButton
 import com.kg.yildizname.feature.compatability.ui.components.ResultColumn
@@ -70,8 +45,14 @@ import com.kg.yildizname.feature.compatability.ui.components.SignBox
 import compose.icons.FeatherIcons
 import compose.icons.feathericons.ArrowLeft
 import horoscope.shared.generated.resources.Res
+import horoscope.shared.generated.resources.btn_share
 import horoscope.shared.generated.resources.capricorn_svgrepo_com
 import horoscope.shared.generated.resources.cd_back
+import horoscope.shared.generated.resources.compat_detailed_analysis_button
+import horoscope.shared.generated.resources.compat_score_communication
+import horoscope.shared.generated.resources.compat_score_friendship
+import horoscope.shared.generated.resources.compat_score_long_term
+import horoscope.shared.generated.resources.compat_score_love
 import horoscope.shared.generated.resources.compat_subtitle
 import horoscope.shared.generated.resources.compat_title
 import horoscope.shared.generated.resources.gemini_svgrepo_com
@@ -79,9 +60,34 @@ import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun CompatibilityResultScreen(
+    uiState: CompatibilityResultUIState,
     onBackClick: () -> Unit = {}
 )
 {
+    when (uiState) {
+        is CompatibilityResultUIState.Loading -> {
+
+        }
+        is CompatibilityResultUIState.Error ->
+        {
+
+        }
+        is CompatibilityResultUIState.Success -> CompatibilityResultSuccessScreen(
+            uiState = uiState,
+            onBackClick = onBackClick
+        )
+    }
+}
+
+
+@Composable
+fun CompatibilityResultSuccessScreen(
+    uiState: CompatibilityResultUIState.Success,
+    onBackClick: () -> Unit = {}
+)
+{
+    val signA = uiState.result.signs[0]
+    val signB = uiState.result.signs[1]
     StarFieldBackground()
     Box(modifier = Modifier.yzStatusBarsPadding().fillMaxSize())
     {
@@ -115,23 +121,23 @@ fun CompatibilityResultScreen(
             )
             Spacer(Modifier.height(16.dp))
             SignBox(
-                sign= "CAPRICORN",
-                icon = Res.drawable.capricorn_svgrepo_com,
-                element =  "Earth"
+                sign= signA.localizedName(),
+                icon = signA.compatGridIcon,
+                element =  signA.localizedElementName()
             )
             Spacer(Modifier.height(32.dp))
             ResultColumn(
-                score = 68,
-                elementA = "Earth",
-                elementB = "Air",
-                iconA = Icons.Rounded.Landscape,
-                iconB = Icons.Rounded.Air
+                score = uiState.result.matchPercent,
+                elementA = signA.localizedElementName(),
+                elementB = signB.localizedElementName(),
+                iconA = signA.elementIcon,
+                iconB = signB.elementIcon
             )
             Spacer(Modifier.height(32.dp))
             SignBox(
-                sign = "GEMINI",
-                icon = Res.drawable.gemini_svgrepo_com,
-                element = "Air"
+                sign = signB.localizedName(),
+                icon = signB.compatGridIcon,
+                element = signB.localizedElementName()
             )
             Spacer(Modifier.height(32.dp))
             Text(
@@ -150,10 +156,7 @@ fun CompatibilityResultScreen(
                         )
                     ) {
                         append(
-                            "Akrep ve Aslan arasındaki bu çekim, derin bir tutku ve sadakat temeline dayanır. " +
-                                    "Su ve Ateşin birleşimi zorlayıcı olsa da, karşılıklı saygı ile sarsılmaz bir " +
-                                    "bağa dönüşebilir. Her iki burç da sabit nitelikte olduğundan, " +
-                                    "birbirlerine olan bağlılıkları zamanın ötesinde bir güç barındırır."
+                            uiState.result.content.summary
                         )
                     }
                 },
@@ -166,26 +169,26 @@ fun CompatibilityResultScreen(
                 )
             )
             Spacer(Modifier.height(16.dp))
-            Scores(90,"Aşk")
+            Scores(uiState.result.scores.love, stringResource(Res.string.compat_score_love))
             Spacer(Modifier.height(8.dp))
-            Scores(60,"İş")
+            Scores(uiState.result.scores.communication, stringResource(Res.string.compat_score_communication))
             Spacer(Modifier.height(8.dp))
-            Scores(70,"Para")
+            Scores(uiState.result.scores.friendship, stringResource(Res.string.compat_score_friendship))
             Spacer(Modifier.height(8.dp))
-            Scores(100,"Hayat")
+            Scores(uiState.result.scores.longTerm, stringResource(Res.string.compat_score_long_term))
             Spacer(Modifier.height(16.dp))
             Column(
                 verticalArrangement = Arrangement.spacedBy(16.dp),
                 modifier = Modifier.padding(horizontal = 8.dp)
             ) {
                 CompatButton(
-                    text = "Detaylı Analiz",
+                    text = stringResource(Res.string.compat_detailed_analysis_button),
                     filled = false,
                     onClick = { }
                 )
 
                 CompatButton(
-                    text = "Paylaş",
+                    text = stringResource(Res.string.btn_share),
                     filled = true,
                     onClick = { }
                 )
