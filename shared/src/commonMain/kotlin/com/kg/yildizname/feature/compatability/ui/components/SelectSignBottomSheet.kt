@@ -32,6 +32,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.kg.yildizname.core.data.model.ZodiacSign
+import com.kg.yildizname.core.data.model.compatGridIcon
 import com.kg.yildizname.core.data.model.localizedName
 import com.kg.yildizname.core.ui.theme.SheetShape
 import com.kg.yildizname.core.ui.theme.SquareShape
@@ -60,22 +61,7 @@ import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
-/** Icon used to represent [this] sign in the compatibility feature's sign picker/button. */
-internal val ZodiacSign.compatGridIcon: DrawableResource
-    get() = when (this) {
-        ZodiacSign.ARIES -> Res.drawable.aries_svgrepo_com
-        ZodiacSign.TAURUS -> Res.drawable.taurus_svgrepo_com
-        ZodiacSign.GEMINI -> Res.drawable.gemini_svgrepo_com
-        ZodiacSign.CANCER -> Res.drawable.cancer_svgrepo_com
-        ZodiacSign.LEO -> Res.drawable.leo_svgrepo_com
-        ZodiacSign.VIRGO -> Res.drawable.virgo_svgrepo_com
-        ZodiacSign.LIBRA -> Res.drawable.libra_svgrepo_com
-        ZodiacSign.SCORPIO -> Res.drawable.scorpio_svgrepo_com
-        ZodiacSign.SAGITTARIUS -> Res.drawable.sagittarius_svgrepo_com
-        ZodiacSign.CAPRICORN -> Res.drawable.capricorn_svgrepo_com
-        ZodiacSign.AQUARIUS -> Res.drawable.aquarius_svgrepo_com
-        ZodiacSign.PISCES -> Res.drawable.pisces_svgrepo_com
-    }
+
 
 /**
  * Modal sheet with a 4x3 grid of the 12 zodiac signs and a confirm button below it.

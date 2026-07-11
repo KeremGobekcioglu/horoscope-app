@@ -4,15 +4,25 @@ import androidx.compose.runtime.Composable
 import com.kg.yildizname.core.domain.model.Element
 import horoscope.shared.generated.resources.Res
 import horoscope.shared.generated.resources.aquarius_constellation_icon
+import horoscope.shared.generated.resources.aquarius_svgrepo_com
 import horoscope.shared.generated.resources.aries_constellation_icon
+import horoscope.shared.generated.resources.aries_svgrepo_com
 import horoscope.shared.generated.resources.cancer_constellation_icon
+import horoscope.shared.generated.resources.cancer_svgrepo_com
 import horoscope.shared.generated.resources.capricorn_constellation_icon
+import horoscope.shared.generated.resources.capricorn_svgrepo_com
 import horoscope.shared.generated.resources.gemini_constellation_icon
+import horoscope.shared.generated.resources.gemini_svgrepo_com
 import horoscope.shared.generated.resources.leo_constellation_icon
+import horoscope.shared.generated.resources.leo_svgrepo_com
 import horoscope.shared.generated.resources.libra_constellation_icon
+import horoscope.shared.generated.resources.libra_svgrepo_com
 import horoscope.shared.generated.resources.pisces_constellation_icon
+import horoscope.shared.generated.resources.pisces_svgrepo_com
 import horoscope.shared.generated.resources.sagittarius_constellation_icon
+import horoscope.shared.generated.resources.sagittarius_svgrepo_com
 import horoscope.shared.generated.resources.scorpio_constellation_icon
+import horoscope.shared.generated.resources.scorpio_svgrepo_com
 import horoscope.shared.generated.resources.taurus_constellation_icon
 import horoscope.shared.generated.resources.virgo_constellation_icon
 import horoscope.shared.generated.resources.sign_name_aries
@@ -39,6 +49,8 @@ import horoscope.shared.generated.resources.sign_dates_sagittarius
 import horoscope.shared.generated.resources.sign_dates_capricorn
 import horoscope.shared.generated.resources.sign_dates_aquarius
 import horoscope.shared.generated.resources.sign_dates_pisces
+import horoscope.shared.generated.resources.taurus_svgrepo_com
+import horoscope.shared.generated.resources.virgo_svgrepo_com
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
@@ -95,3 +107,20 @@ fun ZodiacSign.localizedDateRange(): String = stringResource(dateRangeRes)
 
 @Composable
 fun ZodiacSign.localizedElementName(): String = stringResource(element.nameRes)
+
+/** Icon used to represent [this] sign in the compatibility feature's sign picker/button. */
+val ZodiacSign.compatGridIcon: DrawableResource
+    get() = when (this) {
+        ZodiacSign.ARIES -> Res.drawable.aries_svgrepo_com
+        ZodiacSign.TAURUS -> Res.drawable.taurus_svgrepo_com
+        ZodiacSign.GEMINI -> Res.drawable.gemini_svgrepo_com
+        ZodiacSign.CANCER -> Res.drawable.cancer_svgrepo_com
+        ZodiacSign.LEO -> Res.drawable.leo_svgrepo_com
+        ZodiacSign.VIRGO -> Res.drawable.virgo_svgrepo_com
+        ZodiacSign.LIBRA -> Res.drawable.libra_svgrepo_com
+        ZodiacSign.SCORPIO -> Res.drawable.scorpio_svgrepo_com
+        ZodiacSign.SAGITTARIUS -> Res.drawable.sagittarius_svgrepo_com
+        ZodiacSign.CAPRICORN -> Res.drawable.capricorn_svgrepo_com
+        ZodiacSign.AQUARIUS -> Res.drawable.aquarius_svgrepo_com
+        ZodiacSign.PISCES -> Res.drawable.pisces_svgrepo_com
+    }
