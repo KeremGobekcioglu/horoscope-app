@@ -32,6 +32,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kg.yildizname.core.data.model.ZodiacSign
+import com.kg.yildizname.core.data.model.compatGridIcon
 import com.kg.yildizname.core.ui.theme.SquareShape
 import com.kg.yildizname.core.ui.theme.YzGold
 import com.kg.yildizname.core.ui.theme.YzOnSurface
