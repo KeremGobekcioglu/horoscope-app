@@ -44,8 +44,9 @@ class CompatibilityRepository(
      * manual "check again" logic.
      */
 
-    fun getCompatibilityResult(signA: ZodiacSign,signB: ZodiacSign)
-    : Flow<CompatibilityResult?> = flow {
+    suspend fun getCompatibilityResult(signA: ZodiacSign,signB: ZodiacSign)
+    : CompatibilityResult?
+    {
         // tier 1: room
 
         // Doc IDs (both in Firestore and in our Room table) are alphabetical, e.g.
@@ -61,14 +62,16 @@ class CompatibilityRepository(
         if(cached != null)
         {
             println("CompatibilityRepository: ROOM HIT for id=$id")
-            emit(cached.toDomain())
-            return@flow
+           //emit(cached.toDomain())
+           // return@flow
+            return cached.toDomain()
         }
         println("CompatibilityRepository: ROOM MISS for id=$id, trying Firestore")
 
         // STEP 2 — Firestore (remote source of truth).
         // Only runs if Room had nothing for this pair (e.g. first time this exact
         // pair has ever been looked up on this device).
+
 
         val compatibilityResultDto = firestoreSource.getCompatibilityResult(signA,signB)
         if(compatibilityResultDto != null)
@@ -78,7 +81,8 @@ class CompatibilityRepository(
             // Save it to Room now, so next time this pair is requested, STEP 1 above
             // finds it instantly, and we skip Firestore entirely.
             dao.upsert(domain.toEntity())
-            emit(domain)
+            //emit(domain)
+            return domain
         }
         else
         {
@@ -89,7 +93,8 @@ class CompatibilityRepository(
             // Firestore, generated ahead of time. Reaching here means something is
             // wrong — e.g. pairId() built an ID that doesn't match any real document —
             // NOT a normal "not ready yet" situation like daily readings can have.
-            emit(null)
+            //emit(null)
+            return null
         }
     }
 }

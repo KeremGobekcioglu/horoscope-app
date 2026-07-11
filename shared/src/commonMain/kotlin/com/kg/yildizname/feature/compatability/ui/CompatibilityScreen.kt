@@ -37,6 +37,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -105,11 +106,11 @@ private enum class SignSlot { ONE, TWO }
 
 @Composable
 fun CompatibilityScreen(
-    onAnalyze : () -> Unit
+    onAnalyze : (signA: String, signB: String) -> Unit
 ) {
     StarFieldBackground(Modifier.fillMaxSize())
-    var personOneSign by remember { mutableStateOf<ZodiacSign?>(null) }
-    var personTwoSign by remember { mutableStateOf<ZodiacSign?>(null) }
+    var personOneSign by rememberSaveable { mutableStateOf<ZodiacSign?>(null) }
+    var personTwoSign by rememberSaveable { mutableStateOf<ZodiacSign?>(null) }
     var pickingSlot by remember { mutableStateOf<SignSlot?>(null) }
     Box(
         modifier = Modifier.fillMaxSize().yzStatusBarsPadding(),
@@ -189,7 +190,12 @@ fun CompatibilityScreen(
             AnalyzeButton(
                 isEnabled = personOneSign != null && personTwoSign != null,
                 modifier = Modifier.padding(horizontal = 28.dp),
-                onClick = onAnalyze
+                onClick = {
+                    if(personOneSign != null && personTwoSign != null)
+                    {
+                        onAnalyze(personOneSign!!.firestoreKey ,personTwoSign!!.firestoreKey)
+                    }
+                }
             )
             Spacer(Modifier.height(8.dp))
             Text(

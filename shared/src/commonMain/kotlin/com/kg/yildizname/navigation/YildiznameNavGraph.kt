@@ -20,21 +20,14 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.navigation
 import androidx.navigation.toRoute
-import com.kg.yildizname.core.data.model.PeriodType
-import com.kg.yildizname.core.data.model.Reading
-import com.kg.yildizname.core.data.model.ScoreSet
-import com.kg.yildizname.core.data.model.ZodiacSign
 import com.kg.yildizname.core.ui.components.StarFieldBackground
 import com.kg.yildizname.core.ui.components.YzBottomNav
 import com.kg.yildizname.core.ui.components.YzBottomNavItemData
 import com.kg.yildizname.core.util.DateUtils
-import com.kg.yildizname.feature.calendar.ui.CalendarDay
 import com.kg.yildizname.feature.calendar.ui.CalendarScreen
-import com.kg.yildizname.feature.calendar.ui.CalendarUiState
 import com.kg.yildizname.feature.calendar.ui.CalendarViewModel
-import com.kg.yildizname.feature.calendar.ui.MonthRelation
-import com.kg.yildizname.feature.calendar.ui.PageTab
-import com.kg.yildizname.feature.compatability.ui.CompatibilityResultScreen
+import com.kg.yildizname.feature.compatability.ui.CompatibilityResult.CompatibilityResultScreen
+import com.kg.yildizname.feature.compatability.ui.CompatibilityResult.CompatibilityResultViewModel
 import com.kg.yildizname.feature.compatability.ui.CompatibilityScreen
 import com.kg.yildizname.feature.home.ui.HomeScreen
 import com.kg.yildizname.feature.home.ui.HomeUiState
@@ -66,8 +59,6 @@ import horoscope.shared.generated.resources.nav_calendar
 import horoscope.shared.generated.resources.nav_compatibility
 import horoscope.shared.generated.resources.nav_home
 import horoscope.shared.generated.resources.nav_settings
-import kotlinx.datetime.DatePeriod
-import kotlinx.datetime.plus
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
@@ -323,8 +314,8 @@ fun YildiznameNavGraph(navController: NavHostController) {
 
             composable<Compatibility> {
                 CompatibilityScreen(
-                    onAnalyze = {
-                        navController.navigate(CompatibilityResultRoute("", ""))
+                    onAnalyze = { signA, signB ->
+                        navController.navigate(CompatibilityResultRoute(signA, signB))
                     }
                 )
             }
@@ -333,8 +324,14 @@ fun YildiznameNavGraph(navController: NavHostController) {
 //                CompatibilityScreen()
 //            }
 
-            composable<CompatibilityResultRoute> {
+            composable<CompatibilityResultRoute> { backStackEntry ->
+                val route: CompatibilityResultRoute = backStackEntry.toRoute()
+                val resultViewModel : CompatibilityResultViewModel = koinViewModel{
+                    parametersOf(route.signA, route.signB)
+                }
+                val state by resultViewModel.uiState.collectAsStateWithLifecycle()
                 CompatibilityResultScreen(
+                    uiState = state,
                     onBackClick = { navController.popBackStack() }
                 )
             }
