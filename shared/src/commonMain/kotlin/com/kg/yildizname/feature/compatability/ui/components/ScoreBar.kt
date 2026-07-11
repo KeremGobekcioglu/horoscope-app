@@ -27,6 +27,9 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.boundsInWindow
+import androidx.compose.ui.layout.findRootCoordinates
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kg.yildizname.core.ui.theme.YzGold
@@ -38,17 +41,16 @@ fun Scores(
     score: Int,
     field: String
 ) {
-    var animationPlayed by remember { mutableStateOf(false) }
+    val (visibilityModifier, isVisible) = rememberIsVisible()
     val animatedFraction by animateFloatAsState(
-        targetValue = if (animationPlayed) score / 10f else 0f,
+        targetValue = if (isVisible) score / 100f else 0f,
         animationSpec = tween(durationMillis = 900, easing = EaseOutCubic),
         label = "score_bar_$field"
     )
-    LaunchedEffect(score) { animationPlayed = true }
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth().then(visibilityModifier)
     )
     {
         Row(
@@ -116,4 +118,35 @@ private fun ScoreBar(
                 }
             }
     )
+}
+
+/**
+ * Tracks whether this composable's bounds currently overlap the visible window,
+ * updating on every layout pass (scroll, resize, etc.) rather than latching once.
+ *
+ * Use this to gate "animate on appear" effects (e.g. animateFloatAsState target)
+ * so they replay each time the element scrolls into view, and reverse/reset when
+ * it scrolls back out.
+ *
+ * Returns a Modifier to attach to the composable you want tracked, paired with
+ * the current visibility boolean to read in that same composable.
+ *
+ * Note: onGloballyPositioned fires frequently during scroll, so isVisible can
+ * flip rapidly near the viewport edge — animateFloatAsState handles being
+ * retargeted mid-animation fine, but expect some extra recomposition near the
+ * boundary. No hysteresis/margin is applied here; add one only if this causes
+ * visible flicker in practice.
+ */
+@Composable
+fun rememberIsVisible(): Pair<Modifier, Boolean> {
+    var isVisible by remember { mutableStateOf(false) }
+    val modifier = Modifier.onGloballyPositioned { coordinates ->
+        val bounds = coordinates.boundsInWindow()
+        val rootHeight = coordinates.findRootCoordinates().size.height
+        val currentlyVisible = bounds.top < rootHeight && bounds.bottom > 0
+        if (currentlyVisible != isVisible) {
+            isVisible = currentlyVisible
+        }
+    }
+    return modifier to isVisible
 }

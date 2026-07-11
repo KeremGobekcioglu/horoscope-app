@@ -104,7 +104,7 @@ fun SelectSignButton(
             Icon(
                 painter = painterResource(selectedSign.compatGridIcon),
                 contentDescription = null,
-                tint = Color.Unspecified,
+                tint = YzGold.copy(0.75f),
                 modifier = Modifier.fillMaxSize().padding(20.dp),
             )
         } else {

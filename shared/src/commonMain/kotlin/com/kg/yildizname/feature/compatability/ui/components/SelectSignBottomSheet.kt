@@ -171,7 +171,7 @@ private fun SignGridItem(
             Icon(
                 painter = painterResource(sign.compatGridIcon),
                 contentDescription = sign.localizedName(),
-                tint = Color.Unspecified,
+                tint = YzGold.copy(0.75f),
                 modifier = Modifier.fillMaxWidth(),
             )
         }
