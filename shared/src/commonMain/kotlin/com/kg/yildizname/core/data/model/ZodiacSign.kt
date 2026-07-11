@@ -1,6 +1,12 @@
 package com.kg.yildizname.core.data.model
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Air
+import androidx.compose.material.icons.rounded.Landscape
+import androidx.compose.material.icons.rounded.LocalFireDepartment
+import androidx.compose.material.icons.rounded.WaterDrop
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.vector.ImageVector
 import com.kg.yildizname.core.domain.model.Element
 import horoscope.shared.generated.resources.Res
 import horoscope.shared.generated.resources.aquarius_constellation_icon
@@ -123,4 +129,15 @@ val ZodiacSign.compatGridIcon: DrawableResource
         ZodiacSign.CAPRICORN -> Res.drawable.capricorn_svgrepo_com
         ZodiacSign.AQUARIUS -> Res.drawable.aquarius_svgrepo_com
         ZodiacSign.PISCES -> Res.drawable.pisces_svgrepo_com
+    }
+
+val ZodiacSign.elementIcon: ImageVector
+    get() = element.icon
+
+val Element.icon: ImageVector
+    get() = when (this) {
+        Element.FIRE -> Icons.Rounded.LocalFireDepartment
+        Element.WATER -> Icons.Rounded.WaterDrop
+        Element.AIR -> Icons.Rounded.Air
+        Element.EARTH -> Icons.Rounded.Landscape
     }
