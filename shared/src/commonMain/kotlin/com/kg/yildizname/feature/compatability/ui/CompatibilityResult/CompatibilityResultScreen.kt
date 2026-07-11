@@ -36,6 +36,10 @@ import com.kg.yildizname.core.data.model.compatGridIcon
 import com.kg.yildizname.core.data.model.elementIcon
 import com.kg.yildizname.core.data.model.localizedElementName
 import com.kg.yildizname.core.data.model.localizedName
+import com.kg.yildizname.core.domain.model.CompatibilityBand
+import com.kg.yildizname.core.domain.model.ElementPairing
+import com.kg.yildizname.core.domain.model.localizedDesc
+import com.kg.yildizname.core.domain.model.tintColor
 import com.kg.yildizname.core.ui.components.StarFieldBackground
 import com.kg.yildizname.core.ui.utils.yzStatusBarsPadding
 import com.kg.yildizname.feature.compatability.ui.components.CompatButton
@@ -131,7 +135,11 @@ fun CompatibilityResultSuccessScreen(
                 elementA = signA.localizedElementName(),
                 elementB = signB.localizedElementName(),
                 iconA = signA.elementIcon,
-                iconB = signB.elementIcon
+                iconB = signB.elementIcon,
+                scoreDesc = CompatibilityBand.fromScore(uiState.result.matchPercent).localizedDesc(),
+                genericElementExp = ElementPairing.from(signA.element, signB.element).localizedDesc(),
+                iconATint = signA.element.tintColor,
+                iconBTint = signB.element.tintColor
             )
             Spacer(Modifier.height(32.dp))
             SignBox(

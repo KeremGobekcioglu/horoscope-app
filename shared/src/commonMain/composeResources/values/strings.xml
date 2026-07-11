@@ -134,6 +134,24 @@
     <string name="compat_score_friendship">Arkadaşlık</string>
     <string name="compat_score_long_term">Uzun Vade</string>
 
+    <!-- Compatibility score bands -->
+    <string name="compat_band_excellent">Mükemmel Uyum</string>
+    <string name="compat_band_strong">Güçlü Uyum</string>
+    <string name="compat_band_balanced">Dengeli Uyum</string>
+    <string name="compat_band_variable">Değişken Uyum</string>
+    <string name="compat_band_challenging">Zorlu Uyum</string>
+
+    <!-- Compatibility element pairings -->
+    <string name="compat_elem_fire_fire">Ortak Ateşin Gücü</string>
+    <string name="compat_elem_earth_earth">Sağlam Zemin</string>
+    <string name="compat_elem_air_air">Zihinlerin Buluşması</string>
+    <string name="compat_elem_water_water">Derin Bağ</string>
+    <string name="compat_elem_fire_earth">Tutkuyla Denge</string>
+    <string name="compat_elem_fire_air">Kıvılcım ve Rüzgar</string>
+    <string name="compat_elem_fire_water">Zıtlıkların Dansı</string>
+    <string name="compat_elem_earth_air">Pratik ve Fikirler</string>
+    <string name="compat_elem_earth_water">Besleyici Uyum</string>
+    <string name="compat_elem_air_water">Duygu ve Düşünce</string>
 
     <!-- Common -->
     <string name="btn_continue">Devam</string>

@@ -132,6 +132,25 @@
     <string name="compat_score_friendship">Friendship</string>
     <string name="compat_score_long_term">Long Term</string>
 
+    <!-- Compatibility score bands -->
+    <string name="compat_band_excellent">Excellent Match</string>
+    <string name="compat_band_strong">Strong Match</string>
+    <string name="compat_band_balanced">Balanced Match</string>
+    <string name="compat_band_variable">Variable Match</string>
+    <string name="compat_band_challenging">Challenging Match</string>
+
+    <!-- Compatibility element pairings -->
+    <string name="compat_elem_fire_fire">Shared Fire\'s Power</string>
+    <string name="compat_elem_earth_earth">Solid Ground</string>
+    <string name="compat_elem_air_air">Meeting of Minds</string>
+    <string name="compat_elem_water_water">Deep Connection</string>
+    <string name="compat_elem_fire_earth">Passion Meets Stability</string>
+    <string name="compat_elem_fire_air">Spark and Wind</string>
+    <string name="compat_elem_fire_water">Dance of Opposites</string>
+    <string name="compat_elem_earth_air">Grounded Ideas</string>
+    <string name="compat_elem_earth_water">Nurturing Harmony</string>
+    <string name="compat_elem_air_water">Feeling and Thought</string>
+
     <!-- Settings -->
     <string name="settings_title">Settings</string>
     <string name="settings_language">Language</string>

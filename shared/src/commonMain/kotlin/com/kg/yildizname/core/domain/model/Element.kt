@@ -1,6 +1,11 @@
 package com.kg.yildizname.core.domain.model
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
+import com.kg.yildizname.core.ui.theme.YzAirBlue
+import com.kg.yildizname.core.ui.theme.YzEarthGreen
+import com.kg.yildizname.core.ui.theme.YzFireOrange
+import com.kg.yildizname.core.ui.theme.YzWaterBlue
 import horoscope.shared.generated.resources.Res
 import horoscope.shared.generated.resources.element_name_air
 import horoscope.shared.generated.resources.element_name_earth
@@ -18,3 +23,11 @@ enum class Element(val nameRes: StringResource) {
 
 @Composable
 fun Element.localizedName(): String = stringResource(nameRes)
+
+val Element.tintColor: Color
+    get() = when (this) {
+        Element.FIRE -> YzFireOrange   // or whatever tokens exist
+        Element.EARTH -> YzEarthGreen
+        Element.AIR -> YzAirBlue
+        Element.WATER -> YzWaterBlue
+    }

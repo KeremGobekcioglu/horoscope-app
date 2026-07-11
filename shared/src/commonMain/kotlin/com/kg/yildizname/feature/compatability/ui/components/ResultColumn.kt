@@ -34,7 +34,9 @@ fun ResultColumn(
     elementB: String,
     genericElementExp: String = "Zıtlıkların Dansı",
     iconA: ImageVector,
-    iconB: ImageVector
+    iconB: ImageVector,
+    iconATint: Color,
+    iconBTint: Color
 ) {
     Box() {
         Column(
@@ -67,14 +69,14 @@ fun ResultColumn(
                         imageVector = iconA,
                         contentDescription = null,
                         modifier = Modifier.size(16.dp),
-                        tint = Color.Green
+                        tint = iconATint
                     )
                     Spacer(Modifier.width(4.dp))
                     Icon(
                         imageVector = iconB,
                         contentDescription = null,
                         modifier = Modifier.size(16.dp),
-                        tint = Color.White
+                        tint = iconBTint
                     )
                     Spacer(Modifier.width(12.dp))
                     Text(

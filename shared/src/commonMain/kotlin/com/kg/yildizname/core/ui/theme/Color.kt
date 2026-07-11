@@ -13,7 +13,12 @@ val YzTertiary = Color(0xFF5A5A78)
 val YzBorder = Color(0xFF1E2240)
 
 val YzStarWhite = Color(0xFFFFFFFF)
-
+// Element accent colors — used for element icon tints in compatibility results.
+// Muted/desaturated to sit naturally against YzBg/DarkGray without competing with YzGold or YzViolet.
+val YzFireOrange = Color(0xFFD97A4D)
+val YzEarthGreen = Color(0xFF7C9473)
+val YzAirBlue = Color(0xFF8FAAC9)
+val YzWaterBlue = Color(0xFF5B87A6)
 val YzCardBg    = Color(0xFF181B2A)
 val YzCardBgSel = Color(0xFF0F1222)
 val YzOnSurface = Color(0xFFE0E1F7)
