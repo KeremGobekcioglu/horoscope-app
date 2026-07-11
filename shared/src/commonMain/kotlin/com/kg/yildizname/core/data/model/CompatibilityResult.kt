@@ -7,7 +7,7 @@ data class CompatibilityResult(
     val signs: List<ZodiacSign>,
     val matchPercent: Int,
     val scores: CompatibilityScores,
-    val content: CompatibilityLocalizedContent
+    val content: CompatibilityContent
 )
 
 data class CompatibilityScores(

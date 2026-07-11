@@ -128,11 +128,19 @@
     <string name="settings_notifications">Bildirimler</string>
     <string name="settings_about">Hakkında</string>
 
+    <string name="compat_detailed_analysis_button">Detaylı Analiz</string>
+    <string name="compat_score_love">Aşk</string>
+    <string name="compat_score_communication">İletişim</string>
+    <string name="compat_score_friendship">Arkadaşlık</string>
+    <string name="compat_score_long_term">Uzun Vade</string>
+
+
     <!-- Common -->
     <string name="btn_continue">Devam</string>
     <string name="btn_skip">Atla</string>
     <string name="btn_back">Geri</string>
     <string name="btn_share">Paylaş</string>
+    <string name="btn_share_analysis">Analizi paylaş</string>
     <string name="btn_start">Başla</string>
 
     <!-- Zodiac signs (Turkish) -->

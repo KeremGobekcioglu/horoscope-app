@@ -124,6 +124,14 @@
     <!-- Angular Relationship Card -->
     <string name="title_angular_relationship">Angular Relationship</string>
     <string name="desc_angular_relationship">By calculating the positional angles in the zodiac belt, we analyze the attraction energy between you.</string>
+
+    <string name="compat_detailed_analysis_button">Detailed Analysis</string>
+    <string name="btn_share_analysis">Share analysis</string>
+    <string name="compat_score_love">Love</string>
+    <string name="compat_score_communication">Communication</string>
+    <string name="compat_score_friendship">Friendship</string>
+    <string name="compat_score_long_term">Long Term</string>
+
     <!-- Settings -->
     <string name="settings_title">Settings</string>
     <string name="settings_language">Language</string>

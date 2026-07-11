@@ -1,12 +1,10 @@
 package com.kg.yildizname.core.data.repository
 
 import com.kg.yildizname.core.data.local.CompatibilityDao
-import com.kg.yildizname.core.data.local.CompatibilityEntity
 import com.kg.yildizname.core.data.local.toDomain
 import com.kg.yildizname.core.data.local.toEntity
 import com.kg.yildizname.core.data.model.CompatibilityResult
 import com.kg.yildizname.core.data.model.ZodiacSign
-import com.kg.yildizname.core.data.model.toDomain
 import com.kg.yildizname.core.data.remote.FirestoreSource
 import com.kg.yildizname.core.util.pairId
 import io.ktor.util.logging.Logger
@@ -77,12 +75,12 @@ class CompatibilityRepository(
         if(compatibilityResultDto != null)
         {
             println("CompatibilityRepository: FIRESTORE HIT for id=$id (matchPercent=${compatibilityResultDto.matchPercent})")
-            val domain = compatibilityResultDto.toDomain()
+            val entity = compatibilityResultDto.toEntity()
             // Save it to Room now, so next time this pair is requested, STEP 1 above
             // finds it instantly, and we skip Firestore entirely.
-            dao.upsert(domain.toEntity())
+            dao.upsert(entity)
             //emit(domain)
-            return domain
+            return entity.toDomain()
         }
         else
         {
