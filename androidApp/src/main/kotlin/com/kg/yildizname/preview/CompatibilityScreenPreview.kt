@@ -22,7 +22,7 @@ import com.kg.yildizname.feature.compatability.ui.components.AnalyzeButton
 fun CompPreview()
 {
     YzTheme {
-        CompatibilityScreen()
+        CompatibilityScreen({})
     }
 
 }

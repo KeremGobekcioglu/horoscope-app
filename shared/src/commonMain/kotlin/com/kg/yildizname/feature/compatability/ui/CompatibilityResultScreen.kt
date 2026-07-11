@@ -35,6 +35,7 @@ import androidx.compose.material.icons.rounded.Landscape
 import androidx.compose.material.icons.rounded.LocalFireDepartment
 import androidx.compose.material.icons.rounded.WaterDrop
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -62,19 +63,27 @@ import com.kg.yildizname.core.ui.theme.DarkGray
 import com.kg.yildizname.core.ui.theme.YzBg
 import com.kg.yildizname.core.ui.theme.YzSurfaceAlt
 import com.kg.yildizname.core.ui.utils.yzStatusBarsPadding
+import com.kg.yildizname.feature.compatability.ui.components.CompatButton
+import com.kg.yildizname.feature.compatability.ui.components.ResultColumn
+import com.kg.yildizname.feature.compatability.ui.components.Scores
 import com.kg.yildizname.feature.compatability.ui.components.SignBox
+import compose.icons.FeatherIcons
+import compose.icons.feathericons.ArrowLeft
 import horoscope.shared.generated.resources.Res
 import horoscope.shared.generated.resources.capricorn_svgrepo_com
+import horoscope.shared.generated.resources.cd_back
 import horoscope.shared.generated.resources.compat_subtitle
 import horoscope.shared.generated.resources.compat_title
 import horoscope.shared.generated.resources.gemini_svgrepo_com
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
-fun CompatibilityResultScreen()
+fun CompatibilityResultScreen(
+    onBackClick: () -> Unit = {}
+)
 {
     StarFieldBackground()
-    Box(modifier = Modifier.background(YzBg).yzStatusBarsPadding().fillMaxSize())
+    Box(modifier = Modifier.yzStatusBarsPadding().fillMaxSize())
     {
         Column(modifier = Modifier
             .padding(horizontal = 8.dp)
@@ -84,7 +93,15 @@ fun CompatibilityResultScreen()
             horizontalAlignment = Alignment.CenterHorizontally
         )
         {
-            Spacer(Modifier.height(16.dp))
+            Row(modifier = Modifier.fillMaxWidth()) {
+                IconButton(onClick = onBackClick) {
+                    Icon(
+                        imageVector = FeatherIcons.ArrowLeft,
+                        contentDescription = stringResource(Res.string.cd_back),
+                        tint = YzInk
+                    )
+                }
+            }
             Text(
                 text = stringResource(Res.string.compat_title),
                 color = YzGold,
@@ -161,205 +178,18 @@ fun CompatibilityResultScreen()
                 verticalArrangement = Arrangement.spacedBy(16.dp),
                 modifier = Modifier.padding(horizontal = 8.dp)
             ) {
-                YzButton(
+                CompatButton(
                     text = "Detaylı Analiz",
                     filled = false,
                     onClick = { }
                 )
 
-                YzButton(
+                CompatButton(
                     text = "Paylaş",
                     filled = true,
                     onClick = { }
                 )
             }
-        }
-    }
-}
-
-@Composable
-fun Scores(
-    score: Int,
-    field: String
-)
-{
-    var animationPlayed by remember { mutableStateOf(false) }
-    val animatedFraction by animateFloatAsState(
-        targetValue = if (animationPlayed) score / 10f else 0f,
-        animationSpec = tween(durationMillis = 900, easing = EaseOutCubic),
-        label = "score_bar_$field"
-    )
-    LaunchedEffect(score) { animationPlayed = true }
-    Column(
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.fillMaxWidth()
-    )
-    {
-        Row(
-            horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier
-                .padding(horizontal = 4.dp)
-                .fillMaxWidth()
-        ) {
-            Text(
-                text = field,
-                color = YzGold.copy(0.7f),
-                fontSize = 10.sp
-            )
-            Text(
-                text = "$score%",
-                color = YzInk.copy(0.7f),
-                fontSize = 10.sp
-            )
-        }
-        Spacer(Modifier.height(4.dp))
-        ScoreBar(animatedFraction)
-    }
-}
-@Composable
-fun YzButton(
-    text: String,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier,
-    filled: Boolean = true
-) {
-    val shape = RoundedCornerShape(18.dp)
-
-    Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .height(48.dp)
-            .clip(shape)
-            .background(
-                if (filled) YzGold
-                else Color.Transparent
-            )
-            .border(
-                width = 1.dp,
-                color = if (filled) Color.Transparent else YzGold.copy(alpha = 0.7f),
-                shape = shape
-            )
-            .clickable(onClick = onClick),
-        contentAlignment = Alignment.Center
-    ) {
-        Text(
-            text = text.uppercase(),
-            style = MaterialTheme.typography.titleMedium.copy(
-                fontWeight = FontWeight.SemiBold,
-                letterSpacing = 1.sp
-            ),
-            color = if (filled) YzBg else YzGold
-        )
-    }
-}
-/**
- * ScoreBar — thin animated gold bar on a dark track.
- *
- * Visual layering:
- *   1. Dark track (full width, YzSurfaceAlt)
- *   2. Gold fill (animates from 0 → fraction)
- *   3. Bright gold tip — 4dp cap that glows at the leading edge
- *
- * This gives depth without shadows: the tip reads as the energy "cursor".
- */
-@Composable
-private fun ScoreBar(
-    animatedFraction: Float,
-    modifier: Modifier = Modifier,
-) {
-    val goldColor   = YzInk
-    val trackColor  = YzSurfaceAlt   // #141830
-    val tipColor    = Color(0xFFFFD980)  // brighter than YzGold for the tip highlight
-
-    Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .height(3.dp)
-            .clip(RoundedCornerShape(999.dp))
-            .background(trackColor)
-            .drawBehind {
-                val barWidth = size.width * animatedFraction
-                if (barWidth > 0f) {
-                    // Gold fill
-                    drawRect(
-                        color = goldColor,
-                        size = Size(barWidth, size.height)
-                    )
-                    // Bright tip cap — 6dp wide glow at leading edge
-                    val tipWidth = 6.dp.toPx().coerceAtMost(barWidth)
-                    drawRect(
-                        color = tipColor,
-                        topLeft = Offset(x = barWidth - tipWidth, y = 0f),
-                        size = Size(tipWidth, size.height)
-                    )
-                }
-            }
-    )
-}
-@Composable
-fun ResultColumn(
-    score: Int,
-    scoreDesc: String = "Mükemmel Uyum",
-    elementA: String,
-    elementB: String,
-    genericElementExp: String = "Zıtlıkların Dansı",
-    iconA: ImageVector,
-    iconB: ImageVector
-) {
-    Box() {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally
-        )
-        {
-            Text(
-                text = "$score %",
-                color = YzGold,
-                style = MaterialTheme.typography.headlineLarge
-            )
-            Text(
-                text = scoreDesc,
-                color = YzInk,
-                style = MaterialTheme.typography.headlineMedium
-            )
-            Spacer(Modifier.height(8.dp))
-            Box(
-                modifier = Modifier.padding(horizontal = 8.dp)
-                    .clip(RoundedCornerShape(12.dp))
-                    .background(DarkGray.copy(0.4f)),
-                contentAlignment = Alignment.Center
-            ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center,
-                    modifier = Modifier.padding(vertical = 4.dp, horizontal = 16.dp)
-                ) {
-                    Icon(
-                        imageVector = iconA,
-                        contentDescription = null,
-                        modifier = Modifier.size(16.dp),
-                        tint = Color.Green
-                    )
-                    Spacer(Modifier.width(4.dp))
-                    Icon(
-                        imageVector = iconB,
-                        contentDescription = null,
-                        modifier = Modifier.size(16.dp),
-                        tint = Color.White
-                    )
-                    Spacer(Modifier.width(12.dp))
-                    Text(
-                        text = "$elementA + $elementB",
-                        color = YzGold.copy(0.8f),
-                        fontSize = 12.sp
-                    )
-                }
-            }
-            Text(
-                text = "$genericElementExp",
-                color = YzInk,
-                fontSize = 10.sp
-            )
         }
     }
 }

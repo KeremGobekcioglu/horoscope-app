@@ -104,7 +104,9 @@ import kotlin.math.sign
 private enum class SignSlot { ONE, TWO }
 
 @Composable
-fun CompatibilityScreen() {
+fun CompatibilityScreen(
+    onAnalyze : () -> Unit
+) {
     StarFieldBackground(Modifier.fillMaxSize())
     var personOneSign by remember { mutableStateOf<ZodiacSign?>(null) }
     var personTwoSign by remember { mutableStateOf<ZodiacSign?>(null) }
@@ -187,7 +189,7 @@ fun CompatibilityScreen() {
             AnalyzeButton(
                 isEnabled = personOneSign != null && personTwoSign != null,
                 modifier = Modifier.padding(horizontal = 28.dp),
-                onClick = {}
+                onClick = onAnalyze
             )
             Spacer(Modifier.height(8.dp))
             Text(

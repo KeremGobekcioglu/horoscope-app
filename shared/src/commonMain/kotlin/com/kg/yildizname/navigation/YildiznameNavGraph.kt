@@ -34,6 +34,7 @@ import com.kg.yildizname.feature.calendar.ui.CalendarUiState
 import com.kg.yildizname.feature.calendar.ui.CalendarViewModel
 import com.kg.yildizname.feature.calendar.ui.MonthRelation
 import com.kg.yildizname.feature.calendar.ui.PageTab
+import com.kg.yildizname.feature.compatability.ui.CompatibilityResultScreen
 import com.kg.yildizname.feature.compatability.ui.CompatibilityScreen
 import com.kg.yildizname.feature.home.ui.HomeScreen
 import com.kg.yildizname.feature.home.ui.HomeUiState
@@ -321,7 +322,21 @@ fun YildiznameNavGraph(navController: NavHostController) {
             }
 
             composable<Compatibility> {
-                CompatibilityScreen()
+                CompatibilityScreen(
+                    onAnalyze = {
+                        navController.navigate(CompatibilityResultRoute("", ""))
+                    }
+                )
+            }
+
+//            composable<CompatibilityDetailRoute> {
+//                CompatibilityScreen()
+//            }
+
+            composable<CompatibilityResultRoute> {
+                CompatibilityResultScreen(
+                    onBackClick = { navController.popBackStack() }
+                )
             }
 
             composable<Settings> {
