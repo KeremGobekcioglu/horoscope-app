@@ -17,11 +17,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -39,6 +35,7 @@ import com.kg.yildizname.core.ui.theme.YzGold
 import com.kg.yildizname.core.ui.theme.YzMuted
 import com.kg.yildizname.core.ui.theme.YzSurface
 import com.kg.yildizname.core.ui.theme.YzSurfaceAlt
+import com.kg.yildizname.feature.compatability.ui.components.rememberIsVisible
 import compose.icons.FeatherIcons
 import compose.icons.feathericons.Activity
 import compose.icons.feathericons.Briefcase
@@ -128,17 +125,17 @@ private fun EnergyScoreTile(
     icon: ImageVector,
     modifier: Modifier = Modifier,
 ) {
-    // Animate the score bar width from 0 → fraction on first composition
-    var animationPlayed by remember { mutableStateOf(false) }
+    // Animate the score bar width from 0 → fraction each time the tile scrolls into view
+    val (visibilityModifier, isVisible) = rememberIsVisible()
     val animatedFraction by animateFloatAsState(
-        targetValue = if (animationPlayed) score / 10f else 0f,
+        targetValue = if (isVisible) score / 10f else 0f,
         animationSpec = tween(durationMillis = 900, easing = EaseOutCubic),
         label = "score_bar_$label"
     )
-    LaunchedEffect(score) { animationPlayed = true }
 
     Box(
         modifier = modifier
+            .then(visibilityModifier)
             .clip(RoundedCornerShape(20.dp))
             .background(YzSurface)
             .border(0.5.dp, YzBorder, RoundedCornerShape(20.dp))
