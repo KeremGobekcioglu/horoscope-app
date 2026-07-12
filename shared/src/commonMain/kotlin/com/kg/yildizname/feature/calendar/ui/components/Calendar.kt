@@ -5,10 +5,10 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -29,6 +29,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kg.yildizname.core.ui.theme.YzBg
@@ -123,17 +124,30 @@ fun Calendar(
             }
         }
 
-        Column(modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(4.dp))
-        {
-            weeks.forEach {
-                    week ->
-                CalendarRow(
-                    week = week,
-                    selectedDay = selectedDay?.day ?: -1,
-                    selectedRelation = selectedDay?.relation ?: MonthRelation.CURRENT,
-                    onDayClick = onDaySelected,
-                    modifier = Modifier.weight(1f)
-                    )
+        val rowSpacing = 4.dp
+
+        // No weight here: this should wrap its own natural (width-derived) content height, not
+        // stretch to fill whatever's left in the parent Column. The maxHeight BoxWithConstraints
+        // reports is still a real, finite ceiling (inherited from the screen), so the min() below
+        // remains a safety net for the rare case content would otherwise overflow it.
+        BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
+            val totalRowSpacing = rowSpacing * (weeks.size - 1)
+            val cellSize = minOf(
+                maxWidth / 7,
+                (maxHeight - totalRowSpacing) / weeks.size,
+            )
+
+            Column(modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(rowSpacing)) {
+                weeks.forEach {
+                        week ->
+                    CalendarRow(
+                        week = week,
+                        cellSize = cellSize,
+                        selectedDay = selectedDay?.day ?: -1,
+                        selectedRelation = selectedDay?.relation ?: MonthRelation.CURRENT,
+                        onDayClick = onDaySelected,
+                        )
+                }
             }
         }
 
@@ -153,9 +167,8 @@ fun DayComposable(
     val shape = RoundedCornerShape(16.dp)
     println("day = $day and avavilable info = $isAvailable")
     Box(
-        modifier = modifier.aspectRatio(1f)
+        modifier = modifier
             .clickable(isAvailable, onClick = onClick)
-//            .size(42.dp)
             .then(
                 if(canShine) {
                     Modifier.shadow(elevation = 0.dp, shape = shape, ambientColor = YzGold, spotColor = YzGold)
@@ -197,16 +210,19 @@ fun DayComposable(
 @Composable
 fun CalendarRow(
     modifier: Modifier = Modifier,
-    luckDays: List<Int> = emptyList(),
     week: List<CalendarDay>,
+    cellSize: Dp,
     selectedDay: Int, selectedRelation: MonthRelation,
     onDayClick: (CalendarDay) -> Unit
     )
 {
-    Row(modifier = modifier.fillMaxWidth()) {
+    Row(
+        modifier = modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceEvenly,
+    ) {
         week.forEach { day ->
             DayComposable(
-                modifier = Modifier.weight(1f),
+                modifier = Modifier.size(cellSize),
                 day = day.day,
                 isAvailable = day.isAvailable,
                 isSelected = day.day == selectedDay && day.relation == selectedRelation,

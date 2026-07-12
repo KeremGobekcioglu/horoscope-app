@@ -142,7 +142,11 @@ private fun CalendarScreenSuccessContent(
                 style = MaterialTheme.typography.headlineMedium,
                 color = YzGold
             )
-            Box(modifier = Modifier.weight(1f) , contentAlignment = Alignment.TopCenter)
+            // No weight here on purpose: Calendar()'s height is now deterministic (cell size is
+            // derived from screen width via BoxWithConstraints inside Calendar()), so it should
+            // just wrap its natural content size. HorizontalPager below keeps weight(1f) and
+            // absorbs all genuinely leftover space — no fixed ratio to guess/tune.
+            Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.TopCenter)
             {
                 Calendar(
                     date = uiState.date,
