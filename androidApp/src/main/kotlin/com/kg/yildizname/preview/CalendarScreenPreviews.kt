@@ -51,6 +51,7 @@ private fun CalendarPreviewScaffold(uiState: CalendarUiState) {
             onTabChange = {},
             onReadMoreClick = { _, _ -> },
             onRetryClick = {},
+            {}
         )
     }
 }

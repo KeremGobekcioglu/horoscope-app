@@ -188,6 +188,15 @@ class CalendarViewModel(
             }
         }
     }
+
+    fun clearDay()
+    {
+        val current = _uiState.value as? CalendarUiState.Success ?: return
+        _uiState.value = current.copy(
+            selectedDay = null,
+            dailyReading = null
+        )
+    }
     private fun dailyKey(date: LocalDate) : String = date.toString()
 
     private fun resolveDate(day: CalendarDay, displayedMonth: LocalDate): LocalDate {

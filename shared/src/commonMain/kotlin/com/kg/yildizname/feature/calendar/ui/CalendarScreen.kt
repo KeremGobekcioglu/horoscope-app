@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -15,10 +16,13 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SecondaryTabRow
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
@@ -35,6 +39,7 @@ import com.kg.yildizname.core.ui.components.StarFieldBackground
 import com.kg.yildizname.core.ui.theme.PillShape
 import com.kg.yildizname.core.ui.theme.YzGold
 import com.kg.yildizname.core.ui.theme.YzMuted
+import com.kg.yildizname.core.ui.theme.YzSurface
 import com.kg.yildizname.core.ui.utils.DateFormatter
 import com.kg.yildizname.core.ui.utils.YzWindowWidth
 import com.kg.yildizname.core.ui.utils.rememberWindowWidth
@@ -63,7 +68,8 @@ fun CalendarScreen(
     onDaySelectedDay: (CalendarDay) -> Unit,
     onTabChange: (PageTab) -> Unit,
     onReadMoreClick: (sign: String, period: String) -> Unit,
-    onRetryClick: () -> Unit
+    onRetryClick: () -> Unit,
+    onDaySheetDismissed: () -> Unit
 ) {
 
     when (uiState) {
@@ -75,11 +81,13 @@ fun CalendarScreen(
             onPreviousMonth = onPreviousMonth,
             onDaySelected = onDaySelectedDay,
             onReadMoreClick = onReadMoreClick,
-            onTabChange = onTabChange
+            onTabChange = onTabChange,
+            onDaySheetDismissed = onDaySheetDismissed
         )
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun CalendarScreenSuccessContent(
     uiState: CalendarUiState.Success,
@@ -87,20 +95,21 @@ private fun CalendarScreenSuccessContent(
     onPreviousMonth: () -> Unit,
     onDaySelected: (CalendarDay) -> Unit,
     onReadMoreClick: (sign: String, period: String) -> Unit,
-    onTabChange: (PageTab) -> Unit
+    onTabChange: (PageTab) -> Unit,
+    onDaySheetDismissed: () -> Unit
 ) {
     val pagerState: PagerState = rememberPagerState(initialPage = uiState.selectedTab.page) { 2 }
+    val sheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
     LaunchedEffect(pagerState)
     {
         snapshotFlow { pagerState.currentPage }.collect { page ->
-            onTabChange(PageTab.entries.first { it.page == page})
+            onTabChange(PageTab.entries.first { it.page == page })
         }
     }
     LaunchedEffect(uiState.selectedTab)
     {
-        if(pagerState.currentPage != uiState.selectedTab.page)
-        {
+        if (pagerState.currentPage != uiState.selectedTab.page) {
             pagerState.animateScrollToPage(uiState.selectedTab.page)
         }
     }
@@ -130,9 +139,10 @@ private fun CalendarScreenSuccessContent(
          */
         Column(
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxWidth()
                 .widthIn(max = contentMaxWidth)
                 .yzStatusBarsPadding()
+                .verticalScroll(rememberScrollState())
                 .padding(horizontal = 16.dp, vertical = 16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
             horizontalAlignment = Alignment.CenterHorizontally
@@ -159,81 +169,49 @@ private fun CalendarScreenSuccessContent(
                 )
             }
 
-
-            SecondaryTabRow(
-                selectedTabIndex = pagerState.currentPage,
-                containerColor = Color.Transparent,
-                contentColor = YzGold,
-                divider = {}
-            )
-            {
-                Tab(
-                    modifier = Modifier.clip(RoundedCornerShape(16.dp)),
-                    selected = pagerState.currentPage == PageTab.MONTHLY.page,
-                    onClick = {
-                        scope.launch { pagerState.animateScrollToPage(PageTab.MONTHLY.page) }
-                    },
-                    text = {
-                        Text(
-                            text = stringResource(Res.string.period_monthly)
-                        )
-                    }
-                )
-
-
-                Tab(
-                    modifier = Modifier.clip(PillShape),
-                    selected = pagerState.currentPage == PageTab.DAILY.page,
-                    onClick = {
-                        scope.launch { pagerState.animateScrollToPage(PageTab.DAILY.page) }
-                    },
-                    text = {
-                        Text(
-                            text = stringResource(Res.string.period_daily)
-                        )
-                    }
-                )
+            val monthly = uiState.monthlyReading
+            if (monthly != null) {
+                MonthlyReadingCard(monthly.text)
+            } else {
+                CalendarEmptyStateContent(message = stringResource(Res.string.calendar_future_month_message))
             }
-
-            HorizontalPager(
-                state = pagerState,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f)
-            )
-            { page ->
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .verticalScroll(rememberScrollState())
-                ) {
-                    when (page) {
-                        PageTab.MONTHLY.page -> {
-                            val monthly = uiState.monthlyReading
-                            if (monthly != null) {
-                                MonthlyReadingCard(monthlyComment = monthly.text)
-                            } else {
-                                CalendarEmptyStateContent(message = stringResource(Res.string.calendar_future_month_message))
-                            }
+//            if (uiState.selectedDay != null && daily != null) {
+//                SelectedDailyReadingCard(
+//                    scoreLove = daily.scores.love,
+//                    scoreWork = daily.scores.work,
+//                    scoreHealth = daily.scores.health,
+//                    scoreLuck = daily.scores.luck,
+//                    dailyComment = daily.text,
+//                    toReadingDetail = { onReadMoreClick(daily.sign.apiKey, daily.period.apiKey) },
+//                    date = DateFormatter.fullDate(LocalDate.parse(daily.date))
+//                )
+//            } else {
+//                CalendarEmptyStateContent(message = stringResource(Res.string.calendar_pick_a_day_message))
+//            }
+        }
+        val daily = uiState.dailyReading
+        if (uiState.selectedDay != null && daily != null) {
+            ModalBottomSheet(
+                onDismissRequest = onDaySheetDismissed,
+                containerColor = YzSurface,
+                shape = RoundedCornerShape(16.dp),
+                sheetState = sheetState
+            ) {
+                SelectedDailyReadingCard(
+                    scoreLove = daily.scores.love,
+                    scoreWork = daily.scores.work,
+                    scoreHealth = daily.scores.health,
+                    scoreLuck = daily.scores.luck,
+                    dailyComment = daily.text,
+                    toReadingDetail = {
+                        scope.launch {
+                            onReadMoreClick(daily.sign.apiKey, daily.period.apiKey)
+                            sheetState.hide()
+                            onDaySheetDismissed()
                         }
-                        PageTab.DAILY.page -> {
-                            val daily = uiState.dailyReading
-                            if (daily != null) {
-                                SelectedDailyReadingCard(
-                                    scoreLove = daily.scores.love,
-                                    scoreWork = daily.scores.work,
-                                    scoreHealth = daily.scores.health,
-                                    scoreLuck = daily.scores.luck,
-                                    dailyComment = daily.text,
-                                    toReadingDetail = { onReadMoreClick(daily.sign.apiKey, daily.period.apiKey) },
-                                    date = DateFormatter.fullDate(LocalDate.parse(daily.date))
-                                )
-                            } else {
-                                CalendarEmptyStateContent(message = stringResource(Res.string.calendar_pick_a_day_message))
-                            }
-                        }
-                    }
-                }
+                    },
+                    date = DateFormatter.fullDate(LocalDate.parse(daily.date))
+                )  // unchanged
             }
         }
     }
