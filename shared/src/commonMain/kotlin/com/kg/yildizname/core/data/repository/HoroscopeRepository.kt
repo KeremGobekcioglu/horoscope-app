@@ -39,9 +39,11 @@ class HoroscopeRepository(
         period: PeriodType,
         date: String,
     ): Flow<Reading> = flow {
+        println("HoroscopeRepository: getReading sign=${sign.apiKey} period=${period.apiKey} date=$date")
 
         // Tier 1: Room
         val cached = dao.getReading(sign.apiKey, period.apiKey, date)
+        println("HoroscopeRepository: ROOM ${if (cached == null) "MISS" else "HIT (isComplete=${cached.isComplete(period)}, hasCategories=${cached.hasCategories()})"}")
         if (cached != null) {
             emit(cached.toDomain(sign, period))
             if (cached.isComplete(period)) return@flow
@@ -50,6 +52,7 @@ class HoroscopeRepository(
 
         // Tier 2: Firestore
         val firestoreDto = firestoreSource.getReading(sign, date, period)
+        println("HoroscopeRepository: FIRESTORE ${if (firestoreDto == null) "MISS" else "HIT"}")
         if (firestoreDto != null) {
             val entity = ReadingEntity(
                 sign         = sign.apiKey,
@@ -82,8 +85,13 @@ class HoroscopeRepository(
         // detail) and avoids an extra network call.
         if (cached != null) return@flow
 
+        println("HoroscopeRepository: falling back to API")
         val apiDto = apiSource.getReading(sign, period)
-            ?: throw Exception("No reading available for ${sign.apiKey}")
+            ?: run {
+                println("HoroscopeRepository: API MISS for ${sign.apiKey}")
+                throw Exception("No reading available for ${sign.apiKey}")
+            }
+        println("HoroscopeRepository: API HIT")
         val hasScoreCategories = period != PeriodType.MONTHLY
 
         val entity = ReadingEntity(

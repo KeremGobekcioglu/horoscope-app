@@ -34,10 +34,17 @@ class ReadingDetailViewModel(
             ?: PeriodType.DAILY
         val today = DateUtils.today()
 
+        println("ReadingDetailViewModel: load() sign=${sign.apiKey} period=${period.apiKey} date=$today")
+
         viewModelScope.launch {
             repository.getReading(sign, period, today)
-                .catch { e -> _uiState.value = ReadingDetailUiState.Error(e.message ?: "error") }
+                .catch { e ->
+                    println("ReadingDetailViewModel: ERROR ${e.message}")
+                    e.printStackTrace()
+                    _uiState.value = ReadingDetailUiState.Error(e.message ?: "error")
+                }
                 .collect { reading ->
+                    println("ReadingDetailViewModel: got reading text=${reading.text.take(40)} categoryDetail=${reading.categoryDetail}")
                     _uiState.value = ReadingDetailUiState.Success(
                         sign             = sign,
                         signDisplayName  = getString(sign.nameRes),
