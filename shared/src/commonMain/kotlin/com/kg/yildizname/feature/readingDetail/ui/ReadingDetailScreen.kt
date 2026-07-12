@@ -28,6 +28,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.kg.yildizname.core.ui.components.StarFieldBackground
 import com.kg.yildizname.core.ui.components.yzTextSurfaceWash
 import com.kg.yildizname.core.ui.theme.CardShape
 import com.kg.yildizname.core.ui.theme.YzBorder
@@ -200,6 +201,7 @@ private fun ReadingDetailLoadingScreen(
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    StarFieldBackground(Modifier.fillMaxSize())
     Box(modifier = modifier.fillMaxSize()) {
         ReadingDetailTopBar(
             signName = "",

@@ -132,10 +132,7 @@ fun Calendar(
         // remains a safety net for the rare case content would otherwise overflow it.
         BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
             val totalRowSpacing = rowSpacing * (weeks.size - 1)
-            val cellSize = minOf(
-                maxWidth / 7,
-                (maxHeight - totalRowSpacing) / weeks.size,
-            )
+            val cellSize = maxWidth / 7
 
             Column(modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(rowSpacing)) {
                 weeks.forEach {

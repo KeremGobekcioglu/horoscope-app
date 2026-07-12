@@ -1,5 +1,8 @@
 package com.kg.yildizname.navigation
 
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -271,7 +274,11 @@ fun YildiznameNavGraph(navController: NavHostController) {
                 )
             }
 
-            composable<ReadingDetail> { backStackEntry ->
+            composable<ReadingDetail>(
+                enterTransition = { fadeIn(tween(1000)) },
+                exitTransition = { fadeOut(tween(180)) },
+                popEnterTransition = { fadeIn(tween(1000)) },
+                popExitTransition = { fadeOut(tween(180)) },) { backStackEntry ->
                 val route: ReadingDetail = backStackEntry.toRoute()
                 val vm: ReadingDetailViewModel = koinViewModel {
                     parametersOf(route.sign, route.period)
@@ -308,7 +315,8 @@ fun YildiznameNavGraph(navController: NavHostController) {
                     },
                     onPreviousMonth = viewModel::onPreviousMonth,
                     onDaySelectedDay = viewModel::onDaySelected,
-                    onTabChange = viewModel::onTabChange
+                    onTabChange = viewModel::onTabChange,
+                    onDaySheetDismissed = viewModel::clearDay
                 )
             }
 
