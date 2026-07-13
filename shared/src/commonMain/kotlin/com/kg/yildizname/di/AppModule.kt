@@ -18,9 +18,13 @@ val appModule: Module = module {
     viewModel { HomeViewModel(get(), get()) }
     viewModel { CalendarViewModel(get(),get()) }
     viewModel { params -> CompatibilityResultViewModel(get() , params.get() , params.get()) }
-    // Positional destructuring, not params.get(): get<T>() matches by type, and a nullable
-    // String? match is satisfied by any element (including index 0), so it silently grabbed
-    // signKey instead of date. Destructuring resolves strictly by index.
+    // Using (date, signKey) = params instead of params.get<T>().
+    // Our route param was nullable (String?), and get<T>() can't reliably
+    // type-match on a nullable type. So instead of failing, it silently
+    // grabbed the wrong param (signKey) and handed it back as "date."
+    // That bad value only blew up later, deep in the screen, when code
+    // tried to actually use it as a date. Destructuring avoids this
+    // because it unpacks by position, not by type.
     viewModel { (signKey: String, periodKey: String, date: String?) ->
         ReadingDetailViewModel(signKey, periodKey, date, get())
     }
