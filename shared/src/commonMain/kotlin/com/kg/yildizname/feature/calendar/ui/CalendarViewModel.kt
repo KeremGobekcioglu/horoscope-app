@@ -158,7 +158,8 @@ class CalendarViewModel(
         val resolvedDate = resolveDate(day,current.date)
         _uiState.value = current.copy(
             selectedDay = day,
-            selectedTab = PageTab.DAILY
+            selectedTab = PageTab.DAILY,
+            selectedDate = dailyKey(resolvedDate)
         )
         if(day.isAvailable)
         {

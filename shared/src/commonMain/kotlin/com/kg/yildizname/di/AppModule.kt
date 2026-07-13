@@ -18,5 +18,5 @@ val appModule: Module = module {
     viewModel { HomeViewModel(get(), get()) }
     viewModel { CalendarViewModel(get(),get()) }
     viewModel { params -> CompatibilityResultViewModel(get() , params.get() , params.get()) }
-    viewModel { params -> ReadingDetailViewModel(params.get(), params.get(), get()) }
+    viewModel { params -> ReadingDetailViewModel(params.get(), params.get(), params.get(), get()) }
 }

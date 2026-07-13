@@ -2,6 +2,7 @@ package com.kg.yildizname.feature.readingDetail.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -17,6 +18,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.graphics.Color
 import androidx.compose.material3.Text
@@ -60,28 +62,72 @@ fun ReadingDetailScreen(
     onShareClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    when (uiState) {
-        is ReadingDetailUiState.Loading -> ReadingDetailLoadingScreen(
-            onBackClick = onBackClick,
-            modifier = modifier,
-        )
-        is ReadingDetailUiState.Error -> ReadingDetailErrorScreen(
-            message = uiState.message,
-            onBackClick = onBackClick,
-            modifier = modifier,
-        )
-        is ReadingDetailUiState.Success -> ReadingDetailSuccessScreen(
+//    when (uiState) {
+//        is ReadingDetailUiState.Loading -> ReadingDetailLoadingScreen(
+//            onBackClick = onBackClick,
+//            modifier = modifier,
+//        )
+//        is ReadingDetailUiState.Error -> ReadingDetailErrorScreen(
+//            message = uiState.message,
+//            onBackClick = onBackClick,
+//            modifier = modifier,
+//        )
+//        is ReadingDetailUiState.Success -> ReadingDetailSuccessScreen(
+//            uiState = uiState,
+//            onBackClick = onBackClick,
+//            onShareClick = onShareClick,
+//            modifier = modifier,
+//        )
+//    }
+    if(uiState.isLoading)
+    {
+        StarFieldBackground(Modifier.fillMaxSize())
+        Box(modifier = modifier.fillMaxSize()) {
+            ReadingDetailTopBar(
+                signName = "",
+                periodLabel = "",
+                onBackClick = onBackClick,
+                modifier = Modifier.align(Alignment.TopStart),
+            )
+            CircularProgressIndicator(
+                color = YzGold,
+                modifier = Modifier.align(Alignment.Center),
+            )
+        }
+    }
+    else if(!uiState.err.isNullOrEmpty())
+    {
+        Box(modifier = modifier.fillMaxSize()) {
+            ReadingDetailTopBar(
+                signName = "",
+                periodLabel = "",
+                onBackClick = onBackClick,
+                modifier = Modifier.align(Alignment.TopStart),
+            )
+            Text(
+                text = uiState.err,
+                color = YzMuted,
+                style = MaterialTheme.typography.bodyMedium,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .align(Alignment.Center)
+                    .padding(horizontal = 32.dp),
+            )
+        }
+    }
+    else {
+        ReadingDetailSuccessScreen(
             uiState = uiState,
             onBackClick = onBackClick,
             onShareClick = onShareClick,
             modifier = modifier,
         )
-    }
+}
 }
 
 @Composable
 private fun ReadingDetailSuccessScreen(
-    uiState: ReadingDetailUiState.Success,
+    uiState: ReadingDetailUiState,
     onBackClick: () -> Unit,
     onShareClick: () -> Unit,
     modifier: Modifier = Modifier,

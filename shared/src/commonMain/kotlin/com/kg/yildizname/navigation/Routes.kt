@@ -8,7 +8,7 @@ import kotlinx.serialization.Serializable
 @Serializable object OnboardingStep2
 @Serializable object OnboardingStep3
 @Serializable object Home
-@Serializable data class ReadingDetail(val sign: String, val period: String)
+@Serializable data class ReadingDetail(val sign: String, val period: String, val date: String? = null)
 @Serializable object Calendar
 @Serializable object Compatibility
 @Serializable object Settings

@@ -67,7 +67,7 @@ fun CalendarScreen(
     onPreviousMonth: () -> Unit,
     onDaySelectedDay: (CalendarDay) -> Unit,
     onTabChange: (PageTab) -> Unit,
-    onReadMoreClick: (sign: String, period: String) -> Unit,
+    onReadMoreClick: (sign: String, period: String, date:String) -> Unit,
     onRetryClick: () -> Unit,
     onDaySheetDismissed: () -> Unit
 ) {
@@ -94,7 +94,7 @@ private fun CalendarScreenSuccessContent(
     onNextMonth: () -> Unit,
     onPreviousMonth: () -> Unit,
     onDaySelected: (CalendarDay) -> Unit,
-    onReadMoreClick: (sign: String, period: String) -> Unit,
+    onReadMoreClick: (sign: String, period: String, date: String) -> Unit,
     onTabChange: (PageTab) -> Unit,
     onDaySheetDismissed: () -> Unit
 ) {
@@ -190,7 +190,7 @@ private fun CalendarScreenSuccessContent(
 //            }
         }
         val daily = uiState.dailyReading
-        if (uiState.selectedDay != null && daily != null) {
+        if (uiState.selectedDay != null && daily != null && uiState.selectedDate != null) {
             ModalBottomSheet(
                 onDismissRequest = onDaySheetDismissed,
                 containerColor = YzSurface,
@@ -205,7 +205,7 @@ private fun CalendarScreenSuccessContent(
                     dailyComment = daily.text,
                     toReadingDetail = {
                         scope.launch {
-                            onReadMoreClick(daily.sign.apiKey, daily.period.apiKey)
+                            onReadMoreClick(daily.sign.apiKey, daily.period.apiKey, uiState.selectedDate)
                             sheetState.hide()
                             onDaySheetDismissed()
                         }

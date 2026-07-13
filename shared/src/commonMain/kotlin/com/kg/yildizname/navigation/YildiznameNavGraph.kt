@@ -275,13 +275,13 @@ fun YildiznameNavGraph(navController: NavHostController) {
             }
 
             composable<ReadingDetail>(
-                enterTransition = { fadeIn(tween(1000)) },
+                /*enterTransition = { fadeIn(tween(1000)) },
                 exitTransition = { fadeOut(tween(180)) },
                 popEnterTransition = { fadeIn(tween(1000)) },
-                popExitTransition = { fadeOut(tween(180)) },) { backStackEntry ->
+                popExitTransition = { fadeOut(tween(180)) },*/) { backStackEntry ->
                 val route: ReadingDetail = backStackEntry.toRoute()
                 val vm: ReadingDetailViewModel = koinViewModel {
-                    parametersOf(route.sign, route.period)
+                    parametersOf(route.sign, route.period, route.date)
                 }
                 val uiState by vm.uiState.collectAsStateWithLifecycle()
 
@@ -289,16 +289,16 @@ fun YildiznameNavGraph(navController: NavHostController) {
                     uiState     = uiState,
                     onBackClick = { navController.popBackStack() },
                     onShareClick = {
-                        (uiState as? ReadingDetailUiState.Success)?.let { success ->
+
                             shareFlowState.open(
                                 ShareCardRequest(
-                                    signDisplayName = success.signDisplayName,
-                                    sign = success.sign,
-                                    quoteText = shareQuoteFrom(success.generalText),
+                                    signDisplayName = uiState.signDisplayName,
+                                    sign = uiState.sign,
+                                    quoteText = shareQuoteFrom(uiState.generalText),
                                     date = DateUtils.todayLocalDate(),
                                 )
                             )
-                        }
+
                     },
                 )
             }
@@ -310,8 +310,8 @@ fun YildiznameNavGraph(navController: NavHostController) {
                     uiState = uiState,
                     onNextMonth = viewModel::onNextMonth,
                     onRetryClick = {},
-                    onReadMoreClick = {sign,period ->
-                        navController.navigate(ReadingDetail(sign,period))
+                    onReadMoreClick = {sign,period,date ->
+                        navController.navigate(ReadingDetail(sign,period,date))
                     },
                     onPreviousMonth = viewModel::onPreviousMonth,
                     onDaySelectedDay = viewModel::onDaySelected,

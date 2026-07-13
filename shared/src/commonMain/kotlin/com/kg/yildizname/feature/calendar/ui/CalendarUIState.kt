@@ -15,7 +15,8 @@ sealed interface CalendarUiState{
         val selectedTab: PageTab = PageTab.MONTHLY,
         val luckDays: List<Int> = emptyList(),
         val dailyReading: Reading?,
-        val monthlyReading: Reading?
+        val monthlyReading: Reading?,
+        val selectedDate: String? = null
     ) : CalendarUiState
     {
         val canGoToPreviousMonth: Boolean

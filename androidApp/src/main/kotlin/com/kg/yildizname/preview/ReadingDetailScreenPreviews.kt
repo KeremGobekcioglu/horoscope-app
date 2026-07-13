@@ -7,7 +7,7 @@ import com.kg.yildizname.core.ui.theme.YzTheme
 import com.kg.yildizname.feature.readingDetail.ui.ReadingDetailScreen
 import com.kg.yildizname.feature.readingDetail.ui.ReadingDetailUiState
 
-private val previewReadingDetail = ReadingDetailUiState.Success(
+private val previewReadingDetail = ReadingDetailUiState(
     sign = ZodiacSign.SCORPIO,
     signDisplayName = "AKREP",
     periodLabel = "GÜNLÜK YORUM",
@@ -22,6 +22,7 @@ private val previewReadingDetail = ReadingDetailUiState.Success(
     healthText = "Enerjin yüksek ama dinlenmeyi ihmal etme. Kısa bir yürüyüş " +
         "zihnini açacak.",
     luckText = "Şans bugün senden yana. Cesur adımlar atmak için iyi bir zaman.",
+    isLoading = false
 )
 
 @Preview(name = "ReadingDetail — Success", showBackground = true)
@@ -41,7 +42,7 @@ private fun ReadingDetailScreenSuccessPreview() {
 private fun ReadingDetailScreenLoadingPreview() {
     YzTheme {
         ReadingDetailScreen(
-            uiState = ReadingDetailUiState.Loading,
+            uiState = ReadingDetailUiState(),
             onBackClick = {},
             onShareClick = {},
         )
@@ -53,7 +54,7 @@ private fun ReadingDetailScreenLoadingPreview() {
 private fun ReadingDetailScreenErrorPreview() {
     YzTheme {
         ReadingDetailScreen(
-            uiState = ReadingDetailUiState.Error(message = "Yorum yüklenemedi. Lütfen tekrar deneyin."),
+            uiState = ReadingDetailUiState(err = "Yorum yüklenemedi. Lütfen tekrar deneyin.", isLoading = false),
             onBackClick = {},
             onShareClick = {},
         )

@@ -49,7 +49,7 @@ private fun CalendarPreviewScaffold(uiState: CalendarUiState) {
             onPreviousMonth = {},
             onDaySelectedDay = {},
             onTabChange = {},
-            onReadMoreClick = { _, _ -> },
+            onReadMoreClick = { _, _ ,_-> },
             onRetryClick = {},
             {}
         )
