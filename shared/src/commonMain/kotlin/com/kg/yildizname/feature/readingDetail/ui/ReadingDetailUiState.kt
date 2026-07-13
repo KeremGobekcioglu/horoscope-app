@@ -14,5 +14,6 @@ data class ReadingDetailUiState(
     val healthText: String= "",
     val luckText: String= "",
     val err: String? = null,
-    val isLoading: Boolean = true
+    val isLoading: Boolean = true,
+    val formattedDate: String = ""
 )

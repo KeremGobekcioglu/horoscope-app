@@ -1,5 +1,6 @@
 package com.kg.yildizname.feature.readingDetail.ui
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -14,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.kg.yildizname.core.ui.theme.YzInk
+import com.kg.yildizname.core.ui.theme.YzMuted
 import compose.icons.FeatherIcons
 import compose.icons.feathericons.ArrowLeft
 import horoscope.shared.generated.resources.Res
@@ -26,6 +28,7 @@ internal fun ReadingDetailTopBar(
     periodLabel: String,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
+    date: String = "",
 ) {
     Row(
         modifier = modifier
@@ -42,12 +45,20 @@ internal fun ReadingDetailTopBar(
             )
         }
 
-        Text(
-            text = "$signName — $periodLabel",
-            color = YzInk,
-            style = MaterialTheme.typography.titleMedium,
-            fontWeight = FontWeight.Medium,
-            modifier = Modifier.weight(1f),
-        )
+        Column(modifier = Modifier.weight(1f)) {
+            Text(
+                text = "$signName — $periodLabel",
+                color = YzInk,
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Medium,
+            )
+            if (date.isNotEmpty()) {
+                Text(
+                    text = date,
+                    color = YzMuted,
+                    style = MaterialTheme.typography.bodySmall,
+                )
+            }
+        }
     }
 }

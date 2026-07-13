@@ -37,8 +37,10 @@ import com.kg.yildizname.core.ui.theme.YzBorder
 import com.kg.yildizname.core.ui.theme.YzGold
 import com.kg.yildizname.core.ui.theme.YzMuted
 import com.kg.yildizname.core.ui.theme.YzSurface
+import com.kg.yildizname.core.ui.utils.DateFormatter
 import com.kg.yildizname.core.ui.utils.YzWindowWidth
 import com.kg.yildizname.core.ui.utils.rememberWindowWidth
+import com.kg.yildizname.core.util.DateUtils
 import com.kg.yildizname.feature.home.ui.components.ConstellationHero
 import compose.icons.FeatherIcons
 import compose.icons.feathericons.Activity
@@ -148,6 +150,7 @@ private fun ReadingDetailSuccessScreen(
                 signName = uiState.signDisplayName,
                 periodLabel = uiState.periodLabel,
                 onBackClick = onBackClick,
+                date = uiState.formattedDate
             )
         },
         bottomBar = {

@@ -254,7 +254,7 @@ fun YildiznameNavGraph(navController: NavHostController) {
                 HomeScreen(
                     uiState             = uiState,
                     onReadMoreClick     = { sign, period ->
-                        navController.navigate(ReadingDetail(sign = sign, period = period))
+                        navController.navigate(ReadingDetail(sign = sign, period = period, date = null))
                     },
                     onShareClick        = { /* wire shareText() when Share.kt actuals are ready */ },
                     onShareCardClick    = {
@@ -289,7 +289,7 @@ fun YildiznameNavGraph(navController: NavHostController) {
                     uiState     = uiState,
                     onBackClick = { navController.popBackStack() },
                     onShareClick = {
-
+                            // needs to be fixed, date should reflect date parameter.
                             shareFlowState.open(
                                 ShareCardRequest(
                                     signDisplayName = uiState.signDisplayName,

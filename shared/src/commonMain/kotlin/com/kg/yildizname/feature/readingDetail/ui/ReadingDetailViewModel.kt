@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.kg.yildizname.core.data.model.PeriodType
 import com.kg.yildizname.core.data.model.ZodiacSign
 import com.kg.yildizname.core.data.repository.HoroscopeRepository
+import com.kg.yildizname.core.ui.utils.DateFormatter
 import com.kg.yildizname.core.util.DateUtils
 import com.kg.yildizname.core.util.LuckyInfo
 import com.kg.yildizname.core.util.currentLanguageCode
@@ -38,6 +39,11 @@ class ReadingDetailViewModel(
         if(date != null)
         {
             println("DATE NOT NULL ON READING DETAIL AND THIS IS RECEIVED : $date")
+            _uiState.update {
+                it.copy(
+                    formattedDate = DateFormatter.formatDate(date)
+                )
+            }
         }
         println("ReadingDetailViewModel: load() sign=${sign.apiKey} period=${period.apiKey} date=$toFetched")
 
@@ -82,7 +88,8 @@ class ReadingDetailViewModel(
                             careerText       = reading.categoryDetail?.work.orEmpty(),
                             healthText       = reading.categoryDetail?.health.orEmpty(),
                             luckText         = reading.categoryDetail?.luck.orEmpty(),
-                            isLoading = false
+                            isLoading = false,
+                            //formattedDate = toFetched
                         )
                     }
                 }

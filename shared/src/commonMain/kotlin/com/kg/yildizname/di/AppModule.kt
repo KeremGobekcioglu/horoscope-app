@@ -18,5 +18,10 @@ val appModule: Module = module {
     viewModel { HomeViewModel(get(), get()) }
     viewModel { CalendarViewModel(get(),get()) }
     viewModel { params -> CompatibilityResultViewModel(get() , params.get() , params.get()) }
-    viewModel { params -> ReadingDetailViewModel(params.get(), params.get(), params.get(), get()) }
+    // Positional destructuring, not params.get(): get<T>() matches by type, and a nullable
+    // String? match is satisfied by any element (including index 0), so it silently grabbed
+    // signKey instead of date. Destructuring resolves strictly by index.
+    viewModel { (signKey: String, periodKey: String, date: String?) ->
+        ReadingDetailViewModel(signKey, periodKey, date, get())
+    }
 }
