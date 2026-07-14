@@ -1,0 +1,122 @@
+package com.kg.yildizname.feature.compatability.ui.CompatibilityDetailedResult
+
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import com.kg.yildizname.core.data.model.compatGridIcon
+import com.kg.yildizname.core.data.model.localizedElementName
+import com.kg.yildizname.core.data.model.localizedName
+import com.kg.yildizname.core.ui.components.StarFieldBackground
+import com.kg.yildizname.core.ui.theme.YzGold
+import com.kg.yildizname.core.ui.theme.YzInk
+import com.kg.yildizname.core.ui.utils.yzStatusBarsPadding
+import com.kg.yildizname.feature.compatability.ui.CompatibilityResult.CompatibilityResultErrorScreen
+import com.kg.yildizname.feature.compatability.ui.CompatibilityResult.CompatibilityResultLoadingScreen
+import com.kg.yildizname.feature.compatability.ui.CompatibilityResult.CompatibilityResultSuccessScreen
+import com.kg.yildizname.feature.compatability.ui.CompatibilityResult.CompatibilityResultUIState
+import com.kg.yildizname.feature.compatability.ui.components.SignBox
+import com.kg.yildizname.feature.compatibility.ui.components.CompatibilityScoreRing
+import compose.icons.FeatherIcons
+import compose.icons.feathericons.ArrowLeft
+import horoscope.shared.generated.resources.Res
+import horoscope.shared.generated.resources.cd_back
+import horoscope.shared.generated.resources.compat_title
+import horoscope.shared.generated.resources.detailed_compat_title
+import org.jetbrains.compose.resources.stringResource
+
+@Composable
+fun CompatibilityDetailedResultScreen(
+    uiState: CompatibilityResultUIState,
+    onShare: () -> Unit = {},
+    onBack: () -> Unit
+)
+{
+    when (uiState) {
+        is CompatibilityResultUIState.Loading -> CompatibilityResultLoadingScreen(
+            onBackClick = {  }
+        )
+        is CompatibilityResultUIState.Error -> CompatibilityResultErrorScreen(
+            message = uiState.message,
+            onBackClick = {  }
+        )
+        is CompatibilityResultUIState.Success -> CompatibilityDetailedResultSuccessScreen(
+            uiState = uiState,
+            onShare = {},
+            onBack = onBack
+        )
+    }
+}
+
+@Composable
+fun CompatibilityDetailedResultSuccessScreen(
+    uiState: CompatibilityResultUIState.Success,
+    onShare: () -> Unit = {},
+    onBack: () -> Unit
+) {
+    val signA = uiState.result.signs[0]
+    val signB = uiState.result.signs[1]
+    StarFieldBackground()
+    Box(modifier = Modifier.yzStatusBarsPadding().fillMaxSize())
+    {
+        Column(
+            modifier = Modifier
+                .padding(horizontal = 8.dp)
+                .padding(bottom = 32.dp)
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState()),
+            horizontalAlignment = Alignment.CenterHorizontally
+        )
+        {
+            Row(modifier = Modifier.fillMaxWidth()) {
+                IconButton(onClick = onBack) {
+                    Icon(
+                        imageVector = FeatherIcons.ArrowLeft,
+                        contentDescription = stringResource(Res.string.cd_back),
+                        tint = YzInk
+                    )
+                }
+            }
+            Text(
+                text = stringResource(Res.string.detailed_compat_title),
+                color = YzGold,
+                style = MaterialTheme.typography.headlineLarge
+            )
+            Spacer(Modifier.height(16.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                SignBox(
+                    sign= signA.localizedName(),
+                    icon = signA.compatGridIcon,
+                    element =  signA.localizedElementName()
+                )
+                CompatibilityScoreRing(
+                    matchPercent = uiState.result.matchPercent
+                )
+                SignBox(
+                    sign = signB.localizedName(),
+                    icon = signB.compatGridIcon,
+                    element = signB.localizedElementName()
+                )
+            }
+        }
+    }
+}

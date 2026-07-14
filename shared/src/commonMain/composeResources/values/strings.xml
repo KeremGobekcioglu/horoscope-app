@@ -101,6 +101,7 @@
 
     <!-- Compatibility -->
     <string name="compat_title">Uyum Analizi</string>
+    <string name="detailed_compat_title">Detaylı Uyum Analizi</string>
     <string name="compat_your_sign">Burcunuz</string>
     <string name="compat_partner_sign">Partnerinizin Burcu</string>
     <string name="compat_subtitle">Kozmik Rezonans Testi</string>

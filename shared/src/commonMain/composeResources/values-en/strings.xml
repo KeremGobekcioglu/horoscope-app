@@ -104,6 +104,7 @@
 
     <!-- Compatibility -->
     <string name="compat_title">Compatibility Analysis</string>
+    <string name="detailed_compat_title">Detailed Compatibility Analysis</string>
     <string name="compat_your_sign">Your Sign</string>
     <string name="compat_partner_sign">Partner\'s Sign</string>
     <string name="compat_subtitle">Cosmic Resonance Test</string>

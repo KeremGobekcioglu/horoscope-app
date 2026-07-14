@@ -43,7 +43,8 @@ fun CompatibilityResultScreenSuccessPreview() {
     YzTheme {
         Box(modifier = Modifier.fillMaxSize().background(YzBg)) {
             CompatibilityResultScreen(
-                uiState = CompatibilityResultUIState.Success(mockCompatibilityResult)
+                uiState = CompatibilityResultUIState.Success(mockCompatibilityResult),
+                onDetailClick = {}
             )
         }
     }
@@ -55,7 +56,9 @@ fun CompatibilityResultScreenLoadingPreview() {
     YzTheme {
         Box(modifier = Modifier.fillMaxSize().background(YzBg)) {
             CompatibilityResultScreen(
-                uiState = CompatibilityResultUIState.Loading
+                uiState = CompatibilityResultUIState.Loading,
+                onDetailClick = {}
+
             )
         }
     }
@@ -67,7 +70,9 @@ fun CompatibilityResultScreenErrorPreview() {
     YzTheme {
         Box(modifier = Modifier.fillMaxSize().background(YzBg)) {
             CompatibilityResultScreen(
-                uiState = CompatibilityResultUIState.Error("No compatibility data is found")
+                uiState = CompatibilityResultUIState.Error("No compatibility data is found"),
+                onDetailClick = {}
+
             )
         }
     }

@@ -14,4 +14,7 @@ import kotlinx.serialization.Serializable
 @Serializable object Settings
 
 @Serializable data class CompatibilityResultRoute(val signA: String, val signB: String)
-@Serializable data class CompatibilityDetailRoute(val signA: String, val signB: String)
+@Serializable
+data object CompatibilityDetailRoute
+
+@Serializable object CompatibilityGraph

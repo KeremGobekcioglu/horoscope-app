@@ -29,6 +29,7 @@ import com.kg.yildizname.core.ui.components.YzBottomNavItemData
 import com.kg.yildizname.core.util.DateUtils
 import com.kg.yildizname.feature.calendar.ui.CalendarScreen
 import com.kg.yildizname.feature.calendar.ui.CalendarViewModel
+import com.kg.yildizname.feature.compatability.ui.CompatibilityDetailedResult.CompatibilityDetailedResultScreen
 import com.kg.yildizname.feature.compatability.ui.CompatibilityResult.CompatibilityResultScreen
 import com.kg.yildizname.feature.compatability.ui.CompatibilityResult.CompatibilityResultViewModel
 import com.kg.yildizname.feature.compatability.ui.CompatibilityScreen
@@ -76,6 +77,18 @@ private fun NavBackStackEntry.rememberOnboardingViewModel(
 ): OnboardingViewModel {
     val graphEntry = remember(this) { navController.getBackStackEntry<OnboardingGraph>() }
     return koinViewModel(viewModelStoreOwner = graphEntry)
+}
+
+@Composable
+private fun NavBackStackEntry.rememberCompatibilityViewModel(
+    navController: NavController,
+    signA: String?,
+    signB: String?,
+): CompatibilityResultViewModel {
+    val graphEntry = remember(this) { navController.getBackStackEntry<CompatibilityGraph>() }
+    return koinViewModel(viewModelStoreOwner = graphEntry) {
+        parametersOf(signA, signB)
+    }
 }
 
 @Composable
@@ -319,31 +332,44 @@ fun YildiznameNavGraph(navController: NavHostController) {
                     onDaySheetDismissed = viewModel::clearDay
                 )
             }
-
-            composable<Compatibility> {
-                CompatibilityScreen(
-                    onAnalyze = { signA, signB ->
-                        navController.navigate(CompatibilityResultRoute(signA, signB))
-                    }
-                )
-            }
-
-//            composable<CompatibilityDetailRoute> {
-//                CompatibilityScreen()
-//            }
-
-            composable<CompatibilityResultRoute> { backStackEntry ->
-                val route: CompatibilityResultRoute = backStackEntry.toRoute()
-                val resultViewModel : CompatibilityResultViewModel = koinViewModel{
-                    parametersOf(route.signA, route.signB)
+            navigation<CompatibilityGraph>(startDestination = Compatibility) {
+                composable<Compatibility> {
+                    CompatibilityScreen(
+                        onAnalyze = { signA, signB ->
+                            navController.navigate(CompatibilityResultRoute(signA, signB))
+                        }
+                    )
                 }
-                val state by resultViewModel.uiState.collectAsStateWithLifecycle()
-                CompatibilityResultScreen(
-                    uiState = state,
-                    onBackClick = { navController.popBackStack() }
-                )
-            }
 
+                composable<CompatibilityResultRoute> { backStackEntry ->
+                    val route: CompatibilityResultRoute = backStackEntry.toRoute()
+                    val resultViewModel = backStackEntry.rememberCompatibilityViewModel(
+                        navController = navController,
+                        signA = route.signA,
+                        signB = route.signB,
+                    )
+                    val state by resultViewModel.uiState.collectAsStateWithLifecycle()
+                    CompatibilityResultScreen(
+                        uiState = state,
+                        onDetailClick = { navController.navigate(CompatibilityDetailRoute) },
+                        onBackClick = { navController.popBackStack() }
+                    )
+                }
+
+                composable<CompatibilityDetailRoute> { backStackEntry ->
+                    val resultViewModel = backStackEntry.rememberCompatibilityViewModel(
+                        navController = navController,
+                        signA = null,
+                        signB = null,
+                    )
+                    val state by resultViewModel.uiState.collectAsStateWithLifecycle()
+                    CompatibilityDetailedResultScreen(
+                        uiState = state,
+                        onBack = { navController.popBackStack() },
+                        onShare = {}
+                    )
+                }
+            }
             composable<Settings> {
                 SettingsScreen()
             }

@@ -67,7 +67,8 @@ import org.jetbrains.compose.resources.stringResource
 @Composable
 fun CompatibilityResultScreen(
     uiState: CompatibilityResultUIState,
-    onBackClick: () -> Unit = {}
+    onBackClick: () -> Unit = {},
+    onDetailClick: () -> Unit
 )
 {
     when (uiState) {
@@ -80,13 +81,14 @@ fun CompatibilityResultScreen(
         )
         is CompatibilityResultUIState.Success -> CompatibilityResultSuccessScreen(
             uiState = uiState,
-            onBackClick = onBackClick
+            onBackClick = onBackClick,
+            onDetailClick = onDetailClick
         )
     }
 }
 
 @Composable
-private fun CompatibilityResultLoadingScreen(
+fun CompatibilityResultLoadingScreen(
     onBackClick: () -> Unit = {}
 ) {
     StarFieldBackground()
@@ -108,7 +110,7 @@ private fun CompatibilityResultLoadingScreen(
 }
 
 @Composable
-private fun CompatibilityResultErrorScreen(
+fun CompatibilityResultErrorScreen(
     message: String,
     onBackClick: () -> Unit = {}
 ) {
@@ -139,7 +141,8 @@ private fun CompatibilityResultErrorScreen(
 @Composable
 fun CompatibilityResultSuccessScreen(
     uiState: CompatibilityResultUIState.Success,
-    onBackClick: () -> Unit = {}
+    onBackClick: () -> Unit = {},
+    onDetailClick: () -> Unit
 )
 {
     val signA = uiState.result.signs[0]
@@ -244,7 +247,7 @@ fun CompatibilityResultSuccessScreen(
                 CompatButton(
                     text = stringResource(Res.string.compat_detailed_analysis_button),
                     filled = false,
-                    onClick = { }
+                    onClick = { onDetailClick() }
                 )
 
                 CompatButton(
