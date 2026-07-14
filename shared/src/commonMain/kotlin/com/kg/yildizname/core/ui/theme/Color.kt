@@ -31,7 +31,15 @@ val LightGray = Color(0xFFE5E7EB)
 val Gray = Color(0xFF9CA3AF)
 val DarkGray = Color(0xFF4B5563)
 val Charcoal = Color(0xFF1F2937)
-
+val YzBgLight = Color(0xFF13172D)   // +5% lighter
+val YzNight = Color(0xFF0E1123)
+val YzMidnight = Color(0xFF0E1123)
+val YzCosmos = Color(0xFF0E1123)
+val YzDeepSpace = Color(0xFF0E1123)
+val YzVoid = Color(0xFF0E1123)
+val YzNebulaBg = Color(0xFF0E1123)
+val YzDarkNavy = Color(0xFF0E1123)
+val YzBackground = Color(0xFF0E1123)
 
 val NeonPurple = Color(0xFFB026FF)      // Ultra-vibrant electric purple
 val RadiantAmethyst = Color(0xFFBB86FC) // The classic Material Dark primary purple

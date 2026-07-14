@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.style.Style
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -30,6 +31,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.boundsInWindow
 import androidx.compose.ui.layout.findRootCoordinates
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kg.yildizname.core.ui.theme.YzGold
@@ -39,7 +42,11 @@ import com.kg.yildizname.core.ui.theme.YzSurfaceAlt
 @Composable
 fun Scores(
     score: Int,
-    field: String
+    field: String,
+    textColor: Color? = null,
+    scoreTextColor: Color? = null,
+    textSize: TextUnit? = null,
+    barColor: Color = YzInk
 ) {
     val (visibilityModifier, isVisible) = rememberIsVisible()
     val animatedFraction by animateFloatAsState(
@@ -61,17 +68,17 @@ fun Scores(
         ) {
             Text(
                 text = field,
-                color = YzGold.copy(0.7f),
-                fontSize = 10.sp
+                color = textColor ?: YzGold.copy(0.7f),
+                fontSize = textSize ?: 10.sp
             )
             Text(
                 text = "$score%",
-                color = YzInk.copy(0.7f),
-                fontSize = 10.sp
+                color = scoreTextColor?: YzInk.copy(0.7f),
+                fontSize = textSize ?: 10.sp
             )
         }
         Spacer(Modifier.height(4.dp))
-        ScoreBar(animatedFraction)
+        ScoreBar(animatedFraction , color = barColor)
     }
 }
 
@@ -89,8 +96,9 @@ fun Scores(
 private fun ScoreBar(
     animatedFraction: Float,
     modifier: Modifier = Modifier,
+    color: Color = YzInk
 ) {
-    val goldColor   = YzInk
+    //val goldColor   = YzInk
     val trackColor  = YzSurfaceAlt   // #141830
     val tipColor    = Color(0xFFFFD980)  // brighter than YzGold for the tip highlight
 
@@ -105,7 +113,7 @@ private fun ScoreBar(
                 if (barWidth > 0f) {
                     // Gold fill
                     drawRect(
-                        color = goldColor,
+                        color = color,
                         size = Size(barWidth, size.height)
                     )
                     // Bright tip cap — 6dp wide glow at leading edge

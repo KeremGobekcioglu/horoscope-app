@@ -16,10 +16,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.kg.yildizname.core.ui.theme.YzBg
+import com.kg.yildizname.core.ui.theme.YzBgLight
 import com.kg.yildizname.core.ui.theme.YzCardBgAlt
 import com.kg.yildizname.core.ui.theme.YzCardBgAltSecond
 import com.kg.yildizname.core.ui.theme.YzGold
+import com.kg.yildizname.core.ui.theme.YzInk
 import com.kg.yildizname.feature.compatability.ui.components.Scores
 import horoscope.shared.generated.resources.Res
 import horoscope.shared.generated.resources.compat_category_points
@@ -36,10 +39,9 @@ fun ScoreCard(
     friendshipScore: Int,
     longTermScore: Int,
 ) {
-
     Box(modifier = Modifier
         .clip(RoundedCornerShape(16.dp))
-        .background(YzCardBgAltSecond)) {
+        .background(YzBgLight.copy(0.65f))) {
         Column(
             verticalArrangement = Arrangement.spacedBy(8.dp),
             horizontalAlignment = Alignment.Start,
@@ -50,10 +52,39 @@ fun ScoreCard(
                 color = YzGold,
                 style = MaterialTheme.typography.headlineMedium
             )
-            Scores(loveScore, stringResource(Res.string.compat_score_love))
-            Scores(communicationScore, stringResource(Res.string.compat_score_communication))
-            Scores(friendshipScore, stringResource(Res.string.compat_score_friendship))
-            Scores(longTermScore, stringResource(Res.string.compat_score_long_term))
+            Scores(
+                loveScore,
+                stringResource(Res.string.compat_score_love),
+                barColor = YzGold,
+                scoreTextColor = YzGold
+                , textColor = YzInk
+                , textSize = 13.sp
+            )
+            Scores(
+                communicationScore,
+                stringResource(Res.string.compat_score_communication),
+                barColor = YzGold,
+                scoreTextColor = YzGold
+                , textColor = YzInk
+                , textSize = 13.sp
+            )
+            Scores(
+                friendshipScore,
+                stringResource(Res.string.compat_score_friendship),
+                barColor = YzGold,
+                scoreTextColor = YzGold
+                , textColor = YzInk
+                , textSize = 13.sp
+            )
+            Scores(
+                longTermScore,
+                stringResource(Res.string.compat_score_long_term),
+                barColor = YzGold,
+                scoreTextColor = YzGold
+                , textColor = YzInk
+                , textSize = 13.sp
+            )
+
         }
     }
 }
