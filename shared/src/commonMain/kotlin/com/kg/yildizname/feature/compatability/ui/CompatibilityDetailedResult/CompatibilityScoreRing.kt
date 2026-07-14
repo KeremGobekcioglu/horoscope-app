@@ -4,6 +4,7 @@ import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.EaseOutCubic
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -50,8 +51,8 @@ fun CompatibilityScoreRing(
     }
 
     Box(
-        modifier = modifier
-            .size(size)
+        modifier = modifier.aspectRatio(1f)
+            //.size(size)
             .drawBehind {
                 val stroke = strokeWidth.toPx()
                 val diameter = this.size.minDimension - stroke

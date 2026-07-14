@@ -101,21 +101,26 @@ fun CompatibilityDetailedResultSuccessScreen(
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                SignBox(
-                    sign= signA.localizedName(),
-                    icon = signA.compatGridIcon,
-                    element =  signA.localizedElementName()
-                )
-                CompatibilityScoreRing(
-                    matchPercent = uiState.result.matchPercent
-                )
-                SignBox(
-                    sign = signB.localizedName(),
-                    icon = signB.compatGridIcon,
-                    element = signB.localizedElementName()
-                )
+                Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
+                    SignBox(
+                        sign = signA.localizedName(),
+                        icon = signA.compatGridIcon,
+                        element = signA.localizedElementName(),
+                    )
+                }
+                Box(modifier = Modifier.weight(0.7f), contentAlignment = Alignment.Center) {
+                    CompatibilityScoreRing(
+                        matchPercent = uiState.result.matchPercent,
+                    )
+                }
+                Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
+                    SignBox(
+                        sign = signB.localizedName(),
+                        icon = signB.compatGridIcon,
+                        element = signB.localizedElementName(),
+                    )
+                }
             }
         }
     }
