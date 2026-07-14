@@ -151,7 +151,7 @@
     <string name="compat_elem_earth_air">Grounded Ideas</string>
     <string name="compat_elem_earth_water">Nurturing Harmony</string>
     <string name="compat_elem_air_water">Feeling and Thought</string>
-
+    <string name="compat_category_points">Category Points</string>
     <!-- Settings -->
     <string name="settings_title">Settings</string>
     <string name="settings_language">Language</string>

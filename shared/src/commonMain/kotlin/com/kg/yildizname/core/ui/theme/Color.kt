@@ -3,6 +3,8 @@ package com.kg.yildizname.core.ui.theme
 import androidx.compose.ui.graphics.Color
 
 val YzBg = Color(0xFF080B1A)
+val YzCardBgAlt = Color(0xFF1E2238)
+val YzCardBgAltSecond = Color(0xFF232742)
 val YzSurface = Color(0xFF0F1428)
 val YzSurfaceAlt = Color(0xFF141830)
 val YzGold = Color(0xFFC9A84C)

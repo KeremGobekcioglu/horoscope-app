@@ -18,7 +18,15 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.kg.yildizname.core.data.model.compatGridIcon
 import com.kg.yildizname.core.data.model.localizedElementName
 import com.kg.yildizname.core.data.model.localizedName
@@ -122,6 +130,42 @@ fun CompatibilityDetailedResultSuccessScreen(
                     )
                 }
             }
+            Spacer(Modifier.height(32.dp))
+            Text(
+                text = buildAnnotatedString {
+                    withStyle(
+                        SpanStyle(
+                            // A smooth gradient fading from a rich ink to a slightly softer tone
+                            brush = Brush.linearGradient(
+                                colors = listOf(YzInk, YzInk.copy(alpha = 0.85f))
+                            ),
+                            // Premium typography settings
+                            fontFamily = FontFamily.Serif,
+                            fontSize = 14.sp,
+                            letterSpacing = 0.5.sp,
+
+                            )
+                    ) {
+                        append(
+                            uiState.result.content.summary
+                        )
+                    }
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp, vertical = 12.dp),
+                style = TextStyle(
+                    lineHeight = 24.sp, // Adds elegant breathing room between lines
+                    textAlign = TextAlign.Justify
+                )
+            )
+            Spacer(Modifier.height(32.dp))
+            ScoreCard(
+                uiState.result.scores.love,
+                uiState.result.scores.communication,
+                uiState.result.scores.friendship,
+                uiState.result.scores.longTerm
+            )
         }
     }
 }
