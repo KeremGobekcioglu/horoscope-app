@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -40,18 +41,21 @@ fun ScoreCard(
     longTermScore: Int,
 ) {
     Box(modifier = Modifier
+        .padding(horizontal = 12.dp)
         .clip(RoundedCornerShape(16.dp))
-        .background(YzBgLight.copy(0.65f))) {
+        .background(YzBgLight.copy(0.65f))
+    ) {
         Column(
             verticalArrangement = Arrangement.spacedBy(8.dp),
             horizontalAlignment = Alignment.Start,
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp)
+            modifier = Modifier.padding(horizontal = 20.dp, vertical = 16.dp).fillMaxWidth()
         ) {
             Text(
                 text = stringResource(Res.string.compat_category_points),
                 color = YzGold,
                 style = MaterialTheme.typography.headlineMedium
             )
+            Spacer(Modifier.height(4.dp))
             Scores(
                 loveScore,
                 stringResource(Res.string.compat_score_love),

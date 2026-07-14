@@ -121,7 +121,12 @@
     <string name="compat_select_sign">Select Sign</string>
     <string name="title_element_balance">Element Balance</string>
     <string name="desc_element_balance">By analyzing the Fire, Earth, Air, and Water balance of your zodiac signs, we map out your spiritual harmony.</string>
-
+    <string name="advices">Advices</string>
+    <string name="strengths">Strengths</string>
+    <string name="challenges">Challenges</string>
+    <string name="loveandintimacy">Love and Intimacy</string>
+    <string name="pros">Pros</string>
+    <string name="cons">Cons</string>
     <!-- Angular Relationship Card -->
     <string name="title_angular_relationship">Angular Relationship</string>
     <string name="desc_angular_relationship">By calculating the positional angles in the zodiac belt, we analyze the attraction energy between you.</string>

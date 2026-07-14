@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -19,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -31,6 +33,8 @@ import com.kg.yildizname.core.data.model.compatGridIcon
 import com.kg.yildizname.core.data.model.localizedElementName
 import com.kg.yildizname.core.data.model.localizedName
 import com.kg.yildizname.core.ui.components.StarFieldBackground
+import com.kg.yildizname.core.ui.theme.AppIcons
+import com.kg.yildizname.core.ui.theme.YzBgLight
 import com.kg.yildizname.core.ui.theme.YzGold
 import com.kg.yildizname.core.ui.theme.YzInk
 import com.kg.yildizname.core.ui.utils.yzStatusBarsPadding
@@ -43,9 +47,14 @@ import com.kg.yildizname.feature.compatibility.ui.components.CompatibilityScoreR
 import compose.icons.FeatherIcons
 import compose.icons.feathericons.ArrowLeft
 import horoscope.shared.generated.resources.Res
+import horoscope.shared.generated.resources.advices
 import horoscope.shared.generated.resources.cd_back
+import horoscope.shared.generated.resources.challenges
+import horoscope.shared.generated.resources.compat_score_communication
 import horoscope.shared.generated.resources.compat_title
 import horoscope.shared.generated.resources.detailed_compat_title
+import horoscope.shared.generated.resources.loveandintimacy
+import horoscope.shared.generated.resources.strengths
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -77,6 +86,7 @@ fun CompatibilityDetailedResultSuccessScreen(
     onShare: () -> Unit = {},
     onBack: () -> Unit
 ) {
+    val bgCard = YzBgLight.copy(0.65f)
     val signA = uiState.result.signs[0]
     val signB = uiState.result.signs[1]
     StarFieldBackground()
@@ -165,6 +175,57 @@ fun CompatibilityDetailedResultSuccessScreen(
                 uiState.result.scores.communication,
                 uiState.result.scores.friendship,
                 uiState.result.scores.longTerm
+            )
+            Spacer(Modifier.height(32.dp))
+            InfoCards(
+                headlineIcon = AppIcons.Recommendations,
+                contentLineIcon = AppIcons.Bullet,
+                contentLineIconTint = YzGold.copy(0.75f),
+                textList = uiState.result.content.advice.split(".").map { it.trim() }.filter { it.isNotBlank() },
+                backgroundColor = bgCard,
+                headlineText = stringResource(Res.string.advices),
+                headLineIconTint = YzGold,
+                iconOffset = (7).dp
+            )
+            Spacer(Modifier.height(32.dp))
+            InfoCards(
+                contentLineIcon = AppIcons.Compatible,
+                contentLineIconTint = YzGold,
+                textList = uiState.result.content.strengths.split(".").map { it.trim() }.filter { it.isNotBlank() },
+                backgroundColor = bgCard,
+                headlineText = stringResource(Res.string.strengths),
+                iconOffset = (7).dp,
+                iconSize = 12.dp
+            )
+            Spacer(Modifier.height(32.dp))
+            InfoCards(
+                contentLineIcon = AppIcons.Incompatible,
+                contentLineIconTint = Color.Red,
+                textList = uiState.result.content.challenges.split(".").map { it.trim() }.filter { it.isNotBlank() },
+                backgroundColor = bgCard,
+                headlineText = stringResource(Res.string.challenges),
+                iconOffset = (7).dp,
+                iconSize = 12.dp
+            )
+            Spacer(Modifier.height(32.dp))
+            InfoCards(
+                headlineIcon = AppIcons.Love,
+                contentLineIcon = null,
+                contentLineIconTint = null,
+                textList = uiState.result.content.loveAndIntimacy.split(".").map { it.trim() }.filter { it.isNotBlank() },
+                backgroundColor = bgCard,
+                headlineText = stringResource(Res.string.loveandintimacy),
+                iconOffset = null
+            )
+            Spacer(Modifier.height(32.dp))
+            InfoCards(
+                headlineIcon = AppIcons.Communication,
+                contentLineIcon = null,
+                contentLineIconTint = Color.Blue,
+                textList = uiState.result.content.communication.split(".").map { it.trim() }.filter { it.isNotBlank() },
+                backgroundColor = bgCard,
+                headlineText = stringResource(Res.string.compat_score_communication),
+                iconOffset = null
             )
         }
     }

@@ -120,6 +120,13 @@
     <string name="title_element_balance">Element Dengesi</string>
     <string name="desc_element_balance">Burçlarınızın Ateş, Toprak, Hava ve Su dengesini inceleyerek ruhsal uyumunuzu haritalandırıyoruz.</string>
 
+    <string name="advices">Tavsiyeler</string>
+    <string name="strengths">Güçlü Yönler</string>
+    <string name="challenges">Zorluklar</string>
+    <string name="loveandintimacy">Aşk ve Yakınlık</string>
+    <string name="pros">Artılar</string>
+    <string name="cons">Eksiler</string>
+
     <!-- Açısal İlişki Card -->
     <string name="title_angular_relationship">Açısal İlişki</string>
     <string name="desc_angular_relationship">Zodyak kuşağındaki konumsal açıları hesaplayarak aranızdaki çekim enerjisini analiz ediyoruz.</string>
