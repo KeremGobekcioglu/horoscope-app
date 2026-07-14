@@ -19,9 +19,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.kg.yildizname.core.ui.theme.YzGold
 import com.kg.yildizname.core.ui.theme.YzInk
+import com.kg.yildizname.core.ui.theme.YzMuted
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Air
 import androidx.compose.material.icons.rounded.Landscape
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.ui.graphics.Brush
@@ -69,16 +71,66 @@ fun CompatibilityResultScreen(
 )
 {
     when (uiState) {
-        is CompatibilityResultUIState.Loading -> {
-
-        }
-        is CompatibilityResultUIState.Error ->
-        {
-
-        }
+        is CompatibilityResultUIState.Loading -> CompatibilityResultLoadingScreen(
+            onBackClick = onBackClick
+        )
+        is CompatibilityResultUIState.Error -> CompatibilityResultErrorScreen(
+            message = uiState.message,
+            onBackClick = onBackClick
+        )
         is CompatibilityResultUIState.Success -> CompatibilityResultSuccessScreen(
             uiState = uiState,
             onBackClick = onBackClick
+        )
+    }
+}
+
+@Composable
+private fun CompatibilityResultLoadingScreen(
+    onBackClick: () -> Unit = {}
+) {
+    StarFieldBackground()
+    Box(modifier = Modifier.yzStatusBarsPadding().fillMaxSize()) {
+        Row(modifier = Modifier.fillMaxWidth()) {
+            IconButton(onClick = onBackClick) {
+                Icon(
+                    imageVector = FeatherIcons.ArrowLeft,
+                    contentDescription = stringResource(Res.string.cd_back),
+                    tint = YzInk
+                )
+            }
+        }
+        CircularProgressIndicator(
+            color = YzGold,
+            modifier = Modifier.align(Alignment.Center)
+        )
+    }
+}
+
+@Composable
+private fun CompatibilityResultErrorScreen(
+    message: String,
+    onBackClick: () -> Unit = {}
+) {
+    StarFieldBackground()
+    Box(modifier = Modifier.yzStatusBarsPadding().fillMaxSize()) {
+        Row(modifier = Modifier.fillMaxWidth()) {
+            IconButton(onClick = onBackClick) {
+                Icon(
+                    imageVector = FeatherIcons.ArrowLeft,
+                    contentDescription = stringResource(Res.string.cd_back),
+                    tint = YzInk
+                )
+            }
+        }
+        Text(
+            text = message,
+            color = YzMuted,
+            style = MaterialTheme.typography.bodyMedium,
+            textAlign = TextAlign.Center,
+            modifier = Modifier
+                .align(Alignment.Center)
+                .padding(horizontal = 32.dp)
         )
     }
 }
