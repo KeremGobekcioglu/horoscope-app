@@ -21,9 +21,15 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.kg.yildizname.App
+import com.kg.yildizname.core.ui.theme.AppIcons
 import com.kg.yildizname.core.ui.theme.YzBgLight
 import com.kg.yildizname.core.ui.theme.YzGold
 import com.kg.yildizname.core.ui.theme.YzInk
+import horoscope.shared.generated.resources.Res
+import horoscope.shared.generated.resources.cons
+import horoscope.shared.generated.resources.pros
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun InfoCards(
@@ -31,7 +37,7 @@ fun InfoCards(
     contentLineIcon: ImageVector?,
     headLineIconTint: Color? = null,
     contentLineIconTint: Color?,
-    textList: List<String> = mutableListOf(),
+    textList: List<String> = emptyList(),
     backgroundColor: Color,
     headlineText: String,
     iconOffset: Dp?,
@@ -97,6 +103,92 @@ fun InfoCards(
                     }
                 }
 
+            }
+        }
+    }
+}
+
+@Composable
+fun ProsConsCard(
+    pros: List<String> = emptyList(),
+    cons: List<String> = emptyList()
+) {
+    Row(
+        modifier = Modifier
+            .padding(horizontal = 12.dp)
+            .clip(RoundedCornerShape(16.dp))
+            .background(YzBgLight.copy(alpha = 0.65f))
+            .fillMaxWidth()
+            .padding(horizontal = 24.dp, vertical = 16.dp),
+        horizontalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        ProsConsColumn(
+            modifier = Modifier.weight(1f),
+            title = stringResource(Res.string.pros),
+            items = pros,
+            itemIcon = AppIcons.Positive,
+            color = YzGold
+        )
+        ProsConsColumn(
+            modifier = Modifier.weight(1f),
+            title = stringResource(Res.string.cons),
+            items = cons,
+            itemIcon = AppIcons.Negative,
+            color = YzInk
+        )
+    }
+}
+
+@Composable
+private fun ProsConsColumn(
+    modifier: Modifier,
+    title: String,
+    items: List<String>,
+    itemIcon: ImageVector,
+    color: Color
+) {
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(9.dp),
+            modifier = Modifier.padding(horizontal = 5.dp)
+        ) {
+            Icon(
+                imageVector = AppIcons.Bullet,
+                contentDescription = null,
+                tint = color,
+                modifier = Modifier.size(6.dp)
+            )
+            Text(
+                text = title,
+                color = color,
+                fontSize = 12.sp,
+                lineHeight = 16.sp
+            )
+        }
+        items.forEach { text ->
+            Row(
+                verticalAlignment = Alignment.Top,
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                modifier = Modifier.padding(horizontal = 1.dp)
+            ) {
+                Icon(
+                    imageVector = itemIcon,
+                    contentDescription = null,
+                    tint = color,
+                    modifier = Modifier
+                        .padding(top = 1.dp)
+                        .size(12.dp)
+                )
+                Text(
+                    text = text,
+                    color = color,
+                    fontSize = 11.sp,
+                    lineHeight = 15.sp
+                )
             }
         }
     }

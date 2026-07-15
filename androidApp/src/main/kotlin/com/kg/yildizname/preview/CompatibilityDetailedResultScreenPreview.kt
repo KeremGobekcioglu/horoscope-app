@@ -20,6 +20,7 @@ import com.kg.yildizname.core.ui.theme.YzGold
 import com.kg.yildizname.core.ui.theme.YzTheme
 import com.kg.yildizname.feature.compatability.ui.CompatibilityDetailedResult.CompatibilityDetailedResultScreen
 import com.kg.yildizname.feature.compatability.ui.CompatibilityDetailedResult.InfoCards
+import com.kg.yildizname.feature.compatability.ui.CompatibilityDetailedResult.ProsConsCard
 import com.kg.yildizname.feature.compatability.ui.CompatibilityResult.CompatibilityResultUIState
 import horoscope.shared.generated.resources.Res
 import horoscope.shared.generated.resources.advices
@@ -67,6 +68,28 @@ private val mockDetailedCompatibilityResult = CompatibilityResult(
     )
 )
 
+@Preview
+@Composable
+fun ProConCards() {
+    YzTheme {
+        Box(modifier = Modifier.fillMaxSize().background(YzBg)) {
+            ProsConsCard(
+                pros = listOf(
+                    "Shared enthusiasm",
+                    "Strong loyalty",
+                    "Exciting, adventurous energy",
+                    "Mutual respect for ambition"
+                ),
+                cons = listOf(
+                    "Competing egos",
+                    "Impatience with each other",
+                    "Power struggles over control",
+                    "Difficulty compromising"
+                )
+            )
+        }
+    }
+}
 @Preview
 @Composable
 fun CompatibilityDetailedResultScreenSuccessPreview() {

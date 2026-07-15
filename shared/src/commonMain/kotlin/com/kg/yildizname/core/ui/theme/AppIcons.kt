@@ -6,7 +6,9 @@ import androidx.compose.material.icons.rounded.AutoAwesome
 import androidx.compose.material.icons.rounded.CalendarMonth
 import androidx.compose.material.icons.rounded.Cancel
 import androidx.compose.material.icons.rounded.ChatBubbleOutline
+import androidx.compose.material.icons.rounded.Check
 import androidx.compose.material.icons.rounded.Circle
+import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.Favorite
 import androidx.compose.material.icons.rounded.Forum
 import androidx.compose.material.icons.rounded.Foundation
@@ -58,5 +60,9 @@ object AppIcons {
 
     val Recommendations = Icons.Rounded.AutoAwesome
     val Bullet = Icons.Rounded.Circle
+
+    // List indicators
+    val Positive = Icons.Rounded.Check
+    val Negative = Icons.Rounded.Close
 
 }
