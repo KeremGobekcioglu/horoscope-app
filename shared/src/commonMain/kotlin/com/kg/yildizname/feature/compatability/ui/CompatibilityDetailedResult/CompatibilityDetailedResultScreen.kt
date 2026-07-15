@@ -187,7 +187,7 @@ fun CompatibilityDetailedResultSuccessScreen(
                 headLineIconTint = YzGold,
                 iconOffset = (7).dp
             )
-            Spacer(Modifier.height(32.dp))
+            Spacer(Modifier.height(16.dp))
             InfoCards(
                 contentLineIcon = AppIcons.Compatible,
                 contentLineIconTint = YzGold,
@@ -197,7 +197,7 @@ fun CompatibilityDetailedResultSuccessScreen(
                 iconOffset = (7).dp,
                 iconSize = 12.dp
             )
-            Spacer(Modifier.height(32.dp))
+            Spacer(Modifier.height(16.dp))
             InfoCards(
                 contentLineIcon = AppIcons.Incompatible,
                 contentLineIconTint = Color.Red,
@@ -207,7 +207,7 @@ fun CompatibilityDetailedResultSuccessScreen(
                 iconOffset = (7).dp,
                 iconSize = 12.dp
             )
-            Spacer(Modifier.height(32.dp))
+            Spacer(Modifier.height(16.dp))
             InfoCards(
                 headlineIcon = AppIcons.Love,
                 contentLineIcon = null,
@@ -217,7 +217,7 @@ fun CompatibilityDetailedResultSuccessScreen(
                 headlineText = stringResource(Res.string.loveandintimacy),
                 iconOffset = null
             )
-            Spacer(Modifier.height(32.dp))
+            Spacer(Modifier.height(16.dp))
             InfoCards(
                 headlineIcon = AppIcons.Communication,
                 contentLineIcon = null,
@@ -226,6 +226,11 @@ fun CompatibilityDetailedResultSuccessScreen(
                 backgroundColor = bgCard,
                 headlineText = stringResource(Res.string.compat_score_communication),
                 iconOffset = null
+            )
+            Spacer(Modifier.height(16.dp))
+            ProsConsCard(
+                uiState.result.content.pros,
+                uiState.result.content.cons
             )
         }
     }
