@@ -6,7 +6,10 @@ import androidx.room.RoomDatabase
 import androidx.room.RoomDatabaseConstructor
 import androidx.room.TypeConverters
 
-@Database(entities = [ReadingEntity::class, CompatibilityEntity::class], version = 4)
+@Database(
+    entities = [ReadingEntity::class, CompatibilityEntity::class],
+    version = 5
+)
 @TypeConverters(CompatibilityConverters::class)
 @ConstructedBy(YildiznameDatabaseConstructor::class)
 abstract class YildiznameDatabase : RoomDatabase() {

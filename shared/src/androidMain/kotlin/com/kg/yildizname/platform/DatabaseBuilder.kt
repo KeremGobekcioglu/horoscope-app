@@ -12,5 +12,5 @@ actual fun getDatabaseBuilder(): RoomDatabase.Builder<YildiznameDatabase> {
     return Room.databaseBuilder<YildiznameDatabase>(
         context = context,
         name = dbFile.absolutePath,
-    )
+    ).fallbackToDestructiveMigration(dropAllTables = true)
 }

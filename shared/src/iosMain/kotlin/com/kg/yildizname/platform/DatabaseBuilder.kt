@@ -9,5 +9,5 @@ actual fun getDatabaseBuilder(): RoomDatabase.Builder<YildiznameDatabase> {
     val dbFile = NSHomeDirectory() + "/Documents/yildizname.db"
     return Room.databaseBuilder<YildiznameDatabase>(
         name = dbFile,
-    )
+    ).fallbackToDestructiveMigration(dropAllTables = true)
 }

@@ -33,5 +33,8 @@ data class CompatibilityContentDto(
     val loveAndIntimacy: String,
     val advice: String,
     val pros: List<String>,
-    val cons: List<String>
+    val cons: List<String>,
+    val friendship: String,
+    val longTerm: String,
+    val finalVerdict: String
 )

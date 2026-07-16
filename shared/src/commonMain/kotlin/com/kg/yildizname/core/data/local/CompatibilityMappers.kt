@@ -48,4 +48,4 @@ private fun CompatibilityLocalizedContentDto.toEntityContent(): CompatibilityLoc
     CompatibilityLocalizedContent(en = en.toEntityContent(), tr = tr.toEntityContent())
 
 private fun CompatibilityContentDto.toEntityContent(): CompatibilityContent =
-    CompatibilityContent(summary, strengths, challenges, communication, loveAndIntimacy, advice, pros, cons)
+    CompatibilityContent(summary, strengths, challenges, communication, loveAndIntimacy, advice, pros, cons, friendship, longTerm, finalVerdict)
