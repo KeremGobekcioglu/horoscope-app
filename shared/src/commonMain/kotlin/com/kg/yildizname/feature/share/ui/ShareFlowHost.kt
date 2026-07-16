@@ -25,17 +25,35 @@ data class ShareCardRequest(
     val date: LocalDate,
 )
 
+/** Everything CompatibilityShareCard/ShareBottomSheet need to render for one share request. */
+data class CompatibilityShareCardRequest(
+    val signA: ZodiacSign,
+    val signB: ZodiacSign,
+    val matchPercent: Int,
+    val quoteText: String,
+)
+
+/** The card [ShareFlowHost] is currently asked to preview/share — either a reading or a compatibility result. */
+sealed interface ShareRequest {
+    data class Horoscope(val request: ShareCardRequest) : ShareRequest
+    data class Compatibility(val request: CompatibilityShareCardRequest) : ShareRequest
+}
+
 /** First sentence or two of a reading's body text, used as the share card's pull-quote. */
 fun shareQuoteFrom(text: String, sentenceCount: Int = 2): String =
     text.split(". ", ".\n").take(sentenceCount).joinToString(". ").trimEnd('.', ' ') + "."
 
 @Stable
 class ShareFlowState internal constructor() {
-    var request by mutableStateOf<ShareCardRequest?>(null)
+    var request by mutableStateOf<ShareRequest?>(null)
         private set
 
     fun open(request: ShareCardRequest) {
-        this.request = request
+        this.request = ShareRequest.Horoscope(request)
+    }
+
+    fun open(request: CompatibilityShareCardRequest) {
+        this.request = ShareRequest.Compatibility(request)
     }
 
     fun dismiss() {
@@ -47,10 +65,10 @@ class ShareFlowState internal constructor() {
 fun rememberShareFlowState(): ShareFlowState = remember { ShareFlowState() }
 
 /**
- * Renders the ShareBottomSheet (with the ShareCard preview embedded inside it) for [state]'s
- * current request, if any. Any screen that wants to open the share flow just calls
- * `state.open(ShareCardRequest(...))` — this host owns the card/sheet composition and dismiss
- * wiring so screens/nav graph don't have to.
+ * Renders the ShareBottomSheet (with the ShareCard/CompatibilityShareCard preview embedded
+ * inside it) for [state]'s current request, if any. Any screen that wants to open the share
+ * flow just calls `state.open(ShareCardRequest(...))` or `state.open(CompatibilityShareCardRequest(...))`
+ * — this host owns the card/sheet composition and dismiss wiring so screens/nav graph don't have to.
  */
 @Composable
 fun ShareFlowHost(state: ShareFlowState) {
@@ -58,13 +76,22 @@ fun ShareFlowHost(state: ShareFlowState) {
 
     ShareBottomSheet(
         preview = {
-            ShareCardPreview(
-                signDisplayName = request.signDisplayName,
-                sign = request.sign,
-                date = request.date,
-                quoteText = request.quoteText,
-                modifier = Modifier.fillMaxWidth(),
-            )
+            when (request) {
+                is ShareRequest.Horoscope -> ShareCardPreview(
+                    signDisplayName = request.request.signDisplayName,
+                    sign = request.request.sign,
+                    date = request.request.date,
+                    quoteText = request.request.quoteText,
+                    modifier = Modifier.fillMaxWidth(),
+                )
+                is ShareRequest.Compatibility -> CompatibilityShareCardPreview(
+                    signA = request.request.signA,
+                    signB = request.request.signB,
+                    matchPercent = request.request.matchPercent,
+                    quoteText = request.request.quoteText,
+                    modifier = Modifier.fillMaxWidth(),
+                )
+            }
         },
         onInstagramStoriesClick = state::dismiss,
         onWhatsAppClick = state::dismiss,

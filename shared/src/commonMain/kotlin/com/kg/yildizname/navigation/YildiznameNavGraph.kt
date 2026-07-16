@@ -31,6 +31,7 @@ import com.kg.yildizname.feature.calendar.ui.CalendarScreen
 import com.kg.yildizname.feature.calendar.ui.CalendarViewModel
 import com.kg.yildizname.feature.compatability.ui.CompatibilityDetailedResult.CompatibilityDetailedResultScreen
 import com.kg.yildizname.feature.compatability.ui.CompatibilityResult.CompatibilityResultScreen
+import com.kg.yildizname.feature.compatability.ui.CompatibilityResult.CompatibilityResultUIState
 import com.kg.yildizname.feature.compatability.ui.CompatibilityResult.CompatibilityResultViewModel
 import com.kg.yildizname.feature.compatability.ui.CompatibilityScreen
 import com.kg.yildizname.feature.home.ui.HomeScreen
@@ -45,6 +46,7 @@ import com.kg.yildizname.feature.readingDetail.ui.ReadingDetailScreen
 import com.kg.yildizname.feature.readingDetail.ui.ReadingDetailUiState
 import com.kg.yildizname.feature.readingDetail.ui.ReadingDetailViewModel
 import com.kg.yildizname.feature.settings.ui.SettingsScreen
+import com.kg.yildizname.feature.share.ui.CompatibilityShareCardRequest
 import com.kg.yildizname.feature.share.ui.ShareCardRequest
 import com.kg.yildizname.feature.share.ui.ShareFlowHost
 import com.kg.yildizname.feature.share.ui.rememberShareFlowState
@@ -352,7 +354,19 @@ fun YildiznameNavGraph(navController: NavHostController) {
                     CompatibilityResultScreen(
                         uiState = state,
                         onDetailClick = { navController.navigate(CompatibilityDetailRoute) },
-                        onBackClick = { navController.popBackStack() }
+                        onBackClick = { navController.popBackStack() },
+                        onShareClick = {
+                            (state as? CompatibilityResultUIState.Success)?.let { success ->
+                                shareFlowState.open(
+                                    CompatibilityShareCardRequest(
+                                        signA = success.result.signs[0],
+                                        signB = success.result.signs[1],
+                                        matchPercent = success.result.matchPercent,
+                                        quoteText = shareQuoteFrom(success.result.content.finalVerdict),
+                                    )
+                                )
+                            }
+                        }
                     )
                 }
 
@@ -366,7 +380,18 @@ fun YildiznameNavGraph(navController: NavHostController) {
                     CompatibilityDetailedResultScreen(
                         uiState = state,
                         onBack = { navController.popBackStack() },
-                        onShare = {}
+                        onShare = {
+                            (state as? CompatibilityResultUIState.Success)?.let { success ->
+                                shareFlowState.open(
+                                    CompatibilityShareCardRequest(
+                                        signA = success.result.signs[0],
+                                        signB = success.result.signs[1],
+                                        matchPercent = success.result.matchPercent,
+                                        quoteText = shareQuoteFrom(success.result.content.finalVerdict),
+                                    )
+                                )
+                            }
+                        }
                     )
                 }
             }

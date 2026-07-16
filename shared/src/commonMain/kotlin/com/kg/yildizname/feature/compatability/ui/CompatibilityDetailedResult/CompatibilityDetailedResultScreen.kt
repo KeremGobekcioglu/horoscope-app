@@ -88,7 +88,7 @@ fun CompatibilityDetailedResultScreen(
         )
         is CompatibilityResultUIState.Success -> CompatibilityDetailedResultSuccessScreen(
             uiState = uiState,
-            onShare = {},
+            onShare = onShare,
             onBack = onBack
         )
     }

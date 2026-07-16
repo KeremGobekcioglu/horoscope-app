@@ -68,7 +68,8 @@ import org.jetbrains.compose.resources.stringResource
 fun CompatibilityResultScreen(
     uiState: CompatibilityResultUIState,
     onBackClick: () -> Unit = {},
-    onDetailClick: () -> Unit
+    onDetailClick: () -> Unit,
+    onShareClick: () -> Unit = {}
 )
 {
     when (uiState) {
@@ -82,7 +83,8 @@ fun CompatibilityResultScreen(
         is CompatibilityResultUIState.Success -> CompatibilityResultSuccessScreen(
             uiState = uiState,
             onBackClick = onBackClick,
-            onDetailClick = onDetailClick
+            onDetailClick = onDetailClick,
+            onShareClick = onShareClick
         )
     }
 }
@@ -142,7 +144,8 @@ fun CompatibilityResultErrorScreen(
 fun CompatibilityResultSuccessScreen(
     uiState: CompatibilityResultUIState.Success,
     onBackClick: () -> Unit = {},
-    onDetailClick: () -> Unit
+    onDetailClick: () -> Unit,
+    onShareClick: () -> Unit = {}
 )
 {
     val signA = uiState.result.signs[0]
@@ -253,7 +256,7 @@ fun CompatibilityResultSuccessScreen(
                 CompatButton(
                     text = stringResource(Res.string.btn_share),
                     filled = true,
-                    onClick = { }
+                    onClick = { onShareClick() }
                 )
             }
         }
