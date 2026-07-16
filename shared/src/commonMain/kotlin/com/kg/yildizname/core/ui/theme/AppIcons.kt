@@ -2,6 +2,7 @@ package com.kg.yildizname.core.ui.theme
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.Icons.Rounded
+import androidx.compose.material.icons.rounded.AllInclusive
 import androidx.compose.material.icons.rounded.AutoAwesome
 import androidx.compose.material.icons.rounded.CalendarMonth
 import androidx.compose.material.icons.rounded.Cancel
@@ -24,6 +25,7 @@ import androidx.compose.material.icons.rounded.Schedule
 import androidx.compose.material.icons.rounded.TaskAlt
 import androidx.compose.material.icons.rounded.Verified
 import androidx.compose.material.icons.rounded.VolunteerActivism
+import androidx.compose.ui.graphics.Color
 
 object AppIcons {
 
@@ -49,7 +51,6 @@ object AppIcons {
     val Community = Rounded.PeopleAlt
 
     // Long-term
-    val LongTerm = Rounded.CalendarMonth
     val Stability = Rounded.Foundation
     val Home = Rounded.Home
     val Future = Rounded.Schedule
@@ -65,4 +66,25 @@ object AppIcons {
     val Positive = Icons.Rounded.Check
     val Negative = Icons.Rounded.Close
 
+    val LongTerm = Icons.Rounded.AllInclusive
+    // Love
+    val LoveTint = Color(0xFFE4C45A)      // Gold
+
+    // Communication
+    val CommunicationTint = Color(0xFF7DB8FF) // Sky Blue
+
+    // Friendship
+    val FriendshipTint = Color(0xFF5FD0C2) // Turquoise
+
+    // Long-term
+    val LongTermTint = Color(0xFFC9A8FF)   // Lavender
+
+    // Recommendations
+    val RecommendationTint = Color(0xFFE4C45A)
+
+    // Positive
+    val PositiveTint = Color(0xFF6DD17C)
+
+    // Negative
+    val NegativeTint = Color(0xFFF28B82)
 }

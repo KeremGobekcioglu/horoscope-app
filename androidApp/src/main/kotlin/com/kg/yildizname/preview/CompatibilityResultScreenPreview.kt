@@ -33,7 +33,11 @@ private val mockCompatibilityResult = CompatibilityResult(
         loveAndIntimacy = "Intense chemistry with a strong physical connection.",
         advice = "Take turns leading and celebrate each other's wins.",
         pros = listOf("Shared enthusiasm", "Strong loyalty"),
-        cons = listOf("Competing egos", "Impatience with each other")
+        cons = listOf("Competing egos", "Impatience with each other"),
+        friendship = "a",
+        longTerm = "",
+        finalVerdict = ""
+
     )
 )
 

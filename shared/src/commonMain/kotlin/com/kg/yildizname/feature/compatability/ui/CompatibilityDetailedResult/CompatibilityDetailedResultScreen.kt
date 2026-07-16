@@ -1,5 +1,8 @@
 package com.kg.yildizname.feature.compatability.ui.CompatibilityDetailedResult
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -10,8 +13,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Share
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -19,12 +26,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
@@ -37,6 +46,8 @@ import com.kg.yildizname.core.ui.theme.AppIcons
 import com.kg.yildizname.core.ui.theme.YzBgLight
 import com.kg.yildizname.core.ui.theme.YzGold
 import com.kg.yildizname.core.ui.theme.YzInk
+import com.kg.yildizname.core.ui.theme.YzMuted
+import com.kg.yildizname.core.ui.theme.YzOnSurface
 import com.kg.yildizname.core.ui.utils.yzStatusBarsPadding
 import com.kg.yildizname.feature.compatability.ui.CompatibilityResult.CompatibilityResultErrorScreen
 import com.kg.yildizname.feature.compatability.ui.CompatibilityResult.CompatibilityResultLoadingScreen
@@ -48,9 +59,12 @@ import compose.icons.FeatherIcons
 import compose.icons.feathericons.ArrowLeft
 import horoscope.shared.generated.resources.Res
 import horoscope.shared.generated.resources.advices
+import horoscope.shared.generated.resources.btn_share_analysis
 import horoscope.shared.generated.resources.cd_back
 import horoscope.shared.generated.resources.challenges
 import horoscope.shared.generated.resources.compat_score_communication
+import horoscope.shared.generated.resources.compat_score_friendship
+import horoscope.shared.generated.resources.compat_score_long_term
 import horoscope.shared.generated.resources.compat_title
 import horoscope.shared.generated.resources.detailed_compat_title
 import horoscope.shared.generated.resources.loveandintimacy
@@ -212,6 +226,7 @@ fun CompatibilityDetailedResultSuccessScreen(
                 headlineIcon = AppIcons.Love,
                 contentLineIcon = null,
                 contentLineIconTint = null,
+                headLineIconTint = AppIcons.LoveTint,
                 textList = uiState.result.content.loveAndIntimacy.split(".").map { it.trim() }.filter { it.isNotBlank() },
                 backgroundColor = bgCard,
                 headlineText = stringResource(Res.string.loveandintimacy),
@@ -221,10 +236,33 @@ fun CompatibilityDetailedResultSuccessScreen(
             InfoCards(
                 headlineIcon = AppIcons.Communication,
                 contentLineIcon = null,
-                contentLineIconTint = Color.Blue,
+                contentLineIconTint = null,
+                headLineIconTint = AppIcons.CommunicationTint,
                 textList = uiState.result.content.communication.split(".").map { it.trim() }.filter { it.isNotBlank() },
                 backgroundColor = bgCard,
                 headlineText = stringResource(Res.string.compat_score_communication),
+                iconOffset = null
+            )
+            Spacer(Modifier.height(16.dp))
+            InfoCards(
+                headlineIcon = AppIcons.Friendship,
+                contentLineIcon = null,
+                contentLineIconTint = null,
+                headLineIconTint = AppIcons.FriendshipTint,
+                textList = uiState.result.content.friendship.split(".").map { it.trim() }.filter { it.isNotBlank() },
+                backgroundColor = bgCard,
+                headlineText = stringResource(Res.string.compat_score_friendship),
+                iconOffset = null
+            )
+            Spacer(Modifier.height(16.dp))
+            InfoCards(
+                headlineIcon = AppIcons.LongTerm,
+                contentLineIcon = null,
+                contentLineIconTint = null,
+                headLineIconTint = AppIcons.LongTermTint,
+                textList = uiState.result.content.longTerm.split(".").map { it.trim() }.filter { it.isNotBlank() },
+                backgroundColor = bgCard,
+                headlineText = stringResource(Res.string.compat_score_long_term),
                 iconOffset = null
             )
             Spacer(Modifier.height(16.dp))
@@ -232,6 +270,84 @@ fun CompatibilityDetailedResultSuccessScreen(
                 uiState.result.content.pros,
                 uiState.result.content.cons
             )
+            Spacer(Modifier.height(32.dp))
+            FinalVerdictCard(
+                text = uiState.result.content.finalVerdict,
+                onClick = onShare,
+                headLine = "Göklerin Kararı"
+            )
+        }
+    }
+}
+
+@Composable
+fun FinalVerdictCard(
+    text: String,
+    onClick: () -> Unit,
+    headLine: String,
+    enabled: Boolean = true
+) {
+    Box(
+        modifier = Modifier
+            .clip(RoundedCornerShape(12.dp))
+            .background(
+                Brush.horizontalGradient(
+                    colors = listOf(
+                        Color(0xFF1A1920),
+                        Color(0xFF17171F),
+                        Color(0xFF14141E)
+                    )
+                )
+            )
+            .border(1.dp, YzGold, RoundedCornerShape(12.dp))
+            .padding(horizontal = 16.dp)
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier
+                .padding(vertical = 32.dp, horizontal = 32.dp)
+        ) {
+            Text(
+                text = headLine,
+                color = YzGold,
+                style = MaterialTheme.typography.headlineLarge,
+                textAlign = TextAlign.Center
+            )
+            Spacer(Modifier.height(16.dp))
+            Text(
+                text = text,
+                color = YzOnSurface,
+                fontSize = 19.sp,
+                textAlign = TextAlign.Center
+            )
+            Spacer(Modifier.height(32.dp))
+            Box(
+                modifier = Modifier
+                    .height(48.dp)
+                    .clip(RoundedCornerShape(12.dp))
+                    .background(if (enabled) YzGold else YzGold.copy(alpha = 0.35f))
+                    .clickable(enabled = enabled, onClick = onClick)
+                    .padding(horizontal = 20.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    Text(
+                        text = stringResource(Res.string.btn_share_analysis),
+                        color = if (enabled) Color.Black else YzMuted,
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.SemiBold,
+                    )
+                    Icon(
+                        imageVector = Icons.Rounded.Share,
+                        contentDescription = null,
+                        tint = if (enabled) Color.Black else YzMuted,
+                        modifier = Modifier.size(16.dp)
+                    )
+                }
+            }
         }
     }
 }

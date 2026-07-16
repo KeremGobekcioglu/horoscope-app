@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -19,6 +20,7 @@ import com.kg.yildizname.core.ui.theme.YzBgLight
 import com.kg.yildizname.core.ui.theme.YzGold
 import com.kg.yildizname.core.ui.theme.YzTheme
 import com.kg.yildizname.feature.compatability.ui.CompatibilityDetailedResult.CompatibilityDetailedResultScreen
+import com.kg.yildizname.feature.compatability.ui.CompatibilityDetailedResult.FinalVerdictCard
 import com.kg.yildizname.feature.compatability.ui.CompatibilityDetailedResult.InfoCards
 import com.kg.yildizname.feature.compatability.ui.CompatibilityDetailedResult.ProsConsCard
 import com.kg.yildizname.feature.compatability.ui.CompatibilityResult.CompatibilityResultUIState
@@ -64,7 +66,10 @@ private val mockDetailedCompatibilityResult = CompatibilityResult(
             "Impatience with each other",
             "Power struggles over control",
             "Difficulty compromising"
-        )
+        ),
+        friendship = "naber",
+        longTerm = "naber",
+        finalVerdict = "naber"
     )
 )
 
@@ -219,6 +224,36 @@ fun LovePreview() {
                 backgroundColor = bgCard,
                 headlineText = stringResource(Res.string.loveandintimacy),
                 iconOffset = null
+            )
+        }
+    }
+}
+
+@Preview
+@Composable
+fun FinalVerdictCardEnabledPreview() {
+    YzTheme {
+        Box(modifier = Modifier.fillMaxSize().background(YzBg).padding(16.dp)) {
+            FinalVerdictCard(
+                headLine = "Güçlü Bir Uyum",
+                text = "Aries ve Leo, karşılıklı hayranlık ve paylaşılan enerji üzerine kurulu, ateşli ve tutkulu bir bağ paylaşır.",
+                enabled = true,
+                onClick = {}
+            )
+        }
+    }
+}
+
+@Preview
+@Composable
+fun FinalVerdictCardDisabledPreview() {
+    YzTheme {
+        Box(modifier = Modifier.fillMaxSize().background(YzBg).padding(16.dp)) {
+            FinalVerdictCard(
+                headLine = "Güçlü Bir Uyum",
+                text = "Aries ve Leo, karşılıklı hayranlık ve paylaşılan enerji üzerine kurulu, ateşli ve tutkulu bir bağ paylaşır.",
+                enabled = false,
+                onClick = {}
             )
         }
     }
