@@ -362,7 +362,8 @@ fun YildiznameNavGraph(navController: NavHostController) {
                                         signA = success.result.signs[0],
                                         signB = success.result.signs[1],
                                         matchPercent = success.result.matchPercent,
-                                        quoteText = shareQuoteFrom(success.result.content.finalVerdict),
+                                        scores = success.result.scores,
+                                        verdictText = shareQuoteFrom(success.result.content.finalVerdict),
                                     )
                                 )
                             }
@@ -387,7 +388,8 @@ fun YildiznameNavGraph(navController: NavHostController) {
                                         signA = success.result.signs[0],
                                         signB = success.result.signs[1],
                                         matchPercent = success.result.matchPercent,
-                                        quoteText = shareQuoteFrom(success.result.content.finalVerdict),
+                                        scores = success.result.scores,
+                                        verdictText = shareQuoteFrom(success.result.content.finalVerdict),
                                     )
                                 )
                             }

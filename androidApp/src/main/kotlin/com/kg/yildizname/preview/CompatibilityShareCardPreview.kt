@@ -10,8 +10,16 @@ import com.kg.yildizname.core.data.model.ZodiacSign
 import com.kg.yildizname.core.ui.theme.YzTheme
 import com.kg.yildizname.feature.share.ui.CompatibilityShareCard
 import com.kg.yildizname.feature.share.ui.CompatibilityShareCardPreview
+import com.kg.yildizname.feature.share.ui.ShareScore
 
-private const val previewCompatibilityQuote =
+private val previewCompatibilityScores = listOf(
+    ShareScore("İletişim", 82),
+    ShareScore("Arkadaşlık", 74),
+    ShareScore("Aşk", 91),
+    ShareScore("Uzun Vadeli", 68),
+)
+
+private const val previewVerdictText =
     "İki yıldız birbirine değdiğinde, gökyüzü bile nefesini tutar. Bu bağ, sabır ve " +
         "anlayışla beslendikçe daha da güçlenecek."
 
@@ -27,7 +35,9 @@ private fun CompatibilityShareCardExportPreview() {
             signA = ZodiacSign.ARIES,
             signB = ZodiacSign.LEO,
             matchPercent = 87,
-            quoteText = previewCompatibilityQuote,
+            bandLabel = "Güçlü Uyum",
+            scores = previewCompatibilityScores,
+            verdictText = previewVerdictText,
         )
     }
 }
@@ -41,24 +51,31 @@ private fun CompatibilityShareCardScaledPreview() {
             signA = ZodiacSign.ARIES,
             signB = ZodiacSign.LEO,
             matchPercent = 87,
-            quoteText = previewCompatibilityQuote,
+            bandLabel = "Güçlü Uyum",
+            scores = previewCompatibilityScores,
+            verdictText = previewVerdictText,
             modifier = Modifier.fillMaxWidth().padding(24.dp),
         )
     }
 }
 
-/** Long quote text, to check the quote block and card layout don't overflow/clip. */
-@Preview(name = "CompatibilityShareCardPreview — Long quote", showBackground = true, widthDp = 360, heightDp = 560)
+/** Low scores, to check the score panel and bars render sensibly at the low end. */
+@Preview(name = "CompatibilityShareCardPreview — Low scores", showBackground = true, widthDp = 360, heightDp = 560)
 @Composable
-private fun CompatibilityShareCardScaledLongQuotePreview() {
+private fun CompatibilityShareCardScaledLowScoresPreview() {
     YzTheme {
         CompatibilityShareCardPreview(
             signA = ZodiacSign.CANCER,
             signB = ZodiacSign.SCORPIO,
             matchPercent = 62,
-            quoteText = "İki yıldız birbirine değdiğinde, gökyüzü bile nefesini tutar. Bu bağ, sabır ve " +
-                "anlayışla beslendikçe daha da güçlenecek. Zaman zaman anlaşmazlıklar yaşansa da, " +
-                "temeldeki sevgi ve saygı her şeyi aşacak güçtedir.",
+            bandLabel = "Değişken Uyum",
+            scores = listOf(
+                ShareScore("İletişim", 48),
+                ShareScore("Arkadaşlık", 55),
+                ShareScore("Aşk", 62),
+                ShareScore("Uzun Vadeli", 40),
+            ),
+            verdictText = "Zaman zaman anlaşmazlıklar yaşansa da, temeldeki sevgi ve saygı her şeyi aşacak güçtedir.",
             modifier = Modifier.fillMaxWidth().padding(24.dp),
         )
     }
