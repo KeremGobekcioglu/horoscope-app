@@ -50,6 +50,7 @@ kotlin {
         commonMain.dependencies {
             implementation(libs.gitlive.firebase.firestore)
             implementation(libs.gitlive.firebase.common)
+            implementation(libs.gitlive.firebase.auth)
             implementation(libs.kotlinx.datetime)
             implementation(libs.room.runtime)
             implementation(libs.sqlite.bundled)

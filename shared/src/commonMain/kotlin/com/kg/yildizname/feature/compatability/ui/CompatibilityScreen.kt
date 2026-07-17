@@ -89,7 +89,6 @@ import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import org.koin.compose.koinInject
 import kotlin.math.sign
 
 /**
@@ -234,70 +233,3 @@ fun CompatibilityScreen(
         }
     }
 }
-    /*
-    *   Headline - Uyum Analizi
-    *   Headline two : Kozmik Rezonans Testi
-    *   One backgroudn image if appliacble
-    *
-    *   BURÇ SEÇ  -- -- - - BURÇ SEÇ
-    *
-    *   ANALİZ ET BUTTON
-    *   Small hint
-    *
-    *   Two cards: element dengesi
-    *   Açısal ilişki
-    * */
-
-//    val repository = koinInject<CompatibilityRepository>()
-//    val scope = rememberCoroutineScope()
-//
-//    var status by remember { mutableStateOf("Not fetched yet") }
-//    var resultText by remember { mutableStateOf("") }
-//
-//    Box(
-//        modifier = Modifier.fillMaxSize(),
-//        contentAlignment = Alignment.Center
-//    ) {
-//        Column(
-//            modifier = Modifier
-//                .fillMaxSize()
-//                .padding(24.dp)
-//                .verticalScroll(rememberScrollState()),
-//            verticalArrangement = Arrangement.spacedBy(16.dp)
-//        ) {
-//            Text(text = "Compatibility — Repository Test")
-//
-//            Button(onClick = {
-//                status = "Fetching..."
-//                resultText = ""
-//                scope.launch {
-//                    // .first() takes just the first emission — fine for a manual test,
-//                    // since we're eyeballing one result at a time, not observing live updates.
-//                    val result = repository
-//                        .getCompatibilityResult(ZodiacSign.ARIES, ZodiacSign.LEO)
-//                        .first()
-//
-//                    if (result == null) {
-//                        status = "Got NULL — check println logs (Logcat) for which tier missed"
-//                    } else {
-//                        status = "Got a result"
-//                        resultText = buildString {
-//                            appendLine("id: ${result.id}")
-//                            appendLine("signs: ${result.signs.map { it.firestoreKey }}")
-//                            appendLine("matchPercent: ${result.matchPercent}")
-//                            appendLine("scores: ${result.scores}")
-//                            appendLine()
-//                            appendLine("EN summary: ${result.content.en.summary}")
-//                            appendLine()
-//                            appendLine("TR summary: ${result.content.tr.summary}")
-//                        }
-//                    }
-//                }
-//            }) {
-//                Text(text = "Fetch Aries + Leo")
-//            }
-//
-//            Text(text = status, color = YzGold)
-//            Text(text = resultText, color = YzGold)
-//        }
-//    }

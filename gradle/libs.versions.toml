@@ -28,6 +28,7 @@ firebase-bom = "34.4.0"
 compose-icons = "1.1.0"
 
 [libraries]
+gitlive-firebase-auth = { module = "dev.gitlive:firebase-auth", version.ref = "gitlive-firebase" }
 gitlive-firebase-firestore  = { module = "dev.gitlive:firebase-firestore",  version.ref = "gitlive-firebase" }
 gitlive-firebase-common     = { module = "dev.gitlive:firebase-common",     version.ref = "gitlive-firebase" }
 kotlinx-datetime            = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
