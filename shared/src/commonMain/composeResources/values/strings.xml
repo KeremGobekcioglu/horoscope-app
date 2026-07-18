@@ -135,6 +135,18 @@
     <string name="settings_language">Dil</string>
     <string name="settings_notifications">Bildirimler</string>
     <string name="settings_about">Hakkında</string>
+    <string name="settings_daily_notification">Günlük bildirim</string>
+    <string name="settings_time">Saat</string>
+    <string name="settings_language_turkish">Türkçe</string>
+    <string name="settings_language_english">English</string>
+    <string name="settings_version">Sürüm</string>
+    <string name="settings_privacy_policy">Gizlilik Politikası</string>
+    <string name="settings_share_app">Uygulamayı paylaş</string>
+    <string name="settings_reset_data">Uygulama verilerini sıfırla</string>
+    <!-- aliases expected by code -->
+    <string name="settings_language_en">English</string>
+    <string name="settings_language_tr">Türkçe</string>
+    <string name="settings_notification_time">Saat</string>
 
     <string name="compat_detailed_analysis_button">Detaylı Analiz</string>
     <string name="compat_score_love">Aşk</string>

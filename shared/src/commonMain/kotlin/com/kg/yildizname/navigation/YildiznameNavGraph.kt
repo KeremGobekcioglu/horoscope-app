@@ -398,7 +398,21 @@ fun YildiznameNavGraph(navController: NavHostController) {
                 }
             }
             composable<Settings> {
-                SettingsScreen()
+                // Stateless SettingsScreen currently wired with placeholder state and stub callbacks.
+                SettingsScreen(
+                    currentSign = com.kg.yildizname.core.data.model.ZodiacSign.SCORPIO,
+                    notificationsEnabled = false,
+                    notificationTime = "09:00",
+                    currentLanguage = "tr",
+                    appVersion = "0.0.0",
+                    onChangeSignClick = { /* navigate to sign picker in future task */ },
+                    onNotificationsEnabledChange = { /* TODO: persist setting */ },
+                    onTimeClick = { /* TODO: open time picker */ },
+                    onLanguageChange = { /* TODO: persist language */ },
+                    onPrivacyPolicyClick = { /* TODO: open privacy url */ },
+                    onShareAppClick = { /* TODO: open share sheet */ },
+                    onResetDataClick = { /* TODO: confirm & reset data */ }
+                )
             }
         }
     }
