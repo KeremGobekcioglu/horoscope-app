@@ -1,8 +1,10 @@
 package com.kg.yildizname.di
 
+import com.kg.yildizname.core.data.remote.AuthSource
 import com.kg.yildizname.core.data.remote.FirestoreSource
 import com.kg.yildizname.core.data.remote.HoroscopeApiSource
 import dev.gitlive.firebase.Firebase
+import dev.gitlive.firebase.auth.auth
 import dev.gitlive.firebase.firestore.firestore
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.HttpTimeout
@@ -20,4 +22,5 @@ val networkModule = module {
     }
     single { HoroscopeApiSource(get()) }
     single { FirestoreSource(Firebase.firestore) }
+    single { AuthSource(Firebase.auth) }
 }
