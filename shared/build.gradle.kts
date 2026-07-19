@@ -79,7 +79,8 @@ kotlin {
         }
         androidMain.dependencies {
             implementation(project.dependencies.platform(libs.firebase.bom))
-
+            implementation(libs.firebase.messaging)
+            implementation(libs.kotlinx.coroutines.play.services)
             implementation(libs.compose.uiToolingPreview)
             implementation(libs.ktor.client.okhttp)
             implementation(libs.androidx.lifecycle.process)
