@@ -6,5 +6,5 @@ import org.koin.dsl.module
 
 val domainModule = module {
     factory { GetDailyReadingUseCase(get()) }
-    factory { RegisterDeviceForNotificationsUseCase(get(),get(),get()) }
+    factory { RegisterDeviceForNotificationsUseCase(get(),get(),get() , get()) }
 }

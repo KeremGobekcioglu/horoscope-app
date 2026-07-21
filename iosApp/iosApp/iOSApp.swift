@@ -8,6 +8,7 @@ struct iOSApp: App {
         FirebaseApp.configure()
         MainViewControllerKt.doInitKoin()
         SwiftPushTokenBridgeKt.swiftPushTokenBridge = RealPushTokenBridge()
+        SwiftNotificationPermissionBridgeKt.swiftNotificationPermissionBridge = RealNotificationPermissionBridge()
     }
 
     var body: some Scene {
