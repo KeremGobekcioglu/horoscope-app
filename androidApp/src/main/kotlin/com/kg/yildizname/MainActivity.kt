@@ -14,10 +14,13 @@ import com.kg.yildizname.di.databaseModule
 import com.kg.yildizname.di.domainModule
 import com.kg.yildizname.di.networkModule
 import com.kg.yildizname.di.repositoryModule
+import com.kg.yildizname.platform.AndroidNotificationPermissionRequester
+import com.kg.yildizname.platform.NotificationPermissionRequester
 import kotlinx.coroutines.launch
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.GlobalContext
 import org.koin.core.context.startKoin
+import org.koin.dsl.module
 import org.koin.mp.KoinPlatformTools
 
 class MainActivity : ComponentActivity() {
@@ -26,6 +29,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge(
             statusBarStyle = SystemBarStyle.dark(android.graphics.Color.TRANSPARENT)
         )
+        val permissionRequester = AndroidNotificationPermissionRequester(this)
         if (KoinPlatformTools.defaultContext().getOrNull() == null) {
             startKoin {
                 androidContext(applicationContext)
@@ -36,6 +40,7 @@ class MainActivity : ComponentActivity() {
                     networkModule,
                     repositoryModule,
                     domainModule,
+                    module { single<NotificationPermissionRequester> { permissionRequester } }
                 )
             }
         }
