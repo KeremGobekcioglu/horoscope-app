@@ -2,6 +2,7 @@ import UIKit
 import FirebaseMessaging
 import FirebaseCore
 import UserNotifications
+import Shared
 // Helper property placed OUTSIDE functions to prevent parser issues
 private var isRunningOnSimulator: Bool {
     #if targetEnvironment(simulator)
@@ -42,6 +43,10 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
     func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
         print("FCM Token updated: \(fcmToken ?? "nil")")
         FCMTokenWaiter.shared.receiveToken(fcmToken)
+        // NEW: also push the rotated token into shared Kotlin save logic
+        if let token = fcmToken {
+            TokenRefreshKt.onIosTokenRefreshed(token: token)
+        }
     }
     func application(
         _ application: UIApplication,

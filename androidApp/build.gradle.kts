@@ -14,7 +14,8 @@ kotlin {
 }
 dependencies {
     implementation(projects.shared)
-
+    implementation(project.dependencies.platform(libs.firebase.bom))
+    implementation(libs.firebase.messaging)
     implementation(libs.androidx.activity.compose)
     implementation(libs.koin.android)
     implementation(libs.datastore.preferences.core)

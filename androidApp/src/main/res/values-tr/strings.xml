@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Yıldızname</string>
+    <string name="notification_channel_daily_readings_name">Günlük Yorumlar</string>
+    <string name="notification_channel_daily_readings_description">Günlük burç yorumu bildirimleriniz</string>
+</resources>
