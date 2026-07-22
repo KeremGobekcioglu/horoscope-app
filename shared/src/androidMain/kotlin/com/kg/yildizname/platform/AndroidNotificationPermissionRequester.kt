@@ -27,6 +27,7 @@ class AndroidNotificationPermissionRequester(
     }
 
     override suspend fun requestPermission(): Boolean {
+        // this condition is for api 13.
         if(Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) return true
         val alreadyGranted = ContextCompat.checkSelfPermission(
             activity, POST_NOTIFICATIONS
