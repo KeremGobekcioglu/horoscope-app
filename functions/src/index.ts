@@ -2,7 +2,6 @@ import { onSchedule } from "firebase-functions/v2/scheduler";
 import * as admin from "firebase-admin";
 import { GoogleGenAI } from "@google/genai";
 import { defineSecret } from "firebase-functions/params";
-
 admin.initializeApp();
 
 const GEMINI_API_KEY = defineSecret("GEMINI_API_KEY");
@@ -421,3 +420,6 @@ function pseudoScore(sign: string, date: string, category: string): number {
   for (const ch of str) hash = (Math.imul(31, hash) + ch.charCodeAt(0)) | 0;
   return (Math.abs(hash) % 7) + 4;
 }
+
+
+export { sendInactivityNudges } from "./notifications";
