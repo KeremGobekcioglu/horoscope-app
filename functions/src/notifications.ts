@@ -23,7 +23,7 @@ const ANDROID_CHANNEL_ID = "daily_readings";
 export const sendInactivityNudges = onSchedule(
   {
       // ⚠️ TESTING SCHEDULE — revert to "0 11 * * *" before production.
-    schedule: "*/15 * * * *",
+    schedule: "0 11 * * *",
     timeZone: "Europe/Istanbul",
     timeoutSeconds: 540,
   },
