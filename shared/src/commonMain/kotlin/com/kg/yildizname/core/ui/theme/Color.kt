@@ -13,7 +13,8 @@ val YzInk = Color(0xFFE8E8F0)
 val YzMuted = Color(0xFF8A8AAA)
 val YzTertiary = Color(0xFF5A5A78)
 val YzBorder = Color(0xFF1E2240)
-
+val YzError = Color(0xFFD9534F)
+val YzErrorBorder = Color(0xFF3A1E28) // desaturated navy↔error blend for the reset card outline
 val YzStarWhite = Color(0xFFFFFFFF)
 // Element accent colors — used for element icon tints in compatibility results.
 // Muted/desaturated to sit naturally against YzBg/DarkGray without competing with YzGold or YzViolet.

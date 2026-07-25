@@ -14,10 +14,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
@@ -25,22 +24,34 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.unit.dp
+import compose.icons.FeatherIcons
+import compose.icons.feathericons.Bell
+import compose.icons.feathericons.ChevronRight
+import compose.icons.feathericons.Clock
+import compose.icons.feathericons.Info
+import compose.icons.feathericons.Share2
+import compose.icons.feathericons.Shield
+import compose.icons.feathericons.Trash2
 import com.kg.yildizname.core.data.model.ZodiacSign
 import com.kg.yildizname.core.data.model.compatGridIcon
 import com.kg.yildizname.core.data.model.localizedDateRange
 import com.kg.yildizname.core.data.model.localizedName
 import com.kg.yildizname.core.ui.components.StarFieldBackground
 import com.kg.yildizname.core.ui.theme.YzBorder
+import com.kg.yildizname.core.ui.theme.YzError
+import com.kg.yildizname.core.ui.theme.YzErrorBorder
 import com.kg.yildizname.core.ui.theme.YzGold
 import com.kg.yildizname.core.ui.theme.YzInk
 import com.kg.yildizname.core.ui.theme.YzMuted
 import com.kg.yildizname.core.ui.theme.YzSurface
-import com.kg.yildizname.core.ui.theme.YzTypography // ASSUMPTION: confirm real object/accessor name
+import com.kg.yildizname.core.ui.theme.YzSurfaceAlt
 import com.kg.yildizname.core.ui.utils.yzStatusBarsPadding
-import compose.icons.feathericons.ChevronRight
+import com.kg.yildizname.feature.settings.ui.components.SettingsCard
+import com.kg.yildizname.feature.settings.ui.components.SettingsRow
+import com.kg.yildizname.feature.settings.ui.components.SettingsRowDivider
+import com.kg.yildizname.feature.settings.ui.components.SettingsSectionLabel
 import horoscope.shared.generated.resources.Res
 import horoscope.shared.generated.resources.settings_about
 import horoscope.shared.generated.resources.settings_daily_notification
@@ -73,7 +84,6 @@ fun SettingsScreen(
     onResetDataClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val YzError = Color.Red
     StarFieldBackground(modifier = Modifier.fillMaxSize())
     Box(
         modifier = modifier.fillMaxSize().yzStatusBarsPadding(),
@@ -84,243 +94,200 @@ fun SettingsScreen(
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
                 .padding(horizontal = 16.dp)
-                .padding(bottom = 24.dp),
-            horizontalAlignment = Alignment.Start
+                .padding(bottom = 96.dp), // room for bottom nav
         ) {
-            Spacer(Modifier.height(16.dp))
+            Spacer(Modifier.height(20.dp))
 
-            // Title
             Text(
                 text = stringResource(Res.string.settings_title),
                 color = YzGold,
-                style = YzTypography.headlineLarge
+                // NOTE: apply your YzTypography display/headline token via the theme
+                // wrapper if you have one — kept token-free here to avoid guessing the API.
             )
 
-            Spacer(Modifier.height(20.dp))
+            Spacer(Modifier.height(22.dp))
 
-            // Sign row
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clip(MaterialTheme.shapes.small)
-                    .background(YzSurface)
-                    .clickable(onClick = onChangeSignClick)
-                    .padding(horizontal = 12.dp, vertical = 12.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    val iconPainter: Painter = painterResource(currentSign.compatGridIcon)
-                    Icon(
-                        painter = iconPainter,
-                        contentDescription = null,
-                        modifier = Modifier.size(44.dp),
-                        tint = YzGold
-                    )
-                    Spacer(Modifier.width(16.dp))
-                    Column {
-                        Text(
-                            text = currentSign.localizedName(),
-                            color = YzInk,
-                            style = YzTypography.bodyLarge
-                        )
-                        Text(
-                            text = currentSign.localizedDateRange(),
-                            color = YzMuted,
-                            style = YzTypography.bodySmall
-                        )
-                    }
-                }
-                Icon(
-                    imageVector = compose.icons.FeatherIcons.ChevronRight,
-                    contentDescription = null,
-                    tint = YzMuted,
-                    modifier = Modifier.size(18.dp)
-                )
-            }
-
-            Spacer(Modifier.height(20.dp))
-
-            // Notifications section
-            Text(
-                text = stringResource(Res.string.settings_notifications),
-                color = YzInk,
-                style = YzTypography.labelMedium
-            )
-            Spacer(Modifier.height(8.dp))
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clip(MaterialTheme.shapes.small)
-                    .background(YzSurface)
-                    .padding(horizontal = 12.dp, vertical = 12.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Text(
-                    text = stringResource(Res.string.settings_daily_notification),
-                    color = YzInk,
-                    style = YzTypography.bodyLarge
-                )
-                Switch(
-                    checked = notificationsEnabled,
-                    onCheckedChange = onNotificationsEnabledChange,
-                    colors = SwitchDefaults.colors(
-                        checkedTrackColor = YzGold,
-                        checkedThumbColor = YzSurface
-                    )
-                )
-            }
-
-            if (notificationsEnabled) {
-                Spacer(Modifier.height(8.dp))
+            // ---------- Sign (profile anchor) ----------
+            SettingsCard {
+                val signPainter: Painter = painterResource(currentSign.compatGridIcon)
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .clip(MaterialTheme.shapes.small)
-                        .background(YzSurface)
-                        .clickable(onClick = onTimeClick)
-                        .padding(horizontal = 12.dp, vertical = 12.dp),
+                        .clickable(onClick = onChangeSignClick)
+                        .padding(horizontal = 16.dp, vertical = 14.dp),
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
+                    horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
-                    Text(
-                        text = stringResource(Res.string.settings_notification_time),
-                        color = YzMuted,
-                        style = YzTypography.bodyLarge
-                    )
-                    Text(
-                        text = notificationTime,
-                        color = YzInk,
-                        style = YzTypography.bodyLarge
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Box(
+                            modifier = Modifier
+                                .size(44.dp)
+                                .clip(RoundedCornerShape(999.dp))
+                                .background(YzSurface),
+                            contentAlignment = Alignment.Center,
+                        ) {
+                            Icon(
+                                painter = signPainter,
+                                contentDescription = null,
+                                tint = YzGold,
+                                modifier = Modifier.size(24.dp),
+                            )
+                        }
+                        Spacer(Modifier.width(14.dp))
+                        Column {
+                            Text(text = currentSign.localizedName(), color = YzInk)
+                            Text(text = currentSign.localizedDateRange(), color = YzMuted)
+                        }
+                    }
+                    Icon(
+                        imageVector = FeatherIcons.ChevronRight,
+                        contentDescription = null,
+                        tint = YzMuted,
+                        modifier = Modifier.size(18.dp),
                     )
                 }
             }
 
-            Spacer(Modifier.height(20.dp))
+            Spacer(Modifier.height(24.dp))
 
-            // Language
-            Text(
-                text = stringResource(Res.string.settings_language),
-                color = YzInk,
-                style = YzTypography.labelMedium
-            )
-            Spacer(Modifier.height(8.dp))
+            // ---------- Notifications ----------
+            SettingsSectionLabel(text = stringResource(Res.string.settings_notifications))
+            SettingsCard {
+                SettingsRow(
+                    title = stringResource(Res.string.settings_daily_notification),
+                    leadingIcon = FeatherIcons.Bell,
+                    trailing = {
+                        Switch(
+                            checked = notificationsEnabled,
+                            onCheckedChange = onNotificationsEnabledChange,
+                            colors = SwitchDefaults.colors(
+                                checkedTrackColor = YzGold,
+                                checkedThumbColor = YzSurface,
+                            ),
+                        )
+                    },
+                )
+                if (notificationsEnabled) {
+                    SettingsRowDivider()
+                    SettingsRow(
+                        title = stringResource(Res.string.settings_notification_time),
+                        leadingIcon = FeatherIcons.Clock,
+                        onClick = onTimeClick,
+                        trailing = { Text(text = notificationTime, color = YzGold) },
+                    )
+                }
+            }
+
+            Spacer(Modifier.height(24.dp))
+
+            // ---------- Language ----------
+            SettingsSectionLabel(text = stringResource(Res.string.settings_language))
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clip(MaterialTheme.shapes.small)
-                    .background(YzSurface)
-                    .padding(8.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    .clip(RoundedCornerShape(20.dp))
+                    .background(YzSurfaceAlt)
+                    .padding(6.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
             ) {
-                val trSelected = currentLanguage == "tr"
-                val enSelected = currentLanguage == "en"
-                Column(
-                    modifier = Modifier
-                        .weight(1f)
-                        .clip(MaterialTheme.shapes.small)
-                        .background(if (trSelected) YzGold else YzSurface)
-                        .clickable { onLanguageChange("tr") }
-                        .padding(vertical = 12.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Text(
-                        text = stringResource(Res.string.settings_language_tr),
-                        color = if (trSelected) YzSurface else YzInk,
-                        style = YzTypography.labelMedium
-                    )
-                }
-                Column(
-                    modifier = Modifier
-                        .weight(1f)
-                        .clip(MaterialTheme.shapes.small)
-                        .background(if (enSelected) YzGold else YzSurface)
-                        .clickable { onLanguageChange("en") }
-                        .padding(vertical = 12.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Text(
-                        text = stringResource(Res.string.settings_language_en),
-                        color = if (enSelected) YzSurface else YzInk,
-                        style = YzTypography.labelMedium
-                    )
-                }
-            }
-
-            Spacer(Modifier.height(20.dp))
-
-            // About
-            Text(
-                text = stringResource(Res.string.settings_about),
-                color = YzInk,
-                style = YzTypography.labelMedium
-            )
-            Spacer(Modifier.height(8.dp))   
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clip(MaterialTheme.shapes.small)
-                    .background(YzSurface)
-                    .padding(vertical = 8.dp)
-            ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 8.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Text(
-                        text = stringResource(Res.string.settings_version),
-                        color = YzMuted,
-                        style = YzTypography.bodyLarge
-                    )
-                    Text(text = appVersion, color = YzInk, style = YzTypography.bodyLarge)
-                }
-                HorizontalDivider(color = YzBorder)
-                Row(
-                    modifier = Modifier.fillMaxWidth()
-                        .clickable(onClick = onPrivacyPolicyClick)
-                        .padding(horizontal = 12.dp, vertical = 12.dp)
-                ) {
-                    Text(
-                        text = stringResource(Res.string.settings_privacy_policy),
-                        color = YzInk,
-                        style = YzTypography.bodyLarge
-                    )
-                }
-                HorizontalDivider(color = YzBorder)
-                Row(
-                    modifier = Modifier.fillMaxWidth()
-                        .clickable(onClick = onShareAppClick)
-                        .padding(horizontal = 12.dp, vertical = 12.dp)
-                ) {
-                    Text(
-                        text = stringResource(Res.string.settings_share_app),
-                        color = YzInk,
-                        style = YzTypography.bodyLarge
-                    )
-                }
-            }
-
-            Spacer(Modifier.height(28.dp))
-
-            HorizontalDivider(color = YzBorder)
-            Spacer(Modifier.height(12.dp))
-
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable(onClick = onResetDataClick)
-                    .padding(vertical = 16.dp),
-                horizontalArrangement = Arrangement.Center
-            ) {
-                Text(
-                    text = stringResource(Res.string.settings_reset_data),
-                    color = YzError,
-                    style = YzTypography.bodyLarge
+                LanguageOption(
+                    label = stringResource(Res.string.settings_language_tr),
+                    selected = currentLanguage == "tr",
+                    modifier = Modifier.weight(1f),
+                    onClick = { onLanguageChange("tr") },
+                )
+                LanguageOption(
+                    label = stringResource(Res.string.settings_language_en),
+                    selected = currentLanguage == "en",
+                    modifier = Modifier.weight(1f),
+                    onClick = { onLanguageChange("en") },
                 )
             }
 
-            Spacer(Modifier.height(96.dp)) // leave room for bottom nav
+            Spacer(Modifier.height(24.dp))
+
+            // ---------- About ----------
+            SettingsSectionLabel(text = stringResource(Res.string.settings_about))
+            SettingsCard {
+                SettingsRow(
+                    title = stringResource(Res.string.settings_version),
+                    leadingIcon = FeatherIcons.Info,
+                    iconTint = YzMuted,
+                    trailing = { Text(text = appVersion, color = YzMuted) },
+                )
+                SettingsRowDivider()
+                SettingsRow(
+                    title = stringResource(Res.string.settings_privacy_policy),
+                    leadingIcon = FeatherIcons.Shield,
+                    iconTint = YzMuted,
+                    onClick = onPrivacyPolicyClick,
+                    trailing = {
+                        Icon(
+                            imageVector = FeatherIcons.ChevronRight,
+                            contentDescription = null,
+                            tint = YzMuted,
+                            modifier = Modifier.size(18.dp),
+                        )
+                    },
+                )
+                SettingsRowDivider()
+                SettingsRow(
+                    title = stringResource(Res.string.settings_share_app),
+                    leadingIcon = FeatherIcons.Share2,
+                    iconTint = YzMuted,
+                    onClick = onShareAppClick,
+                    trailing = {
+                        Icon(
+                            imageVector = FeatherIcons.ChevronRight,
+                            contentDescription = null,
+                            tint = YzMuted,
+                            modifier = Modifier.size(18.dp),
+                        )
+                    },
+                )
+            }
+
+            Spacer(Modifier.height(24.dp))
+
+            // ---------- Reset (destructive) ----------
+            SettingsCard(borderColor = YzErrorBorder) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable(onClick = onResetDataClick)
+                        .padding(15.dp),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Icon(
+                        imageVector = FeatherIcons.Trash2,
+                        contentDescription = null,
+                        tint = YzError,
+                        modifier = Modifier.size(19.dp),
+                    )
+                    Spacer(Modifier.width(8.dp))
+                    Text(text = stringResource(Res.string.settings_reset_data), color = YzError)
+                }
+            }
         }
+    }
+}
+
+@Composable
+private fun LanguageOption(
+    label: String,
+    selected: Boolean,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit,
+) {
+    Box(
+        modifier = modifier
+            .clip(RoundedCornerShape(12.dp))
+            .background(if (selected) YzGold else YzSurfaceAlt)
+            .clickable(onClick = onClick)
+            .padding(vertical = 10.dp),
+        contentAlignment = Alignment.Center,
+    ) {
+        Text(text = label, color = if (selected) YzSurface else YzInk)
     }
 }
