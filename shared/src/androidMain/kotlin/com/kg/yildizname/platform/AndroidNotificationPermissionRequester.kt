@@ -39,4 +39,23 @@ class AndroidNotificationPermissionRequester(
             launcher.launch(POST_NOTIFICATIONS)
         }
     }
+
+    override suspend fun currentStatus(): PermissionStatus {
+        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) return PermissionStatus.GRANTED
+
+        val granted = ContextCompat.checkSelfPermission(
+            activity, POST_NOTIFICATIONS
+        ) == PackageManager.PERMISSION_GRANTED
+
+        if(granted) return PermissionStatus.GRANTED
+        // shouldShowRequestPermissionRationale returns true only if the user has
+        // denied once but the system will still show the dialog again. It returns
+        // false both when never asked AND when permanently denied — Android gives
+        // no direct way to tell those apart, so this is the best signal available.
+
+        val canAskAgain = activity.shouldShowRequestPermissionRationale(
+            android.Manifest.permission.POST_NOTIFICATIONS
+        )
+        return if(canAskAgain) PermissionStatus.DENIED else PermissionStatus.NOT_DETERMINED
+    }
 }

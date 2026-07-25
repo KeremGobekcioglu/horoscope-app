@@ -16,6 +16,7 @@ import com.kg.yildizname.di.networkModule
 import com.kg.yildizname.di.repositoryModule
 import com.kg.yildizname.platform.AndroidNotificationPermissionRequester
 import com.kg.yildizname.platform.NotificationPermissionRequester
+import com.kg.yildizname.platform.NotificationSettingsOpener
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
@@ -29,6 +30,7 @@ class MainActivity : ComponentActivity() {
             statusBarStyle = SystemBarStyle.dark(android.graphics.Color.TRANSPARENT)
         )
         val permissionRequester = AndroidNotificationPermissionRequester(this)
+        val settingsIntent = AndroidNotificationsSettingsOpener(this)
         if (KoinPlatformTools.defaultContext().getOrNull() == null) {
             startKoin {
                 androidContext(applicationContext)
@@ -39,7 +41,8 @@ class MainActivity : ComponentActivity() {
                     networkModule,
                     repositoryModule,
                     domainModule,
-                    module { single<NotificationPermissionRequester> { permissionRequester } }
+                    module { single<NotificationPermissionRequester> { permissionRequester } },
+                    module { single<NotificationSettingsOpener> { settingsIntent } }
                 )
             }
         }

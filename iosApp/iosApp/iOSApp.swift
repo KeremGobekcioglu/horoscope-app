@@ -10,6 +10,7 @@ struct iOSApp: App {
         MainViewControllerKt.doInitKoin()
         SwiftPushTokenBridgeKt.swiftPushTokenBridge = RealPushTokenBridge()
         SwiftNotificationPermissionBridgeKt.swiftNotificationPermissionBridge = RealNotificationPermissionBridge()
+        SwiftSettingsOpenerBridgeKt.swiftSettingsOpenerBridge = RealSettingsOpenerBridge()
     }
 
     var body: some Scene {

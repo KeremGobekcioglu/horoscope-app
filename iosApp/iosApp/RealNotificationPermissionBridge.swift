@@ -14,4 +14,19 @@ class RealNotificationPermissionBridge: SwiftNotificationPermissionBridge {
 
         return KotlinBoolean(bool: granted)
     }
+
+    // RealNotificationPermissionBridge.swift
+    func currentStatus() async throws -> KotlinInt {
+        let settings = await UNUserNotificationCenter.current().notificationSettings()
+        switch settings.authorizationStatus {
+        case .authorized, .provisional, .ephemeral:
+            return 2 // GRANTED
+        case .denied:
+            return 1 // DENIED
+        case .notDetermined:
+            return 0 // NOT_DETERMINED
+        @unknown default:
+            return 0
+        }
+    }
 }
