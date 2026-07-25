@@ -16,20 +16,20 @@ import com.kg.yildizname.feature.settings.ui.SettingsScreen
 fun SettingsScreenPreview() {
     YzTheme {
         Box(modifier = Modifier.fillMaxSize().background(YzBg)) {
-            SettingsScreen(
-                currentSign = ZodiacSign.ARIES,
-                notificationsEnabled = true,
-                notificationTime = "09:00",
-                currentLanguage = "tr",
-                appVersion = "1.0.0",
-                onChangeSignClick = {},
-                onNotificationsEnabledChange = {},
-                onTimeClick = {},
-                onLanguageChange = {},
-                onPrivacyPolicyClick = {},
-                onShareAppClick = {},
-                onResetDataClick = {},
-            )
+//            SettingsScreen(
+//                currentSign = ZodiacSign.ARIES,
+//                notificationsEnabled = true,
+//                notificationTime = "09:00",
+//                currentLanguage = "tr",
+//                appVersion = "1.0.0",
+//                onChangeSignClick = {},
+//                onNotificationsEnabledChange = {},
+//                onTimeClick = {},
+//                onLanguageChange = {},
+//                onPrivacyPolicyClick = {},
+//                onShareAppClick = {},
+//                onResetDataClick = {},
+//            )
         }
     }
 }

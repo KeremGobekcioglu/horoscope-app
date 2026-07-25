@@ -11,6 +11,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.ui.graphics.Color
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -46,6 +47,8 @@ import com.kg.yildizname.feature.readingDetail.ui.ReadingDetailScreen
 import com.kg.yildizname.feature.readingDetail.ui.ReadingDetailUiState
 import com.kg.yildizname.feature.readingDetail.ui.ReadingDetailViewModel
 import com.kg.yildizname.feature.settings.ui.SettingsScreen
+import com.kg.yildizname.feature.settings.ui.SettingsState
+import com.kg.yildizname.feature.settings.ui.SettingsViewModel
 import com.kg.yildizname.feature.share.ui.CompatibilityShareCardRequest
 import com.kg.yildizname.feature.share.ui.ShareCardRequest
 import com.kg.yildizname.feature.share.ui.ShareFlowHost
@@ -66,6 +69,7 @@ import horoscope.shared.generated.resources.nav_compatibility
 import horoscope.shared.generated.resources.nav_home
 import horoscope.shared.generated.resources.nav_settings
 import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
 
@@ -398,20 +402,24 @@ fun YildiznameNavGraph(navController: NavHostController) {
                 }
             }
             composable<Settings> {
+                val viewModel : SettingsViewModel = koinViewModel()
+                val uiState by viewModel.state.collectAsStateWithLifecycle()
                 // Stateless SettingsScreen currently wired with placeholder state and stub callbacks.
                 SettingsScreen(
                     currentSign = com.kg.yildizname.core.data.model.ZodiacSign.SCORPIO,
-                    notificationsEnabled = false,
-                    notificationTime = "09:00",
+                    notificationsEnabled = uiState.notificationsEnabled ?: true,
+                    notificationTime = "11:00",
                     currentLanguage = "tr",
                     appVersion = "0.0.0",
                     onChangeSignClick = { /* navigate to sign picker in future task */ },
-                    onNotificationsEnabledChange = { /* TODO: persist setting */ },
+                    onNotificationSwitchTapped = viewModel::onNotificationsSwitchTapped,
                     onTimeClick = { /* TODO: open time picker */ },
                     onLanguageChange = { /* TODO: persist language */ },
                     onPrivacyPolicyClick = { /* TODO: open privacy url */ },
                     onShareAppClick = { /* TODO: open share sheet */ },
-                    onResetDataClick = { /* TODO: confirm & reset data */ }
+                    onResetDataClick = { /* TODO: confirm & reset data */ },
+                    state = uiState,
+                    refreshNotificationStatus = viewModel::refreshNotificationStatus
                 )
             }
         }

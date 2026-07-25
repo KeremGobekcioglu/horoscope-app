@@ -6,6 +6,7 @@ import com.kg.yildizname.feature.compatability.ui.CompatibilityResult.Compatibil
 import com.kg.yildizname.feature.home.ui.HomeViewModel
 import com.kg.yildizname.feature.onboarding.ui.OnboardingViewModel
 import com.kg.yildizname.feature.readingDetail.ui.ReadingDetailViewModel
+import com.kg.yildizname.feature.settings.ui.SettingsViewModel
 import com.kg.yildizname.feature.splash.ui.SplashViewModel
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModel
@@ -28,4 +29,5 @@ val appModule: Module = module {
     viewModel { (signKey: String, periodKey: String, date: String?) ->
         ReadingDetailViewModel(signKey, periodKey, date, get())
     }
+    viewModel { SettingsViewModel(get(),get()) }
 }
