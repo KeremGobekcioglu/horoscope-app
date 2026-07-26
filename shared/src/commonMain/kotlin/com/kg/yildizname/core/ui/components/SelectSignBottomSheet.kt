@@ -1,4 +1,4 @@
-package com.kg.yildizname.feature.compatability.ui.components
+package com.kg.yildizname.core.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -28,7 +28,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.kg.yildizname.core.data.model.ZodiacSign
@@ -42,22 +41,10 @@ import com.kg.yildizname.core.ui.theme.YzInk
 import com.kg.yildizname.core.ui.theme.YzOnSurface
 import com.kg.yildizname.core.ui.theme.YzSurface
 import com.kg.yildizname.core.ui.utils.yzNavigationBarsPadding
+import com.kg.yildizname.feature.compatability.ui.components.AnalyzeButton
 import horoscope.shared.generated.resources.Res
-import horoscope.shared.generated.resources.aquarius_svgrepo_com
-import horoscope.shared.generated.resources.aries_svgrepo_com
-import horoscope.shared.generated.resources.cancer_svgrepo_com
-import horoscope.shared.generated.resources.capricorn_svgrepo_com
 import horoscope.shared.generated.resources.compat_pick_sign_placeholder
 import horoscope.shared.generated.resources.compat_select_sign
-import horoscope.shared.generated.resources.gemini_svgrepo_com
-import horoscope.shared.generated.resources.leo_svgrepo_com
-import horoscope.shared.generated.resources.libra_svgrepo_com
-import horoscope.shared.generated.resources.pisces_svgrepo_com
-import horoscope.shared.generated.resources.sagittarius_svgrepo_com
-import horoscope.shared.generated.resources.scorpio_svgrepo_com
-import horoscope.shared.generated.resources.taurus_svgrepo_com
-import horoscope.shared.generated.resources.virgo_svgrepo_com
-import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
