@@ -100,7 +100,7 @@ enum class ZodiacSign(
         // or unrecognized key is silently mislabeled rather than surfaced as an error.
         fun fromKey(key: String): ZodiacSign {
             val lower = key.lowercase()
-            return entries.firstOrNull { it.apiKey == lower || it.turkishKey == lower } ?: SCORPIO
+            return entries.first { it.apiKey == lower || it.turkishKey == lower }
         }
     }
 }

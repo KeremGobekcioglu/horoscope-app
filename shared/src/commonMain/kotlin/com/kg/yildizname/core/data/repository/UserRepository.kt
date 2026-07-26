@@ -20,10 +20,10 @@ class UserRepository(
     suspend fun setOnboarded() =
         dataSource.markOnboardingComplete()
 
-    fun getSignFlow() : Flow<ZodiacSign?>
+    fun getSignFlow() : Flow<ZodiacSign>
     {
         return dataSource.getSignFlow().map {
-            KEY -> KEY?.let { stored -> ZodiacSign.entries.firstOrNull() { it.apiKey == stored} }
+            KEY -> KEY.let { stored -> ZodiacSign.entries.first() { it.apiKey == stored} }
         }
     }
 }
