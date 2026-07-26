@@ -317,13 +317,17 @@ fun SettingsScreen(
             AlertDialog(
                 onDismissRequest = onDismissRestartDialog,
                 containerColor = YzSurface,
+                shape = RoundedCornerShape(20.dp),
                 titleContentColor = YzGold,
                 textContentColor = YzMuted,
                 title = { Text(text = stringResource(Res.string.settings_restart_title)) },
                 text = { Text(text = stringResource(Res.string.settings_restart_message)) },
                 confirmButton = {
                     TextButton(onClick = onDismissRestartDialog) {
-                        Text(text = stringResource(Res.string.settings_restart_ok), color = YzGold)
+                        Text(
+                            text = stringResource(Res.string.settings_restart_ok), color = YzGold,
+                            modifier = Modifier.fillMaxWidth()
+                        )
                     }
                 },
             )
