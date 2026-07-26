@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kg.yildizname.core.data.model.ZodiacSign
 import com.kg.yildizname.core.data.repository.UserRepository
+import com.kg.yildizname.core.util.applyLanguage
 import com.kg.yildizname.platform.NotificationPermissionRequester
 import com.kg.yildizname.platform.NotificationSettingsOpener
 import com.kg.yildizname.platform.PermissionStatus
@@ -30,13 +31,28 @@ class SettingsViewModel(
             val sign = userRepository.getSavedSign() ?: ZodiacSign.SCORPIO
             println("sign = $sign")
             val granted = notificationPermissionRequester.currentStatus() == PermissionStatus.GRANTED
+            val language = userRepository.getLanguage() ?: "tr"
             _state.update {
                 it.copy(
                     sign = sign,
-                    notificationsEnabled = granted
+                    notificationsEnabled = granted,
+                    currentLanguage = language
                 )
             }
         }
+    }
+
+    fun onLanguageChange(lang: String) {
+        if (lang == _state.value.currentLanguage) return
+        viewModelScope.launch {
+            userRepository.saveLanguage(lang)
+            applyLanguage(lang)
+            _state.update { it.copy(currentLanguage = lang, showRestartDialog = true) }
+        }
+    }
+
+    fun dismissRestartDialog() {
+        _state.update { it.copy(showRestartDialog = false) }
     }
 
     fun updateSign(sign: ZodiacSign)

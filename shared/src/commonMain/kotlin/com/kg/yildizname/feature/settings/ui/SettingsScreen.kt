@@ -16,10 +16,12 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
@@ -71,6 +73,9 @@ import horoscope.shared.generated.resources.settings_notification_time
 import horoscope.shared.generated.resources.settings_notifications
 import horoscope.shared.generated.resources.settings_privacy_policy
 import horoscope.shared.generated.resources.settings_reset_data
+import horoscope.shared.generated.resources.settings_restart_message
+import horoscope.shared.generated.resources.settings_restart_ok
+import horoscope.shared.generated.resources.settings_restart_title
 import horoscope.shared.generated.resources.settings_share_app
 import horoscope.shared.generated.resources.settings_title
 import horoscope.shared.generated.resources.settings_version
@@ -90,6 +95,7 @@ fun SettingsScreen(
     onPrivacyPolicyClick: () -> Unit,
     onShareAppClick: () -> Unit,
     onResetDataClick: () -> Unit,
+    onDismissRestartDialog: () -> Unit,
     modifier: Modifier = Modifier,
     refreshNotificationStatus: () -> Unit,
     state: SettingsState
@@ -305,6 +311,25 @@ fun SettingsScreen(
                     showSignSheet = false
                 },
                 onDismiss = { showSignSheet = false },
+            )
+        }
+        if (state.showRestartDialog) {
+            AlertDialog(
+                onDismissRequest = onDismissRestartDialog,
+                containerColor = YzSurface,
+                shape = RoundedCornerShape(20.dp),
+                titleContentColor = YzGold,
+                textContentColor = YzMuted,
+                title = { Text(text = stringResource(Res.string.settings_restart_title)) },
+                text = { Text(text = stringResource(Res.string.settings_restart_message)) },
+                confirmButton = {
+                    TextButton(onClick = onDismissRestartDialog) {
+                        Text(
+                            text = stringResource(Res.string.settings_restart_ok), color = YzGold,
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                    }
+                },
             )
         }
     }

@@ -4,5 +4,7 @@ import com.kg.yildizname.core.data.model.ZodiacSign
 
 data class SettingsState(
     val notificationsEnabled: Boolean? = null,
-    val sign: ZodiacSign = ZodiacSign.SCORPIO
+    val sign: ZodiacSign = ZodiacSign.SCORPIO,
+    val currentLanguage: String = "tr",
+    val showRestartDialog: Boolean = false
 )

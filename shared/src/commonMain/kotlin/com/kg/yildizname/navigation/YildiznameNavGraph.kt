@@ -408,15 +408,16 @@ fun YildiznameNavGraph(navController: NavHostController) {
                 SettingsScreen(
                     notificationsEnabled = uiState.notificationsEnabled ?: true,
                     notificationTime = "11:00",
-                    currentLanguage = "tr",
+                    currentLanguage = uiState.currentLanguage,
                     appVersion = "0.0.0",
                     onChangeSignClick = viewModel::updateSign,
                     onNotificationSwitchTapped = viewModel::onNotificationsSwitchTapped,
                     onTimeClick = { /* TODO: open time picker */ },
-                    onLanguageChange = { /* TODO: persist language */ },
+                    onLanguageChange = viewModel::onLanguageChange,
                     onPrivacyPolicyClick = { /* TODO: open privacy url */ },
                     onShareAppClick = { /* TODO: open share sheet */ },
                     onResetDataClick = { /* TODO: confirm & reset data */ },
+                    onDismissRestartDialog = viewModel::dismissRestartDialog,
                     state = uiState,
                     refreshNotificationStatus = viewModel::refreshNotificationStatus
                 )
