@@ -23,7 +23,7 @@ class HomeViewModel(
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
 
     private var lastFetchedDate: String? = null
-
+    private var lastFetchedSign: ZodiacSign? = null
     private val foregroundObserver = ForegroundObserver { onForeground() }
 
     init {
@@ -40,19 +40,22 @@ class HomeViewModel(
         fetchIfNeeded()
     }
 
-    private fun fetchIfNeeded() {
+    fun fetchIfNeeded() {
         val today = DateUtils.today()
-        if (lastFetchedDate == today) return
-        lastFetchedDate = today
         viewModelScope.launch {
+            val sign = userRepository.getSavedSign() ?: ZodiacSign.SCORPIO
+            println("home screen sign = $sign")
+            if (lastFetchedDate == today && lastFetchedSign == sign) return@launch
+            lastFetchedDate = today
+            lastFetchedSign = sign
             _uiState.value = HomeUiState.Loading
             try {
-                val sign = userRepository.getSavedSign() ?: ZodiacSign.SCORPIO
+
                 getDailyReading(sign)
                     .catch { e -> _uiState.value = HomeUiState.Error(e.message ?: "error") }
                     .collect { reading ->
                         _uiState.value = HomeUiState.Success(
-                            reading    = reading,
+                            reading = reading,
                             todayLabel = DateFormatter.fullDate(DateUtils.todayLocalDate()),
                         )
                     }

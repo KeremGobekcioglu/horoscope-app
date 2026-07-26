@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
@@ -55,6 +56,7 @@ fun HomeScreen(
     onNotificationClick: () -> Unit,
     onRetryClick: () -> Unit,
     modifier: Modifier = Modifier,
+    fetch: () -> Unit
 ) {
     val windowWidth = rememberWindowWidth()
 
@@ -64,7 +66,10 @@ fun HomeScreen(
         YzWindowWidth.Medium   -> 520.dp
         YzWindowWidth.Expanded -> 480.dp
     }
-
+    LaunchedEffect(Unit)
+    {
+        fetch()
+    }
     Box(
         modifier = modifier.fillMaxSize(),
         contentAlignment = Alignment.TopCenter

@@ -290,6 +290,7 @@ fun YildiznameNavGraph(navController: NavHostController) {
                     },
                     onNotificationClick = { /* future: notification settings screen */ },
                     onRetryClick        = { vm.retry() },
+                    fetch = vm::fetchIfNeeded
                 )
             }
 
@@ -406,12 +407,11 @@ fun YildiznameNavGraph(navController: NavHostController) {
                 val uiState by viewModel.state.collectAsStateWithLifecycle()
                 // Stateless SettingsScreen currently wired with placeholder state and stub callbacks.
                 SettingsScreen(
-                    currentSign = com.kg.yildizname.core.data.model.ZodiacSign.SCORPIO,
                     notificationsEnabled = uiState.notificationsEnabled ?: true,
                     notificationTime = "11:00",
                     currentLanguage = "tr",
                     appVersion = "0.0.0",
-                    onChangeSignClick = { /* navigate to sign picker in future task */ },
+                    onChangeSignClick = viewModel::updateSign,
                     onNotificationSwitchTapped = viewModel::onNotificationsSwitchTapped,
                     onTimeClick = { /* TODO: open time picker */ },
                     onLanguageChange = { /* TODO: persist language */ },
