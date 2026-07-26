@@ -6,7 +6,10 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
+import com.kg.yildizname.core.data.model.ZodiacSign
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 
 class UserPreferencesDataSource(
     private val dataStore: DataStore<Preferences>,
@@ -26,6 +29,13 @@ class UserPreferencesDataSource(
 
     suspend fun getZodiacSign(): String? {
         return dataStore.data.first()[zodiacSignKey]
+    }
+
+    fun getSignFlow() : Flow<String?>
+    {
+        return dataStore.data.map {
+            it[zodiacSignKey]
+        }
     }
 
     suspend fun markOnboardingComplete() {
