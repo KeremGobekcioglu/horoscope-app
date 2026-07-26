@@ -55,9 +55,8 @@ fun HomeScreen(
     onShareCardClick: () -> Unit,
     onNotificationClick: () -> Unit,
     onRetryClick: () -> Unit,
-    modifier: Modifier = Modifier,
-    fetch: () -> Unit
-) {
+    modifier: Modifier = Modifier
+    ) {
     val windowWidth = rememberWindowWidth()
 
     // Constrain content width on tablets / large screens
@@ -66,10 +65,10 @@ fun HomeScreen(
         YzWindowWidth.Medium   -> 520.dp
         YzWindowWidth.Expanded -> 480.dp
     }
-    LaunchedEffect(Unit)
-    {
-        fetch()
-    }
+//    LaunchedEffect(Unit)
+//    {
+//        fetch()
+//    }
     Box(
         modifier = modifier.fillMaxSize(),
         contentAlignment = Alignment.TopCenter

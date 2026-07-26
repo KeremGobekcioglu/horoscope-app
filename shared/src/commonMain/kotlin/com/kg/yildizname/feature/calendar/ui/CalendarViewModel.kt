@@ -19,6 +19,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.datetime.DatePeriod
 import kotlinx.datetime.LocalDate
@@ -41,9 +45,32 @@ class CalendarViewModel(
     private var monthlyJob: Job? = null
     init {
         println("CalendarViewModel: init, loading monthly reading for ${DateUtils.todayLocalDate()}")
-        loadMonthlyReading(DateUtils.todayLocalDate())
+        //loadMonthlyReading(DateUtils.todayLocalDate())
+        fetchWhenSignChange()
     }
+    private fun fetchWhenSignChange()
+    {
 
+        userRepository.getSignFlow()
+            .map { it ?: ZodiacSign.SCORPIO }
+            .distinctUntilChanged()
+            .onEach {
+                val current = _uiState.value as? CalendarUiState.Success
+                val month = current?.date ?: DateUtils.todayLocalDate()
+
+                _uiState.value = current?.copy(
+                    monthlyReading = null,
+                    dailyReading = null
+                ) ?: CalendarUiState.Loading
+
+                loadMonthlyReading(month)
+
+                current?.selectedDay
+                    ?.takeIf { it.isAvailable }
+                    ?.let { loadDailyReading(resolveDate(it,month)) }
+            }
+            .launchIn(viewModelScope)
+    }
     private fun loadMonthlyReading(month: LocalDate)
     {
         monthlyJob?.cancel()
@@ -72,7 +99,6 @@ class CalendarViewModel(
                         _uiState.value = base?.copy(
                             date = month,
                             monthlyReading = reading,
-                            selectedTab = PageTab.MONTHLY
                         ) ?: CalendarUiState.Success(
                             date = month,
                             selectedDay = null,

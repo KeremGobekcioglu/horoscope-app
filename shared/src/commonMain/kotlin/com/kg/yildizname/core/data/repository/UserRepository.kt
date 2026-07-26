@@ -23,7 +23,7 @@ class UserRepository(
     fun getSignFlow() : Flow<ZodiacSign?>
     {
         return dataSource.getSignFlow().map {
-            name -> name?.let { runCatching { ZodiacSign.valueOf(it) }.getOrNull() }
+            KEY -> KEY?.let { stored -> ZodiacSign.entries.firstOrNull() { it.apiKey == stored} }
         }
     }
 }

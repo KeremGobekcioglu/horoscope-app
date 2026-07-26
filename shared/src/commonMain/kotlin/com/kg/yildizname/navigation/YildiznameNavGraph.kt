@@ -289,8 +289,7 @@ fun YildiznameNavGraph(navController: NavHostController) {
                         }
                     },
                     onNotificationClick = { /* future: notification settings screen */ },
-                    onRetryClick        = { vm.retry() },
-                    fetch = vm::fetchIfNeeded
+                    onRetryClick        = { vm.retry() }
                 )
             }
 
