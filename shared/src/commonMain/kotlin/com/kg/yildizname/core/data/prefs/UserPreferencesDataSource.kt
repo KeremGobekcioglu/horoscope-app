@@ -23,6 +23,7 @@ class UserPreferencesDataSource(
     private val KEY_BIRTH_CITY        = stringPreferencesKey("birth_city")
     private val KEY_GENDER            = stringPreferencesKey("gender")
 
+    private val KEY_LANGUAGE = stringPreferencesKey("language_key")
     suspend fun saveZodiacSign(key: String) {
         dataStore.edit { it[zodiacSignKey] = key }
     }
@@ -30,7 +31,12 @@ class UserPreferencesDataSource(
     suspend fun getZodiacSign(): String? {
         return dataStore.data.first()[zodiacSignKey]
     }
+    suspend fun saveLanguage(lang: String) {
+        dataStore.edit { it[KEY_LANGUAGE] = lang }
+    }
 
+    suspend fun getLanguage(): String? =
+        dataStore.data.first()[KEY_LANGUAGE]
     fun getSignFlow() : Flow<String?>
     {
         return dataStore.data.map {

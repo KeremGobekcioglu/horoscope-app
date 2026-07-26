@@ -142,6 +142,9 @@
     <string name="settings_privacy_policy">Gizlilik Politikası</string>
     <string name="settings_share_app">Uygulamayı paylaş</string>
     <string name="settings_reset_data">Uygulama verilerini sıfırla</string>
+    <string name="settings_restart_title">Yeniden Başlat</string>
+    <string name="settings_restart_message">Dil değişikliği, uygulamayı yeniden başlattığınızda geçerli olacaktır.</string>
+    <string name="settings_restart_ok">Tamam</string>
 
     <string name="compat_detailed_analysis_button">Detaylı Analiz</string>
     <string name="compat_score_love">Aşk</string>

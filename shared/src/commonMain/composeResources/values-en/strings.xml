@@ -170,6 +170,9 @@
     <string name="settings_privacy_policy">Privacy Policy</string>
     <string name="settings_share_app">Share app</string>
     <string name="settings_reset_data">Reset App Data</string>
+    <string name="settings_restart_title">Restart Required</string>
+    <string name="settings_restart_message">The language change will take effect the next time you restart the app.</string>
+    <string name="settings_restart_ok">OK</string>
 
     <!-- Common -->
     <string name="btn_continue">Continue</string>

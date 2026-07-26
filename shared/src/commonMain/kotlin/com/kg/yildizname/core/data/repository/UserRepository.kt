@@ -20,6 +20,12 @@ class UserRepository(
     suspend fun setOnboarded() =
         dataSource.markOnboardingComplete()
 
+    suspend fun saveLanguage(lang: String) =
+        dataSource.saveLanguage(lang)
+
+    suspend fun getLanguage(): String? =
+        dataSource.getLanguage()
+
     fun getSignFlow() : Flow<ZodiacSign?>
     {
         return dataSource.getSignFlow().map {
