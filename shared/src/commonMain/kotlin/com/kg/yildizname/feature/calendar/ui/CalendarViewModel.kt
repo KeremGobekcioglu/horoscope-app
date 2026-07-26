@@ -101,7 +101,7 @@ class CalendarViewModel(
             if(existing == null)
                 _uiState.value = CalendarUiState.Loading
             try {
-                val resolvedSign = sign ?: (userRepository.getSavedSign() ?: ZodiacSign.SCORPIO).also { sign = it }
+                val resolvedSign = userRepository.getSavedSign() ?: ZodiacSign.SCORPIO.also { sign = it }
                 horoscopeRepository.getReading(resolvedSign, period = PeriodType.DAILY,date = dailyKey(date))
                     .catch {
                         if(existing == null)
