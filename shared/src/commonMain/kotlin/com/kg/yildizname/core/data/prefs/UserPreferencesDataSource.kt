@@ -37,10 +37,11 @@ class UserPreferencesDataSource(
 
     suspend fun getLanguage(): String? =
         dataStore.data.first()[KEY_LANGUAGE]
-    fun getSignFlow() : Flow<String?>
+    
+    fun getSignFlow() : Flow<String>
     {
         return dataStore.data.map {
-            it[zodiacSignKey]
+            it[zodiacSignKey] as String
         }
     }
 
