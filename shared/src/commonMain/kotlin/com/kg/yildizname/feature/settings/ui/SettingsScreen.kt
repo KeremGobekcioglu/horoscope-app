@@ -22,6 +22,10 @@ import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -42,6 +46,7 @@ import com.kg.yildizname.core.data.model.ZodiacSign
 import com.kg.yildizname.core.data.model.compatGridIcon
 import com.kg.yildizname.core.data.model.localizedDateRange
 import com.kg.yildizname.core.data.model.localizedName
+import com.kg.yildizname.core.ui.components.SelectSignBottomSheet
 import com.kg.yildizname.core.ui.components.StarFieldBackground
 import com.kg.yildizname.core.ui.theme.YzBorder
 import com.kg.yildizname.core.ui.theme.YzError
@@ -74,12 +79,11 @@ import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun SettingsScreen(
-    currentSign: ZodiacSign,
     notificationsEnabled: Boolean,
     notificationTime: String,
     currentLanguage: String,
     appVersion: String,
-    onChangeSignClick: () -> Unit,
+    onChangeSignClick: (ZodiacSign) -> Unit,
     onNotificationSwitchTapped: () -> Unit,
     onTimeClick: () -> Unit,
     onLanguageChange: (String) -> Unit,
@@ -90,6 +94,8 @@ fun SettingsScreen(
     refreshNotificationStatus: () -> Unit,
     state: SettingsState
 ) {
+
+    var showSignSheet by remember { mutableStateOf(false) }
 
     val lifecycleOwner = LocalLifecycleOwner.current
     DisposableEffect(lifecycleOwner)
@@ -130,11 +136,12 @@ fun SettingsScreen(
 
             // ---------- Sign (profile anchor) ----------
             SettingsCard {
-                val signPainter: Painter = painterResource(currentSign.compatGridIcon)
+                val sign = state.sign
+                val signPainter: Painter = painterResource(sign.compatGridIcon)
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .clickable(onClick = onChangeSignClick)
+                        .clickable(onClick = { showSignSheet = true })
                         .padding(horizontal = 16.dp, vertical = 14.dp),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween,
@@ -156,8 +163,8 @@ fun SettingsScreen(
                         }
                         Spacer(Modifier.width(14.dp))
                         Column {
-                            Text(text = currentSign.localizedName(), color = YzInk)
-                            Text(text = currentSign.localizedDateRange(), color = YzMuted)
+                            Text(text = sign.localizedName(), color = YzInk)
+                            Text(text = sign.localizedDateRange(), color = YzMuted)
                         }
                     }
                     Icon(
@@ -290,6 +297,15 @@ fun SettingsScreen(
                     Text(text = stringResource(Res.string.settings_reset_data), color = YzError)
                 }
             }
+        }
+        if (showSignSheet) {
+            SelectSignBottomSheet(
+                onSignConfirmed = { sign ->
+                    onChangeSignClick(sign)
+                    showSignSheet = false
+                },
+                onDismiss = { showSignSheet = false },
+            )
         }
     }
 }
