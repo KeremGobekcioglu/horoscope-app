@@ -145,6 +145,10 @@
     <string name="settings_restart_title">Yeniden Başlat</string>
     <string name="settings_restart_message">Dil değişikliği, uygulamayı yeniden başlattığınızda geçerli olacaktır.</string>
     <string name="settings_restart_ok">Tamam</string>
+    <string name="settings_reset_dialog_title">Uygulama Verilerini Sıfırla</string>
+    <string name="settings_reset_dialog_message">Bu işlem geri alınamaz. Tüm yorumlarınız ve tercihleriniz kalıcı olarak silinecek.</string>
+    <string name="settings_reset_dialog_confirm">Sıfırla</string>
+    <string name="settings_reset_dialog_cancel">Vazgeç</string>
 
     <string name="compat_detailed_analysis_button">Detaylı Analiz</string>
     <string name="compat_score_love">Aşk</string>

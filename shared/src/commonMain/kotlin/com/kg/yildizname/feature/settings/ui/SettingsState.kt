@@ -6,5 +6,8 @@ data class SettingsState(
     val notificationsEnabled: Boolean? = null,
     val sign: ZodiacSign = ZodiacSign.SCORPIO,
     val currentLanguage: String = "tr",
-    val showRestartDialog: Boolean = false
+    val showRestartDialog: Boolean = false,
+    val showResetDialog: Boolean = false,
+    val navigateToOnboarding: Boolean = false,
+    val error: String? = null,
 )

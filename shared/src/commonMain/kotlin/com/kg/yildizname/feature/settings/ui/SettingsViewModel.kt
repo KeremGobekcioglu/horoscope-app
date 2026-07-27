@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kg.yildizname.core.data.model.ZodiacSign
 import com.kg.yildizname.core.data.repository.UserRepository
+import com.kg.yildizname.core.domain.usecase.ResetAppDataUseCase
 import com.kg.yildizname.core.util.applyLanguage
 import com.kg.yildizname.platform.NotificationPermissionRequester
 import com.kg.yildizname.platform.NotificationSettingsOpener
@@ -17,7 +18,8 @@ import kotlinx.coroutines.launch
 class SettingsViewModel(
     private val notificationPermissionRequester: NotificationPermissionRequester,
     private val settingsOpener: NotificationSettingsOpener,
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val resetAppDataUseCase: ResetAppDataUseCase,
 ) : ViewModel()
 {
     private val _state = MutableStateFlow(SettingsState())
@@ -53,6 +55,44 @@ class SettingsViewModel(
 
     fun dismissRestartDialog() {
         _state.update { it.copy(showRestartDialog = false) }
+    }
+
+    fun onResetDataClick() {
+        _state.update { it.copy(showResetDialog = true) }
+    }
+
+    fun dismissResetDialog() {
+        _state.update { it.copy(showResetDialog = false) }
+    }
+
+    // Only the server-side cleanup (FCM token, users/{uid} doc, anonymous auth
+    // user) runs here — it's safe on this ViewModel's own viewModelScope since
+    // it never touches DataStore/Room. The local wipe (clearLocal()) is
+    // deliberately NOT called from here: it has to run after navigation has
+    // torn down Home/Calendar's sign-flow collectors, by which point this
+    // ViewModel (and viewModelScope) is already cleared. The nav graph kicks
+    // it off on an app-scoped coroutine right after navigating — see
+    // YildiznameNavGraph's Settings composable.
+    fun confirmReset() {
+        viewModelScope.launch {
+            try {
+                resetAppDataUseCase.clearRemote()
+                _state.update {
+                    it.copy(showResetDialog = false, navigateToOnboarding = true)
+                }
+            } catch (e: Exception) {
+                println("confirmReset exception = ${e.message}")
+                _state.update { it.copy(showResetDialog = false, error = e.message) }
+            }
+        }
+    }
+
+    fun onNavigatedToOnboarding() {
+        _state.update { it.copy(navigateToOnboarding = false) }
+    }
+
+    fun clearError() {
+        _state.update { it.copy(error = null) }
     }
 
     fun updateSign(sign: ZodiacSign)

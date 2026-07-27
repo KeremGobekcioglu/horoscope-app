@@ -4,4 +4,8 @@ class iOSPushTokenProvider(): PushTokenProvider {
     override suspend fun currentToken(): String? {
         return swiftPushTokenBridge?.getToken()
     }
+
+    override suspend fun deleteToken() {
+        swiftPushTokenBridge?.deleteToken()
+    }
 }

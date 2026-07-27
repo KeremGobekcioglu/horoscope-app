@@ -18,12 +18,15 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -73,6 +76,10 @@ import horoscope.shared.generated.resources.settings_notification_time
 import horoscope.shared.generated.resources.settings_notifications
 import horoscope.shared.generated.resources.settings_privacy_policy
 import horoscope.shared.generated.resources.settings_reset_data
+import horoscope.shared.generated.resources.settings_reset_dialog_cancel
+import horoscope.shared.generated.resources.settings_reset_dialog_confirm
+import horoscope.shared.generated.resources.settings_reset_dialog_message
+import horoscope.shared.generated.resources.settings_reset_dialog_title
 import horoscope.shared.generated.resources.settings_restart_message
 import horoscope.shared.generated.resources.settings_restart_ok
 import horoscope.shared.generated.resources.settings_restart_title
@@ -96,12 +103,24 @@ fun SettingsScreen(
     onShareAppClick: () -> Unit,
     onResetDataClick: () -> Unit,
     onDismissRestartDialog: () -> Unit,
+    onDismissResetDialog: () -> Unit,
+    onConfirmResetClick: () -> Unit,
+    onErrorShown: () -> Unit,
     modifier: Modifier = Modifier,
     refreshNotificationStatus: () -> Unit,
     state: SettingsState
 ) {
 
     var showSignSheet by remember { mutableStateOf(false) }
+    val snackbarHostState = remember { SnackbarHostState() }
+
+    LaunchedEffect(state.error) {
+        val error = state.error
+        if (error != null) {
+            snackbarHostState.showSnackbar(error)
+            onErrorShown()
+        }
+    }
 
     val lifecycleOwner = LocalLifecycleOwner.current
     DisposableEffect(lifecycleOwner)
@@ -332,6 +351,31 @@ fun SettingsScreen(
                 },
             )
         }
+        if (state.showResetDialog) {
+            AlertDialog(
+                onDismissRequest = onDismissResetDialog,
+                containerColor = YzSurface,
+                shape = RoundedCornerShape(20.dp),
+                titleContentColor = YzGold,
+                textContentColor = YzMuted,
+                title = { Text(text = stringResource(Res.string.settings_reset_dialog_title)) },
+                text = { Text(text = stringResource(Res.string.settings_reset_dialog_message)) },
+                dismissButton = {
+                    TextButton(onClick = onDismissResetDialog) {
+                        Text(text = stringResource(Res.string.settings_reset_dialog_cancel), color = YzMuted)
+                    }
+                },
+                confirmButton = {
+                    TextButton(onClick = onConfirmResetClick) {
+                        Text(text = stringResource(Res.string.settings_reset_dialog_confirm), color = YzError)
+                    }
+                },
+            )
+        }
+        SnackbarHost(
+            hostState = snackbarHostState,
+            modifier = Modifier.align(Alignment.BottomCenter).padding(16.dp),
+        )
     }
 }
 

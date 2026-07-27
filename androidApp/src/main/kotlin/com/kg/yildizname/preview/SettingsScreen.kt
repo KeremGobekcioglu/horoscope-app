@@ -30,6 +30,9 @@ fun SettingsScreenPreview() {
                 onShareAppClick = {},
                 onResetDataClick = {},
                 onDismissRestartDialog = {},
+                onDismissResetDialog = {},
+                onConfirmResetClick = {},
+                onErrorShown = {},
                 refreshNotificationStatus = {},
                 state = SettingsState(
                     notificationsEnabled = true,

@@ -56,4 +56,8 @@ class FirestoreSource(
                 merge = true
             )
     }
+
+    suspend fun deleteUserDoc(uid: String) {
+        firestore.collection("users").document(uid).delete()
+    }
 }

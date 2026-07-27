@@ -13,4 +13,8 @@ class AndroidPushTokenProvider : PushTokenProvider {
             null
         }
     }
+
+    override suspend fun deleteToken() {
+        FirebaseMessaging.getInstance().deleteToken().await()
+    }
 }

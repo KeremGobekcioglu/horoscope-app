@@ -26,6 +26,9 @@ class UserRepository(
     suspend fun getLanguage(): String? =
         dataSource.getLanguage()
 
+    suspend fun clearAllExceptLanguage() =
+        dataSource.clearAllExceptLanguage()
+
   
     fun getSignFlow() : Flow<ZodiacSign>
     {

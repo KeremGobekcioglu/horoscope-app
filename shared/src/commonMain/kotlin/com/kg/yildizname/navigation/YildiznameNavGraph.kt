@@ -24,10 +24,12 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.navigation
 import androidx.navigation.toRoute
+import com.kg.yildizname.core.domain.usecase.ResetAppDataUseCase
 import com.kg.yildizname.core.ui.components.StarFieldBackground
 import com.kg.yildizname.core.ui.components.YzBottomNav
 import com.kg.yildizname.core.ui.components.YzBottomNavItemData
 import com.kg.yildizname.core.util.DateUtils
+import com.kg.yildizname.core.util.appScope
 import com.kg.yildizname.feature.calendar.ui.CalendarScreen
 import com.kg.yildizname.feature.calendar.ui.CalendarViewModel
 import com.kg.yildizname.feature.compatability.ui.CompatibilityDetailedResult.CompatibilityDetailedResultScreen
@@ -68,6 +70,7 @@ import horoscope.shared.generated.resources.nav_calendar
 import horoscope.shared.generated.resources.nav_compatibility
 import horoscope.shared.generated.resources.nav_home
 import horoscope.shared.generated.resources.nav_settings
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
@@ -404,6 +407,31 @@ fun YildiznameNavGraph(navController: NavHostController) {
             composable<Settings> {
                 val viewModel : SettingsViewModel = koinViewModel()
                 val uiState by viewModel.state.collectAsStateWithLifecycle()
+                val resetAppDataUseCase: ResetAppDataUseCase = koinInject()
+
+                LaunchedEffect(uiState.navigateToOnboarding) {
+                    if (uiState.navigateToOnboarding) {
+                        navController.navigate(OnboardingGraph) {
+                            popUpTo(0) { inclusive = true }
+                        }
+                        viewModel.onNavigatedToOnboarding()
+                        // Launched on the app-scoped coroutine, not this
+                        // LaunchedEffect's own scope: navigate() above just
+                        // synchronously cleared Settings' own ViewModelStore
+                        // (this composable is on its way out), so anything
+                        // tied to its composition would risk cancellation.
+                        // See ResetAppDataUseCase.clearLocal() for why this
+                        // must run after navigate(), not before.
+                        appScope.launch {
+                            try {
+                                resetAppDataUseCase.clearLocal()
+                            } catch (e: Exception) {
+                                println("ResetAppData: clearLocal failed: ${e.message}")
+                            }
+                        }
+                    }
+                }
+
                 // Stateless SettingsScreen currently wired with placeholder state and stub callbacks.
                 SettingsScreen(
                     notificationsEnabled = uiState.notificationsEnabled ?: true,
@@ -416,8 +444,11 @@ fun YildiznameNavGraph(navController: NavHostController) {
                     onLanguageChange = viewModel::onLanguageChange,
                     onPrivacyPolicyClick = { /* TODO: open privacy url */ },
                     onShareAppClick = { /* TODO: open share sheet */ },
-                    onResetDataClick = { /* TODO: confirm & reset data */ },
+                    onResetDataClick = viewModel::onResetDataClick,
                     onDismissRestartDialog = viewModel::dismissRestartDialog,
+                    onDismissResetDialog = viewModel::dismissResetDialog,
+                    onConfirmResetClick = viewModel::confirmReset,
+                    onErrorShown = viewModel::clearError,
                     state = uiState,
                     refreshNotificationStatus = viewModel::refreshNotificationStatus
                 )
