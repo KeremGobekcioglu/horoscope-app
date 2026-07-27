@@ -41,7 +41,7 @@ class UserPreferencesDataSource(
     fun getSignFlow() : Flow<String>
     {
         return dataStore.data.map {
-            it[zodiacSignKey] as String
+            it[zodiacSignKey] ?: ""
         }
     }
 
