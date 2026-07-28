@@ -10,3 +10,7 @@ interface NotificationPermissionRequester {
 interface NotificationSettingsOpener {
     fun open()
 }
+
+interface UrlOpener {
+    fun open(url: String)
+}
