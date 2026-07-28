@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Horoscope</string>
+    <string name="app_name">Yıldızname</string>
     <string name="notification_channel_daily_readings_name">Daily Readings</string>
     <string name="notification_channel_daily_readings_description">Your daily horoscope reading notifications</string>
 </resources>

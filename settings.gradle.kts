@@ -1,4 +1,4 @@
-rootProject.name = "Horoscope"
+rootProject.name = "Yildizname"
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 pluginManagement {
