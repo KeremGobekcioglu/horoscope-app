@@ -20,6 +20,7 @@ import com.kg.yildizname.di.repositoryModule
 import com.kg.yildizname.platform.AndroidNotificationPermissionRequester
 import com.kg.yildizname.platform.NotificationPermissionRequester
 import com.kg.yildizname.platform.NotificationSettingsOpener
+import com.kg.yildizname.platform.UrlOpener
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
@@ -47,6 +48,7 @@ class MainActivity : ComponentActivity() {
         )
         val permissionRequester = AndroidNotificationPermissionRequester(this)
         val settingsIntent = AndroidNotificationsSettingsOpener(this)
+        val urlOpener = AndroidUrlOpener(this)
         if (KoinPlatformTools.defaultContext().getOrNull() == null) {
             startKoin {
                 androidContext(applicationContext)
@@ -58,7 +60,8 @@ class MainActivity : ComponentActivity() {
                     repositoryModule,
                     domainModule,
                     module { single<NotificationPermissionRequester> { permissionRequester } },
-                    module { single<NotificationSettingsOpener> { settingsIntent } }
+                    module { single<NotificationSettingsOpener> { settingsIntent } },
+                    module { single<UrlOpener> { urlOpener } }
                 )
             }
         }

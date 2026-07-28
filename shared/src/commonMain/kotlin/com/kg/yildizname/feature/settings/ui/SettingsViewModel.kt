@@ -8,16 +8,20 @@ import com.kg.yildizname.core.util.applyLanguage
 import com.kg.yildizname.platform.NotificationPermissionRequester
 import com.kg.yildizname.platform.NotificationSettingsOpener
 import com.kg.yildizname.platform.PermissionStatus
+import com.kg.yildizname.platform.UrlOpener
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
+private const val PRIVACY_POLICY_URL = "https://keremgobekcioglu.github.io/yildizname-privacy/"
+
 class SettingsViewModel(
     private val notificationPermissionRequester: NotificationPermissionRequester,
     private val settingsOpener: NotificationSettingsOpener,
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val urlOpener: UrlOpener
 ) : ViewModel()
 {
     private val _state = MutableStateFlow(SettingsState())
@@ -76,5 +80,10 @@ class SettingsViewModel(
     fun onNotificationsSwitchTapped()
     {
         settingsOpener.open()
+    }
+
+    fun onPrivacyClick()
+    {
+        urlOpener.open(PRIVACY_POLICY_URL)
     }
 }
