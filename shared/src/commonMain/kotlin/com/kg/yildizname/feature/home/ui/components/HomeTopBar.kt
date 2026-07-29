@@ -42,7 +42,7 @@ internal fun HomeTopBar(
         modifier = modifier
             .yzStatusBarsPadding()
             .padding(horizontal = 20.dp, vertical = 16.dp),
-        horizontalArrangement = Arrangement.SpaceBetween,
+        horizontalArrangement = Arrangement.Start,
         verticalAlignment = Alignment.CenterVertically
     ) {
         // Date pill
@@ -63,18 +63,18 @@ internal fun HomeTopBar(
         }
 
         // Right icons
-        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            TopBarIconButton(
-                contentDescription = stringResource(Res.string.home_notification_cd),
-                onClick = onNotificationClick,
-                icon = FeatherIcons.Bell,
-            )
-            TopBarIconButton(
-                contentDescription = stringResource(Res.string.home_share_card_cd),
-                onClick = onShareCardClick,
-                icon = FeatherIcons.Image,
-            )
-        }
+//        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+//            TopBarIconButton(
+//                contentDescription = stringResource(Res.string.home_notification_cd),
+//                onClick = onNotificationClick,
+//                icon = FeatherIcons.Bell,
+//            )
+//            TopBarIconButton(
+//                contentDescription = stringResource(Res.string.home_share_card_cd),
+//                onClick = onShareCardClick,
+//                icon = FeatherIcons.Image,
+//            )
+//        }
     }
 }
 
