@@ -3,6 +3,7 @@ package com.kg.yildizname.core
 import com.kg.yildizname.platform.NotificationPermissionRequester
 import com.kg.yildizname.platform.NotificationSettingsOpener
 import com.kg.yildizname.platform.PermissionStatus
+import com.kg.yildizname.platform.UrlOpener
 
 class IosNotificationPermissionRequester : NotificationPermissionRequester {
     override suspend fun requestPermission(): Boolean =
@@ -18,4 +19,8 @@ class IosNotificationPermissionRequester : NotificationPermissionRequester {
 
 class IosNotificationSettingsOpener : NotificationSettingsOpener {
     override fun open() { swiftSettingsOpenerBridge?.open() }
+}
+
+class IosUrlOpener : UrlOpener {
+    override fun open(url: String) { swiftUrlOpenerBridge?.open(url) }
 }

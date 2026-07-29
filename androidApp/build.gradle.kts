@@ -40,6 +40,14 @@ android {
         versionCode = 1
         versionName = "1.0"
     }
+    signingConfigs {
+        create("release") {
+            storeFile = file("/Users/keremgobekcioglu/keystores/yildizname-upload-key.jks")
+            storePassword = System.getenv("YZ_KEYSTORE_PASSWORD")
+            keyAlias = "yildizname-upload"
+            keyPassword = System.getenv("YZ_KEY_PASSWORD")
+        }
+    }
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
@@ -47,6 +55,7 @@ android {
     }
     buildTypes {
         getByName("release") {
+            signingConfig = signingConfigs.getByName("release")
             isMinifyEnabled = false
         }
     }

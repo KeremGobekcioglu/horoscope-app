@@ -29,5 +29,5 @@ val appModule: Module = module {
     viewModel { (signKey: String, periodKey: String, date: String?) ->
         ReadingDetailViewModel(signKey, periodKey, date, get())
     }
-    viewModel { SettingsViewModel(get(),get() , get() , get()) }
+    viewModel { SettingsViewModel(get(),get() , get() , get(), get()) }
 }

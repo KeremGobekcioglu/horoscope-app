@@ -442,7 +442,7 @@ fun YildiznameNavGraph(navController: NavHostController) {
                     onNotificationSwitchTapped = viewModel::onNotificationsSwitchTapped,
                     onTimeClick = { /* TODO: open time picker */ },
                     onLanguageChange = viewModel::onLanguageChange,
-                    onPrivacyPolicyClick = { /* TODO: open privacy url */ },
+                    onPrivacyPolicyClick = viewModel::onPrivacyClick,
                     onShareAppClick = { /* TODO: open share sheet */ },
                     onResetDataClick = viewModel::onResetDataClick,
                     onDismissRestartDialog = viewModel::dismissRestartDialog,

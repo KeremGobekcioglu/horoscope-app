@@ -32,7 +32,7 @@ class OnboardingViewModel(
         val sign = _uiState.value.selectedSign ?: return
         viewModelScope.launch {
             try {
-                prefs.saveZodiacSign(sign.turkishKey)
+                prefs.saveZodiacSign(sign.apiKey)
                 prefs.markOnboardingComplete()
                 _events.send(OnboardingEvent.NavigateToHome)
             } catch (e: Exception) {

@@ -30,10 +30,9 @@ class UserRepository(
         dataSource.clearAllExceptLanguage()
 
   
+
     fun getSignFlow() : Flow<ZodiacSign>
     {
-        return dataSource.getSignFlow().map {
-            KEY -> KEY.let { stored -> ZodiacSign.entries.first() { it.apiKey == stored} }
-        }
+        return dataSource.getSignFlow().map { stored -> ZodiacSign.fromKey(stored) }
     }
 }
