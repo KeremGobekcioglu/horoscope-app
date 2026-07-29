@@ -83,4 +83,14 @@ class UserPreferencesDataSource(
     suspend fun clearAll() {
         dataStore.edit { it.clear() }
     }
+
+    // Language is a UI/accessibility preference, not user data — it must survive
+    // a data reset intact, so it's read out and restored inside the same atomic edit.
+    suspend fun clearAllExceptLanguage() {
+        dataStore.edit { prefs ->
+            val lang = prefs[KEY_LANGUAGE]
+            prefs.clear()
+            if (lang != null) prefs[KEY_LANGUAGE] = lang
+        }
+    }
 }

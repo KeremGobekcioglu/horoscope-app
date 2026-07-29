@@ -14,4 +14,8 @@ class RealPushTokenBridge: SwiftPushTokenBridge {
         // TOO_MANY_REGISTRATIONS conflict with that same delegate callback.
         return await FCMTokenWaiter.shared.waitForToken()
     }
+
+    func deleteToken() async throws {
+        try await Messaging.messaging().deleteToken()
+    }
 }

@@ -173,6 +173,10 @@
     <string name="settings_restart_title">Restart Required</string>
     <string name="settings_restart_message">The language change will take effect the next time you restart the app.</string>
     <string name="settings_restart_ok">OK</string>
+    <string name="settings_reset_dialog_title">Reset App Data</string>
+    <string name="settings_reset_dialog_message">This action cannot be undone. All your readings and preferences will be permanently deleted.</string>
+    <string name="settings_reset_dialog_confirm">Reset</string>
+    <string name="settings_reset_dialog_cancel">Cancel</string>
 
     <!-- Common -->
     <string name="btn_continue">Continue</string>
