@@ -149,7 +149,7 @@ fun SettingsScreen(
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
                 .padding(horizontal = 16.dp)
-                //.padding(bottom = 16.dp), // room for bottom nav
+                .padding(bottom = 16.dp), // room for bottom nav
         ) {
             Spacer(Modifier.height(20.dp))
 
