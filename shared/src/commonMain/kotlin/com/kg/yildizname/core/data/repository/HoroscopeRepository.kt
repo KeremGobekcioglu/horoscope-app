@@ -12,10 +12,13 @@ import com.kg.yildizname.core.data.model.ScoreSet
 import com.kg.yildizname.core.data.model.ZodiacSign
 import com.kg.yildizname.core.data.remote.FirestoreSource
 import com.kg.yildizname.core.data.remote.HoroscopeApiSource
+import com.kg.yildizname.core.util.DateUtils
 import com.kg.yildizname.core.util.PseudoScores
 import com.kg.yildizname.core.util.currentLanguageCode
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.number
 
 class HoroscopeRepository(
     private val dao: ReadingDao,
@@ -40,6 +43,16 @@ class HoroscopeRepository(
         date: String,
     ): Flow<Reading> = flow {
         println("HoroscopeRepository: getReading sign=${sign.apiKey} period=${period.apiKey} date=$date")
+
+        // A future reading doesn't exist yet anywhere in the pipeline (Room, Firestore, or
+        // the API, which only ever returns "today"'s text). Refuse it here so no caller can
+        // accidentally store/display today's or mislabelled English fallback text under a
+        // future date key. Emitting nothing leaves the caller's reading state null, which the
+        // UI already renders as the "no reading yet" placeholder.
+        if (isFutureReading(date)) {
+            println("HoroscopeRepository: refusing future reading sign=${sign.apiKey} period=${period.apiKey} date=$date")
+            return@flow
+        }
 
         // Tier 1: Room
         val cached = dao.getReading(sign.apiKey, period.apiKey, date)
@@ -109,6 +122,26 @@ class HoroscopeRepository(
         dao.upsertReading(entity)
         pruneOldEntries()
         emit(entity.toDomain(sign, period))
+    }
+
+    // `date` is either a monthly key ("yyyy-MM", from CalendarViewModel) or a full
+    // daily key ("yyyy-MM-dd", from everywhere else).
+    private fun isFutureReading(date: String): Boolean {
+        val today = DateUtils.todayLocalDate()
+        return if (date.length == 7) {
+            val year = date.substring(0, 4).toIntOrNull() ?: return false
+            val month = date.substring(5, 7).toIntOrNull() ?: return false
+            year > today.year || (year == today.year && month > today.month.number)
+        } else {
+            val requested = date.toLocalDateOrNull() ?: return false
+            requested > today
+        }
+    }
+
+    private fun String.toLocalDateOrNull(): LocalDate? = try {
+        LocalDate.parse(this)
+    } catch (e: Exception) {
+        null
     }
 
     private suspend fun pruneOldEntries() {
