@@ -80,6 +80,10 @@ class ResetAppDataUseCase(
         // DataStore sign key above causes some other observer to write one
         // stray row before this line runs, that row is harmless and gets
         // pruned on the next fetch.
-        database.clearAllTables()
+        //
+        // clearAllTables() is Android-only on Room KMP's RoomDatabase, so
+        // each table is cleared explicitly via its DAO instead.
+        database.readingDao().deleteAll()
+        database.compatibilityDao().deleteAll()
     }
 }

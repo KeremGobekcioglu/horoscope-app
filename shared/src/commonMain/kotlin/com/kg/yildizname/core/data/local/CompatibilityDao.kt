@@ -14,4 +14,7 @@ interface CompatibilityDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun upsert(entity: CompatibilityEntity)
+
+    @Query("DELETE FROM compatibility_results")
+    suspend fun deleteAll()
 }

@@ -15,4 +15,7 @@ interface ReadingDao {
 
     @Query("DELETE FROM readings WHERE cachedAt < :cutoff")
     suspend fun deleteOlderThan(cutoff: Long)
+
+    @Query("DELETE FROM readings")
+    suspend fun deleteAll()
 }
