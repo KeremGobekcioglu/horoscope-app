@@ -287,7 +287,7 @@ interface GeminiMonthlyResult {
 
 export const generateMonthlyReadings = onSchedule(
   {
-    schedule: "10 0 1 * *", // 1st of month, 00:10 Europe/Istanbul
+    schedule: "0 9 1 * *", // 1st of month, 09:00 Europe/Istanbul (06:00 UTC)
     timeZone: "Europe/Istanbul",
     secrets: [GEMINI_API_KEY],
     timeoutSeconds: 540,
@@ -324,7 +324,17 @@ export const generateMonthlyReadings = onSchedule(
         const rawText: string = json?.data?.horoscope ?? "";
         if (!rawText.trim()) throw new Error(`Empty horoscope for ${sign}`);
 
-        const result = await rewriteMonthlyWithGemini(ai, rawText, sign);
+        // The API's own month key. If it lags behind ours, the seed is last
+        // month's text — throwing skips the write so the doc stays absent and
+        // a later run regenerates it. Never store a wrong-month reading.
+        const apiMonth: string = json?.data?.date ?? "";
+        if (apiMonth !== currentMonth) {
+          throw new Error(
+            `Stale seed for ${sign}: API=${apiMonth}, expected=${currentMonth}`
+          );
+        }
+
+        const result = await rewriteMonthlyWithGemini(ai, rawText, sign, currentMonth);
 
         if (result === null) {
           console.error(`Skip write (generation failed): ${docId}`);
@@ -348,13 +358,17 @@ export const generateMonthlyReadings = onSchedule(
 async function rewriteMonthlyWithGemini(
   ai: GoogleGenAI,
   text: string,
-  sign: string
+  sign: string,
+    month: string
 ): Promise<GeminiMonthlyResult | null> {
   const prompt =
     `Sen bir astroloji uzmanısın. Aşağıda bir burç için İngilizce aylık ` +
     `yorum var. Bu yorumu Türkçeye çevir (monthlyTr) — tam çeviri, özet yapma. ` +
     `Samimi, akıcı ve ilham verici bir dil kullan.\n\n` +
-    `Burç: ${sign}\nİngilizce aylık yorum: ${text}`;
+    `ÖNEMLİ: Bu yorum ${month} ayına aittir. Ham metinde başka bir ay adı ` +
+    `geçiyorsa (örn. "In July"), onu DİKKATE ALMA — doğru ayı kullan. ` +
+    `Metinde hiç ay adı geçmiyorsa sen de uydurma, "bu ay" de.\n\n` +
+    `Burç: ${sign}\nAy: ${month}\nİngilizce aylık yorum: ${text}`;
 
   for (const model of MODELS) {
     for (let attempt = 1; attempt <= 3; attempt++) {
