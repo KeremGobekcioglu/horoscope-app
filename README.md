@@ -29,3 +29,10 @@ Use the run button in your IDE's editor gutter, or run tests using Gradle tasks:
 ---
 
 Learn more about [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html)…
+
+## License
+
+This project is licensed under the MIT License with the [Commons Clause](https://commonsclause.com/) —
+free to use, modify, and distribute for non-commercial purposes, but selling
+the software or offering it as a paid product/service is not permitted. See
+[LICENSE](./LICENSE) for the full text.
