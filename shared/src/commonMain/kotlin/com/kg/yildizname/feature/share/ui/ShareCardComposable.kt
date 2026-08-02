@@ -40,6 +40,7 @@ import com.kg.yildizname.core.data.model.ZodiacSign
 import com.kg.yildizname.core.data.model.localizedName
 import com.kg.yildizname.core.ui.components.StaticStarField
 import com.kg.yildizname.core.util.currentLanguageCode
+import com.kg.yildizname.core.util.yzUppercase
 import kotlin.math.roundToInt
 import com.kg.yildizname.core.ui.theme.CardShape
 import com.kg.yildizname.core.ui.theme.YzBg
@@ -56,8 +57,7 @@ import horoscope.shared.generated.resources.share_card_app_url
 import kotlinx.datetime.LocalDate
 import org.jetbrains.compose.resources.stringResource
 
-private val ShareCardWidth = 675.dp
-private val ShareCardHeight = 1200.dp
+
 
 /**
  * Self-contained Instagram Stories share card (9:16, 675x1200dp). Rendered offscreen to a
@@ -113,7 +113,7 @@ fun ShareCard(
             Spacer(Modifier.height(80.dp))
 
             Text(
-                text = sign.localizedName().uppercase(),
+                text = sign.localizedName().yzUppercase(),
                 color = YzGold,
                 style = MaterialTheme.typography.displayLarge.copy(fontSize = 64.sp),
                 textAlign = TextAlign.Center,
@@ -162,7 +162,6 @@ fun ShareCard(
  * shrink — nothing needs to be clipped because the card's own layout never sees tighter
  * constraints than 675x1200dp.
  */
-private val ShareCardTrueHeight = 1200.dp
 
 @Composable
 fun ShareCardPreview(
@@ -172,7 +171,7 @@ fun ShareCardPreview(
     modifier: Modifier = Modifier,
     previewHeight: Dp = 480.dp,          // tune on-device
 ) {
-    val scale = previewHeight / ShareCardTrueHeight   // ≈ 0.283
+    val scale = previewHeight / ShareCardHeight   // ≈ 0.283
 
     Layout(
         modifier = modifier.clip(CardShape),
