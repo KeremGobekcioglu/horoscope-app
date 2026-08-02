@@ -26,14 +26,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.TransformOrigin
-import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -42,7 +39,6 @@ import com.kg.yildizname.core.data.model.localizedName
 import com.kg.yildizname.core.ui.components.StaticStarField
 import com.kg.yildizname.core.util.currentLanguageCode
 import com.kg.yildizname.core.util.yzUppercase
-import kotlin.math.roundToInt
 import com.kg.yildizname.core.ui.theme.CardShape
 import com.kg.yildizname.core.ui.theme.YzBg
 import com.kg.yildizname.core.ui.theme.YzBorder
@@ -171,33 +167,12 @@ fun ShareCardPreview(
     quoteText: String,
     modifier: Modifier = Modifier,
     previewHeight: Dp = 480.dp,          // tune on-device
-) {
-    val scale = previewHeight / ShareCardHeight   // ≈ 0.283
-
-    Layout(
-        modifier = modifier.clip(CardShape),
-        content = {
-            ShareCard(
-                sign = sign,
-                date = date,
-                quoteText = quoteText,
-            )
-        },
-    ) { measurables, _ ->
-        // Measure the card at its own fixed 675x1200 size, ignoring the sheet's tiny constraints.
-        val placeable = measurables.first().measure(Constraints())
-        val scaledW = (placeable.width * scale).roundToInt()
-        val scaledH = (placeable.height * scale).roundToInt()
-
-        // Report the SCALED size so the sheet lays out / centers a real 191x340 element.
-        layout(scaledW, scaledH) {
-            placeable.placeWithLayer(0, 0) {
-                scaleX = scale
-                scaleY = scale
-                transformOrigin = TransformOrigin(0f, 0f)   // scale from top-left into reported bounds
-            }
-        }
-    }
+) = ScaledShareCard(modifier = modifier, previewHeight = previewHeight) {
+    ShareCard(
+        sign = sign,
+        date = date,
+        quoteText = quoteText,
+    )
 }
 @Composable
 private fun ShareCardQuoteBlock(

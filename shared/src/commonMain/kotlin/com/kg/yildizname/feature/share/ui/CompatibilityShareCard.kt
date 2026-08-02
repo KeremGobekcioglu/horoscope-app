@@ -27,15 +27,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -55,7 +52,6 @@ import horoscope.shared.generated.resources.Res
 import horoscope.shared.generated.resources.share_card_app_name
 import horoscope.shared.generated.resources.share_card_app_url
 import horoscope.shared.generated.resources.share_card_compat_header
-import kotlin.math.roundToInt
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
@@ -428,32 +424,13 @@ fun CompatibilityShareCardPreview(
     verdictText: String,
     modifier: Modifier = Modifier,
     previewHeight: Dp = 480.dp,
-) {
-    val scale = previewHeight / ShareCardHeight
-
-    Layout(
-        modifier = modifier.clip(CardShape),
-        content = {
-            CompatibilityShareCard(
-                signA = signA,
-                signB = signB,
-                matchPercent = matchPercent,
-                bandLabel = bandLabel,
-                scores = scores,
-                verdictText = verdictText,
-            )
-        },
-    ) { measurables, _ ->
-        val placeable = measurables.first().measure(Constraints())
-        val scaledW = (placeable.width * scale).roundToInt()
-        val scaledH = (placeable.height * scale).roundToInt()
-
-        layout(scaledW, scaledH) {
-            placeable.placeWithLayer(0, 0) {
-                scaleX = scale
-                scaleY = scale
-                transformOrigin = TransformOrigin(0f, 0f)
-            }
-        }
-    }
+) = ScaledShareCard(modifier = modifier, previewHeight = previewHeight) {
+    CompatibilityShareCard(
+        signA = signA,
+        signB = signB,
+        matchPercent = matchPercent,
+        bandLabel = bandLabel,
+        scores = scores,
+        verdictText = verdictText,
+    )
 }
