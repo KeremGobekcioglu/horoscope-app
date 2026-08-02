@@ -41,6 +41,7 @@ import androidx.compose.ui.unit.sp
 import com.kg.yildizname.core.data.model.ZodiacSign
 import com.kg.yildizname.core.data.model.compatGridIcon
 import com.kg.yildizname.core.data.model.localizedName
+import com.kg.yildizname.core.util.yzUppercase
 import com.kg.yildizname.core.domain.model.tintColor
 import com.kg.yildizname.core.ui.components.StaticStarField
 import com.kg.yildizname.core.ui.theme.CardShape
@@ -52,12 +53,12 @@ import com.kg.yildizname.core.ui.theme.YzMuted
 import horoscope.shared.generated.resources.Res
 import horoscope.shared.generated.resources.share_card_app_name
 import horoscope.shared.generated.resources.share_card_app_url
+import horoscope.shared.generated.resources.share_card_compat_header
 import kotlin.math.roundToInt
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
-private val ShareCardWidth = 675.dp
-private val ShareCardHeight = 1200.dp
+
 private val MedallionSize = 176.dp
 private val MedallionColumnWidth = 220.dp
 
@@ -128,7 +129,7 @@ fun CompatibilityShareCard(
             Spacer(Modifier.height(48.dp))
 
             Text(
-                text = "UYUM ANALİZİ",
+                text = stringResource(Res.string.share_card_compat_header),
                 color = YzMuted,
                 style = MaterialTheme.typography.labelSmall,
                 fontWeight = FontWeight.SemiBold,
@@ -148,7 +149,7 @@ fun CompatibilityShareCard(
             )
 
             Text(
-                text = bandLabel.uppercase(),
+                text = bandLabel.yzUppercase(),
                 color = YzInk,
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.SemiBold,
@@ -260,7 +261,7 @@ private fun SignColumn(
         Spacer(Modifier.height(20.dp))
 
         Text(
-            text = sign.localizedName().uppercase(),
+            text = sign.localizedName().yzUppercase(),
             color = tint,
             style = MaterialTheme.typography.headlineSmall,
             fontWeight = FontWeight.SemiBold,
@@ -356,7 +357,7 @@ private fun ScoreTile(
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
         Text(
-            text = label.uppercase(),
+            text = label.yzUppercase(),
             color = YzMuted,
             style = MaterialTheme.typography.labelSmall,
             fontWeight = FontWeight.SemiBold,
@@ -413,7 +414,6 @@ private fun VerdictQuote(
  * On-screen preview of [CompatibilityShareCard]: lays out the real 675x1200dp card at its true
  * fixed size and scales it down with a `graphicsLayer` transform, matching [ShareCardPreview].
  */
-private val ShareCardTrueHeight = 1200.dp
 
 @Composable
 fun CompatibilityShareCardPreview(
@@ -426,7 +426,7 @@ fun CompatibilityShareCardPreview(
     modifier: Modifier = Modifier,
     previewHeight: Dp = 480.dp,
 ) {
-    val scale = previewHeight / ShareCardTrueHeight
+    val scale = previewHeight / ShareCardHeight
 
     Layout(
         modifier = modifier.clip(CardShape),

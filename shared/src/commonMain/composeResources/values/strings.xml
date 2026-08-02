@@ -232,6 +232,7 @@
     <!-- Share card / bottom sheet -->
     <string name="share_card_app_name">YILDIZNAME</string>
     <string name="share_card_app_url">yildizname.app</string>
+    <string name="share_card_compat_header">UYUM ANALİZİ</string>
     <string name="share_bottom_sheet_title">Paylaş</string>
     <string name="share_option_instagram_stories">Instagram\nStories</string>
     <string name="share_option_whatsapp">WhatsApp</string>

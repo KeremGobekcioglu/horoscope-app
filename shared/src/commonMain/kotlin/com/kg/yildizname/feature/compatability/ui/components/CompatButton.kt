@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kg.yildizname.core.ui.theme.YzBg
 import com.kg.yildizname.core.ui.theme.YzGold
+import com.kg.yildizname.core.util.yzUppercase
 
 @Composable
 fun CompatButton(
@@ -47,7 +48,7 @@ fun CompatButton(
         contentAlignment = Alignment.Center
     ) {
         Text(
-            text = text.uppercase(),
+            text = text.yzUppercase(),
             style = MaterialTheme.typography.titleMedium.copy(
                 fontWeight = FontWeight.SemiBold,
                 letterSpacing = 1.sp

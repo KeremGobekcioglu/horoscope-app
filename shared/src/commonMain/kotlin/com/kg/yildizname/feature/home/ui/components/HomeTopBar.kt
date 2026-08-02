@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.sp
 import com.kg.yildizname.core.ui.theme.YzBorder
 import com.kg.yildizname.core.ui.theme.YzInk
 import com.kg.yildizname.core.ui.theme.YzSurface
+import com.kg.yildizname.core.util.yzUppercase
 import compose.icons.FeatherIcons
 import compose.icons.feathericons.Bell
 import compose.icons.feathericons.Image
@@ -54,7 +55,7 @@ internal fun HomeTopBar(
                 .padding(horizontal = 14.dp, vertical = 7.dp)
         ) {
             Text(
-                text = dateLabel.uppercase(),
+                text = dateLabel.yzUppercase(),
                 color = YzInk,
                 fontSize = 11.sp,
                 fontWeight = FontWeight.Medium,

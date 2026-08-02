@@ -12,6 +12,7 @@ import androidx.compose.ui.unit.sp
 import com.kg.yildizname.core.data.model.ZodiacSign
 import com.kg.yildizname.core.ui.theme.YzGold
 import com.kg.yildizname.core.ui.theme.YzMuted
+import com.kg.yildizname.core.util.yzUppercase
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -25,7 +26,7 @@ internal fun SignHeader(
         verticalArrangement = Arrangement.spacedBy(6.dp)
     ) {
         Text(
-            text = stringResource(sign.nameRes).uppercase(),
+            text = stringResource(sign.nameRes).yzUppercase(),
             color = YzGold,
             fontSize = 26.sp,
             fontWeight = FontWeight.Bold,
@@ -33,7 +34,7 @@ internal fun SignHeader(
             // Uses YzTypography display/serif family — ensure it's applied at theme level
         )
         Text(
-            text = stringResource(sign.dateRangeRes).uppercase(),
+            text = stringResource(sign.dateRangeRes).yzUppercase(),
             color = YzMuted,
             fontSize = 12.sp,
             fontWeight = FontWeight.Normal,
