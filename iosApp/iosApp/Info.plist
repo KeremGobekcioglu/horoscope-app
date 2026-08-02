@@ -6,17 +6,13 @@
 	<true/>
 	<key>FirebaseAppDelegateProxyEnabled</key>
 	<false/>
-	<key>UIBackgroundModes</key>
-	<array>
-		<string>audio</string>
-	</array>
 	<key>FacebookAppID</key>
     <string>2197763431069255</string>
     <key>LSApplicationQueriesSchemes</key>
     <array>
         <string>instagram-stories</string>
     </array>
-    <key>NSPhotoLibraryUsageDescription</key>
+    <key>NSPhotoLibraryAddUsageDescription</key>
     <string>Yıldızname burcunuzu paylaşmak için oluşturduğunuz görseli fotoğraflarınıza kaydetmek isteyebilir.</string>
 </dict>
 </plist>
