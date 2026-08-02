@@ -84,7 +84,6 @@ private fun ShareBottomSheetPreview() {
             ShareBottomSheetContent(
                 preview = {
                     ShareCardPreview(
-                        signDisplayName = "AKREP",
                         sign = ZodiacSign.SCORPIO,
                         date = previewShareDate,
                         quoteText = previewShareQuote,

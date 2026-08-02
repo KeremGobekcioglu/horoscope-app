@@ -24,6 +24,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.navigation
 import androidx.navigation.toRoute
+import com.kg.yildizname.core.data.model.localizedName
 import com.kg.yildizname.core.domain.usecase.ResetAppDataUseCase
 import com.kg.yildizname.core.ui.components.StarFieldBackground
 import com.kg.yildizname.core.ui.components.YzBottomNav
@@ -55,7 +56,6 @@ import com.kg.yildizname.feature.share.ui.CompatibilityShareCardRequest
 import com.kg.yildizname.feature.share.ui.ShareCardRequest
 import com.kg.yildizname.feature.share.ui.ShareFlowHost
 import com.kg.yildizname.feature.share.ui.rememberShareFlowState
-import com.kg.yildizname.feature.share.ui.shareCardSignName
 import com.kg.yildizname.feature.share.ui.shareQuoteFrom
 import com.kg.yildizname.feature.splash.ui.SplashEvent
 import com.kg.yildizname.feature.splash.ui.SplashScreen
@@ -271,7 +271,7 @@ fun YildiznameNavGraph(navController: NavHostController) {
                 val vm: HomeViewModel = koinViewModel()
                 val uiState by vm.uiState.collectAsStateWithLifecycle()
                 val homeSuccess = uiState as? HomeUiState.Success
-                val homeShareSignName = homeSuccess?.let { shareCardSignName(it.reading.sign) }
+                val homeShareSignName = homeSuccess?.let { it.reading.sign.localizedName() }
 
                 HomeScreen(
                     uiState             = uiState,

@@ -22,9 +22,9 @@ import kotlinx.datetime.LocalDate
 import org.jetbrains.compose.resources.stringResource
 
 /** Localized, all-caps sign name — matches the format ShareCard expects. */
-@Composable
-fun shareCardSignName(sign: ZodiacSign): String =
-    sign.localizedName().uppercase()
+//@Composable
+//fun shareCardSignName(sign: ZodiacSign): String =
+//    sign.localizedName().uppercase()
 
 /** Everything ShareCard/ShareBottomSheet need to render for one share request. */
 data class ShareCardRequest(
@@ -88,7 +88,6 @@ fun ShareFlowHost(state: ShareFlowState) {
         preview = {
             when (request) {
                 is ShareRequest.Horoscope -> ShareCardPreview(
-                    signDisplayName = request.request.signDisplayName,
                     sign = request.request.sign,
                     date = request.request.date,
                     quoteText = request.request.quoteText,

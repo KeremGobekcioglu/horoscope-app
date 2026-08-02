@@ -37,6 +37,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kg.yildizname.core.data.model.ZodiacSign
+import com.kg.yildizname.core.data.model.localizedName
 import com.kg.yildizname.core.ui.components.StaticStarField
 import com.kg.yildizname.core.util.currentLanguageCode
 import kotlin.math.roundToInt
@@ -69,7 +70,6 @@ private val ShareCardHeight = 1200.dp
  */
 @Composable
 fun ShareCard(
-    signDisplayName: String,
     sign: ZodiacSign,
     date: LocalDate,
     quoteText: String,
@@ -113,7 +113,7 @@ fun ShareCard(
             Spacer(Modifier.height(80.dp))
 
             Text(
-                text = signDisplayName.uppercase(),
+                text = sign.localizedName().uppercase(),
                 color = YzGold,
                 style = MaterialTheme.typography.displayLarge.copy(fontSize = 64.sp),
                 textAlign = TextAlign.Center,
@@ -166,7 +166,6 @@ private val ShareCardTrueHeight = 1200.dp
 
 @Composable
 fun ShareCardPreview(
-    signDisplayName: String,
     sign: ZodiacSign,
     date: LocalDate,
     quoteText: String,
@@ -179,7 +178,6 @@ fun ShareCardPreview(
         modifier = modifier.clip(CardShape),
         content = {
             ShareCard(
-                signDisplayName = signDisplayName,
                 sign = sign,
                 date = date,
                 quoteText = quoteText,
