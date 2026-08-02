@@ -51,7 +51,7 @@ sealed interface ShareRequest {
 
 /** First sentence or two of a reading's body text, used as the share card's pull-quote. */
 fun shareQuoteFrom(text: String, sentenceCount: Int = 2): String =
-    text.split(". ", ".\n").take(sentenceCount).joinToString(". ").trimEnd('.', ' ') + "."
+    text.split(". ", ".\n")/*.take(sentenceCount)*/.joinToString(". ").trimEnd('.', ' ') + "."
 
 @Stable
 class ShareFlowState internal constructor() {

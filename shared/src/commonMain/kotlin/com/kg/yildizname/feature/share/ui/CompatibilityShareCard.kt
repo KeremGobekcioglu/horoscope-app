@@ -34,6 +34,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -400,6 +401,8 @@ private fun VerdictQuote(
         )
         Text(
             text = "\u201C$text\u201D",
+            maxLines = 6,
+            overflow = TextOverflow.Ellipsis,
             color = YzInk,
             style = MaterialTheme.typography.bodyLarge.copy(
                 fontFamily = FontFamily.Serif,
