@@ -3,7 +3,7 @@ package com.kg.yildizname.platform
 enum class ShareTarget{
     InstagramStories,
     InstagramFeed,
-    WhatApp,
+    WhatsApp,
     Facebook,
     SystemSheet
 }
