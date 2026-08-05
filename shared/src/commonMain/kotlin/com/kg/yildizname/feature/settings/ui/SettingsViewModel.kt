@@ -6,6 +6,7 @@ import com.kg.yildizname.core.data.model.ZodiacSign
 import com.kg.yildizname.core.data.repository.UserRepository
 import com.kg.yildizname.core.domain.usecase.ResetAppDataUseCase
 import com.kg.yildizname.core.util.applyLanguage
+import com.kg.yildizname.core.util.currentLanguageCode
 import com.kg.yildizname.platform.NotificationPermissionRequester
 import com.kg.yildizname.platform.NotificationSettingsOpener
 import com.kg.yildizname.platform.PermissionStatus
@@ -37,7 +38,7 @@ class SettingsViewModel(
             val sign = userRepository.getSavedSign() ?: ZodiacSign.SCORPIO
             println("sign = $sign")
             val granted = notificationPermissionRequester.currentStatus() == PermissionStatus.GRANTED
-            val language = userRepository.getLanguage() ?: "tr"
+            val language = userRepository.getLanguage() ?: currentLanguageCode()
             _state.update {
                 it.copy(
                     sign = sign,

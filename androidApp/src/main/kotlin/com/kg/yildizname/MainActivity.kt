@@ -29,10 +29,13 @@ import java.util.Locale
 
 class MainActivity : ComponentActivity() {
     // Runs before onCreate/Koin startup, so the stored language is read from the
-    // synchronous LanguagePrefsMirror rather than DataStore. Defaults to Turkish.
+    // synchronous LanguagePrefsMirror rather than DataStore. Falls back to the device's
+    // system language (only tr/en are shipped, so anything else falls back to English)
+    // until the user makes an explicit choice in Settings.
     override fun attachBaseContext(newBase: Context) {
         LanguagePrefsMirror.init(newBase)
-        val lang = LanguagePrefsMirror.read() ?: "tr"
+        val deviceLanguage = newBase.resources.configuration.locales[0].language
+        val lang = LanguagePrefsMirror.read() ?: if (deviceLanguage == "tr") "tr" else "en"
         val locale = Locale(lang)
         Locale.setDefault(locale)
         val config = Configuration(newBase.resources.configuration)
