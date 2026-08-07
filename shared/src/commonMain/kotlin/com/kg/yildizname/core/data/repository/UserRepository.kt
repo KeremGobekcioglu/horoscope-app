@@ -4,6 +4,7 @@ import com.kg.yildizname.core.data.model.ZodiacSign
 import com.kg.yildizname.core.data.prefs.UserPreferencesDataSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.datetime.LocalDate
 
 class UserRepository(
     private val dataSource: UserPreferencesDataSource,
@@ -28,6 +29,9 @@ class UserRepository(
 
     suspend fun clearAllExceptLanguage() =
         dataSource.clearAllExceptLanguage()
+
+    suspend fun getOrCreateInstallDate(fallback: LocalDate): LocalDate =
+        dataSource.getOrCreateInstallDate(fallback)
 
   
 

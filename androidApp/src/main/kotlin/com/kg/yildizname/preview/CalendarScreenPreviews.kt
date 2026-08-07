@@ -81,6 +81,7 @@ private fun CalendarScreenMonthlyPreview() {
             luckDays = listOf(3, 7, 14, 21, 27),
             dailyReading = null,
             monthlyReading = previewMonthlyReading,
+            installDate = DateUtils.todayLocalDate(),
         )
     )
 }
@@ -96,6 +97,7 @@ private fun CalendarScreenDailyPreview() {
             luckDays = listOf(3, 7, 14, 21, 27),
             dailyReading = previewDailyReading,
             monthlyReading = previewMonthlyReading,
+            installDate = DateUtils.todayLocalDate(),
         )
     )
 }
@@ -111,6 +113,7 @@ private fun CalendarScreenDailyEmptyPreview() {
             luckDays = listOf(3, 7, 14, 21, 27),
             dailyReading = null,
             monthlyReading = previewMonthlyReading,
+            installDate = DateUtils.todayLocalDate(),
         )
     )
 }
@@ -126,6 +129,7 @@ private fun CalendarScreenMonthlyEmptyPreview() {
             luckDays = emptyList(),
             dailyReading = null,
             monthlyReading = null,
+            installDate = DateUtils.todayLocalDate(),
         )
     )
 }

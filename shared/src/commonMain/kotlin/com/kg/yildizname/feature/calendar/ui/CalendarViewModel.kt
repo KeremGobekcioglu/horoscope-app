@@ -43,10 +43,14 @@ class CalendarViewModel(
 
     private var dailyJob: Job? = null
     private var monthlyJob: Job? = null
+    private var installDate: LocalDate = DateUtils.todayLocalDate()
     init {
         println("CalendarViewModel: init, loading monthly reading for ${DateUtils.todayLocalDate()}")
         //loadMonthlyReading(DateUtils.todayLocalDate())
-        fetchWhenSignChange()
+        viewModelScope.launch {
+            installDate = userRepository.getOrCreateInstallDate(fallback = DateUtils.todayLocalDate())
+            fetchWhenSignChange()
+        }
     }
     private fun fetchWhenSignChange()
     {
@@ -105,7 +109,8 @@ class CalendarViewModel(
                             selectedTab = PageTab.MONTHLY,
                             luckDays = emptyList(),
                             dailyReading = null,
-                            monthlyReading = reading
+                            monthlyReading = reading,
+                            installDate = installDate
                         )
                     }
             }
@@ -169,7 +174,10 @@ class CalendarViewModel(
     fun onPreviousMonth() {
         val current = _uiState.value as? CalendarUiState.Success ?: return
         val newMonth = current.date.minus(DatePeriod(months = 1))
-        if (newMonth < DateUtils.earliestAvailableDate) return
+        val isBeforeInstallMonth = newMonth.year < current.installDate.year ||
+                (newMonth.year == current.installDate.year &&
+                        newMonth.month.number < current.installDate.month.number)
+        if (isBeforeInstallMonth) return
         _uiState.value = current.copy(date = newMonth, selectedDay = null, selectedTab = PageTab.MONTHLY, monthlyReading = null, dailyReading = null)
         loadMonthlyReading(newMonth)
     }
