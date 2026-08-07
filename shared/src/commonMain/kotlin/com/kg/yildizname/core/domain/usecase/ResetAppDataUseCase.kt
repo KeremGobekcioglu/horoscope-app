@@ -5,7 +5,6 @@ import com.kg.yildizname.core.data.remote.AuthSource
 import com.kg.yildizname.core.data.remote.FirestoreSource
 import com.kg.yildizname.core.data.remote.PushTokenProvider
 import com.kg.yildizname.core.data.repository.UserRepository
-
 class ResetAppDataUseCase(
     private val authSource: AuthSource,
     private val firestoreSource: FirestoreSource,
@@ -32,6 +31,7 @@ class ResetAppDataUseCase(
             println("ResetAppDataUseCase: ensureSignedIn failed: ${e.message}")
             null
         }
+        println("ResetAppDataUseCase: clearing uid=$uid")
 
         try {
             pushTokenProvider.deleteToken()
@@ -48,7 +48,13 @@ class ResetAppDataUseCase(
         }
 
         // Delete the anonymous auth user. A fresh anonymous user is created
-        // the next time ensureSignedIn() runs (next app launch).
+        // the next time ensureSignedIn() runs.
+        // Known gap: the anon user is deleted here, so the new one has no
+        // fcmToken doc until the next cold start (App.kt's registration
+        // LaunchedEffect(Unit) won't refire). Push is silently dead for the
+        // rest of this session. Accepted for v1 — reset is rare. Real fix is
+        // to stop deleting the auth user at all; the uid identifies nobody
+        // and deleting users/{uid} is the part that matters.
         try {
             authSource.deleteCurrentUser()
         } catch (e: Exception) {
