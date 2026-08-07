@@ -271,7 +271,7 @@
     <string name="sign_dates_capricorn">Dec 22 – Jan 19</string>
     <string name="sign_dates_aquarius">Jan 20 – Feb 18</string>
     <string name="sign_dates_pisces">Feb 19 – Mar 20</string>
-
+    <string name="final_verdict_card">The Judgment of the Heavens</string>
     <!-- Element names (English) -->
     <string name="element_name_fire">Fire</string>
     <string name="element_name_earth">Earth</string>

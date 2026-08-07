@@ -67,6 +67,7 @@ import horoscope.shared.generated.resources.compat_score_friendship
 import horoscope.shared.generated.resources.compat_score_long_term
 import horoscope.shared.generated.resources.compat_title
 import horoscope.shared.generated.resources.detailed_compat_title
+import horoscope.shared.generated.resources.final_verdict_card
 import horoscope.shared.generated.resources.loveandintimacy
 import horoscope.shared.generated.resources.strengths
 import org.jetbrains.compose.resources.stringResource
@@ -274,7 +275,7 @@ fun CompatibilityDetailedResultSuccessScreen(
             FinalVerdictCard(
                 text = uiState.result.content.finalVerdict,
                 onClick = onShare,
-                headLine = "Göklerin Kararı"
+                headLine = stringResource(Res.string.final_verdict_card)
             )
         }
     }
