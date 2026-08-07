@@ -165,7 +165,8 @@ private fun CalendarScreenSuccessContent(
                     onPreviousMonth = onPreviousMonth,
                     onDaySelected = onDaySelected,
                     selectedDay = uiState.selectedDay,
-                    canGoToPreviousMonth = uiState.canGoToPreviousMonth
+                    canGoToPreviousMonth = uiState.canGoToPreviousMonth,
+                    canGoToNextMonth = uiState.canGoToNextMonth
                 )
             }
 

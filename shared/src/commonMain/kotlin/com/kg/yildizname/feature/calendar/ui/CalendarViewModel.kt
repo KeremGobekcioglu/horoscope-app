@@ -43,10 +43,14 @@ class CalendarViewModel(
 
     private var dailyJob: Job? = null
     private var monthlyJob: Job? = null
+    private var installDate: LocalDate = DateUtils.todayLocalDate()
     init {
         println("CalendarViewModel: init, loading monthly reading for ${DateUtils.todayLocalDate()}")
         //loadMonthlyReading(DateUtils.todayLocalDate())
-        fetchWhenSignChange()
+        viewModelScope.launch {
+            installDate = userRepository.getOrCreateInstallDate(fallback = DateUtils.todayLocalDate())
+            fetchWhenSignChange()
+        }
     }
     private fun fetchWhenSignChange()
     {
@@ -105,7 +109,8 @@ class CalendarViewModel(
                             selectedTab = PageTab.MONTHLY,
                             luckDays = emptyList(),
                             dailyReading = null,
-                            monthlyReading = reading
+                            monthlyReading = reading,
+                            installDate = installDate
                         )
                     }
             }
@@ -154,6 +159,7 @@ class CalendarViewModel(
     {
         val current = _uiState.value as? CalendarUiState.Success ?: return
         val newMonth = current.date.plus(DatePeriod(months = 1))
+        if (isBeyondMaxNavigableMonth(newMonth)) return
         _uiState.value = current.copy(
             date = newMonth,
             selectedDay = null,
@@ -166,10 +172,23 @@ class CalendarViewModel(
             loadMonthlyReading(newMonth)
         }
     }
+    // Mirrors CalendarUiState.Success.canGoToNextMonth: one month past "today" is
+    // navigable (so the calendar doesn't feel dead-ended), further than that is blocked
+    // since no readings will ever exist that far ahead.
+    private fun isBeyondMaxNavigableMonth(month: LocalDate): Boolean {
+        val today = DateUtils.todayLocalDate()
+        val maxMonthNumber = today.month.number + 1
+        val maxYear = if (maxMonthNumber > 12) today.year + 1 else today.year
+        val maxMonth = if (maxMonthNumber > 12) 1 else maxMonthNumber
+        return month.year > maxYear || (month.year == maxYear && month.month.number > maxMonth)
+    }
     fun onPreviousMonth() {
         val current = _uiState.value as? CalendarUiState.Success ?: return
         val newMonth = current.date.minus(DatePeriod(months = 1))
-        if (newMonth < DateUtils.earliestAvailableDate) return
+        val isBeforeInstallMonth = newMonth.year < current.installDate.year ||
+                (newMonth.year == current.installDate.year &&
+                        newMonth.month.number < current.installDate.month.number)
+        if (isBeforeInstallMonth) return
         _uiState.value = current.copy(date = newMonth, selectedDay = null, selectedTab = PageTab.MONTHLY, monthlyReading = null, dailyReading = null)
         loadMonthlyReading(newMonth)
     }
