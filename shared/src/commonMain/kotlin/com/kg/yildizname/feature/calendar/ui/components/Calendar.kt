@@ -63,6 +63,7 @@ fun Calendar(
     onPreviousMonth: () -> Unit,
     onDaySelected: (CalendarDay) -> Unit,
     canGoToPreviousMonth: Boolean,   // new param
+    canGoToNextMonth: Boolean,
 
 )
 {
@@ -96,13 +97,15 @@ fun Calendar(
                 color = YzGold
             )
             IconButton(
-                onClick = { onNextMonth() }
+                onClick = { onNextMonth() },
+                enabled = canGoToNextMonth
             )
             {
                 Icon(
                     imageVector = FeatherIcons.ChevronRight,
                     contentDescription = Res.string.next_month.toString(),
-                    tint = YzGold
+                    tint = YzGold,
+                    modifier = Modifier.alpha(if (canGoToNextMonth) 1f else 0f)
                 )
             }
         }

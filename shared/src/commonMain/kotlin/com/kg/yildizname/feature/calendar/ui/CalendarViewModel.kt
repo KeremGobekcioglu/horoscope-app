@@ -159,6 +159,7 @@ class CalendarViewModel(
     {
         val current = _uiState.value as? CalendarUiState.Success ?: return
         val newMonth = current.date.plus(DatePeriod(months = 1))
+        if (isBeyondMaxNavigableMonth(newMonth)) return
         _uiState.value = current.copy(
             date = newMonth,
             selectedDay = null,
@@ -170,6 +171,16 @@ class CalendarViewModel(
         {
             loadMonthlyReading(newMonth)
         }
+    }
+    // Mirrors CalendarUiState.Success.canGoToNextMonth: one month past "today" is
+    // navigable (so the calendar doesn't feel dead-ended), further than that is blocked
+    // since no readings will ever exist that far ahead.
+    private fun isBeyondMaxNavigableMonth(month: LocalDate): Boolean {
+        val today = DateUtils.todayLocalDate()
+        val maxMonthNumber = today.month.number + 1
+        val maxYear = if (maxMonthNumber > 12) today.year + 1 else today.year
+        val maxMonth = if (maxMonthNumber > 12) 1 else maxMonthNumber
+        return month.year > maxYear || (month.year == maxYear && month.month.number > maxMonth)
     }
     fun onPreviousMonth() {
         val current = _uiState.value as? CalendarUiState.Success ?: return
