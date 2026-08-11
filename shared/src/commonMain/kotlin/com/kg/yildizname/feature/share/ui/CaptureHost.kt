@@ -25,22 +25,20 @@ fun CaptureHost(
 )
 {
     Layout(
-        modifier = modifier.drawWithContent{
-            // Record this draw pass into the offscreen layer instead of (or as well as)
-            // drawing to screen. We report zero size below, so in practice this never
-            // paints anything visible — but the recording still happens.
-            layer.record{
+        modifier = modifier.drawWithContent {
+            layer.record {
                 this@drawWithContent.drawContent()
             }
+            // Deliberately not calling drawContent() here — the content goes into the layer,
+            // never onto the screen.
         },
         content = content,
     )
     {
         measurables, _ ->
         val placeable = measurables.first().measure(Constraints())
-        // Report ZERO size to the parent: this composable occupies no visible space,
-        // regardless of how large the content it's capturing actually is.
-        layout(0, 0) {
+        // Report the real size so the draw phase actually runs for this node.
+        layout(placeable.width, placeable.height) {
             placeable.place(0, 0)
         }
     }

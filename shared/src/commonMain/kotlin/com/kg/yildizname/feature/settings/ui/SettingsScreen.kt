@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -431,13 +432,19 @@ private fun ShareCaptureTestButton(snackbarHostState: SnackbarHostState) {
 
     // Composed off-screen (CaptureHost reports zero size), pinned to export density so the
     // captured pixels are always 1080x1920 regardless of this device's real density/fontScale.
-    CompositionLocalProvider(LocalDensity provides ShareCardExportDensity) {
-        CaptureHost(layer = layer) {
-            ShareCard(
-                sign = ZodiacSign.ARIES,
-                date = LocalDate(2026, 8, 11),
-                quoteText = "Bugün kendine güvenmenin tam zamanı. Yıldızlar cesaretini destekliyor.",
-            )
+    Box(
+        modifier = Modifier
+            .size(0.dp)          // parent reserves nothing
+            .wrapContentSize(unbounded = true)   // child may exceed those bounds
+    ) {
+        CompositionLocalProvider(LocalDensity provides ShareCardExportDensity) {
+            CaptureHost(layer = layer) {
+                ShareCard(
+                    sign = ZodiacSign.ARIES,
+                    date = LocalDate(2026, 8, 11),
+                    quoteText = "Bugün kendine güvenmenin tam zamanı. Yıldızlar cesaretini destekliyor.",
+                )
+            }
         }
     }
     // The layer only has a real size after CaptureHost's draw phase has run at least once.
@@ -445,8 +452,12 @@ private fun ShareCaptureTestButton(snackbarHostState: SnackbarHostState) {
     // it becomes non-zero — cheap for a throwaway test, not something to ship long-term.
     val isReady = layer.size.width > 0 && layer.size.height > 0
     Button(
-        enabled = isReady,onClick = {
+        onClick = {
             scope.launch {
+                if (layer.size.width == 0 || layer.size.height == 0) {
+                    snackbarHostState.showSnackbar("Layer not ready yet — tap again")
+                    return@launch
+                }
                 val bytes = layer.toImageBitmap().toPngBytes()
                 val result = shareManager.saveToGallery(bytes)
                 val message = when (result) {
