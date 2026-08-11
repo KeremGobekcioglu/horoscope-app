@@ -1,9 +1,17 @@
 package com.kg.yildizname.platform
 
+import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
+import android.media.MediaScannerConnection
 import android.net.Uri
+import android.os.Build
+import android.os.Environment
+import android.provider.MediaStore
 import androidx.core.content.FileProvider
+import com.kg.yildizname.shared.R
+import horoscope.shared.generated.resources.Res
+import horoscope.shared.generated.resources.app_name
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
@@ -16,7 +24,7 @@ private const val FACEBOOK_PACKAGE = "com.facebook.katana"
 
 /** Exported PNGs older than this are pruned on the next share. */
 private const val SHARE_CACHE_TTL_MS = 10 * 60 * 1000L
-
+private const val APP_FOLDER_NAME = "Yıldızname"
 class AndroidShareManager(private val context: Context) : ShareManager
 {
     private var lastGrantedUri : Uri? = null
@@ -61,10 +69,6 @@ class AndroidShareManager(private val context: Context) : ShareManager
             }
         }
     }
-
-
-    override suspend fun saveToGallery(png: ByteArray): ShareResult =
-        TODO("step 1c — MediaStore + the API<=28 permission branch")
 
     // ACTION_SEND puts the payload in the extras bundle under EXTRA_STREAM. Every generic
     // "share to me" receiver (WhatsApp, Facebook, the system chooser, Instagram feed) reads
@@ -142,7 +146,7 @@ class AndroidShareManager(private val context: Context) : ShareManager
             }
         }
         // every name is unique because if we use same name we can delete and replace the file which is at mid-read by another app.
-        val file = File(dir, "yildizname_$now.png")
+        val file = File(dir, "${APP_FOLDER_NAME}_$now.png")
         // this must match provider in manifest. android authorities. the fileprovider suffix must match android authorities value.
         return FileProvider.getUriForFile(context, "${context.packageName}.fileprovider", file)
     }
@@ -174,4 +178,70 @@ class AndroidShareManager(private val context: Context) : ShareManager
     private fun isInstalled(pkg: String): Boolean {
         return runCatching { context.packageManager.getPackageInfo(pkg, 0) }.isSuccess
     }
+
+    private fun saveMediaStorage(png: ByteArray) : ShareResult
+    {
+        val values = ContentValues().apply {
+            put(MediaStore.Images.Media.DISPLAY_NAME, "${APP_FOLDER_NAME}_${System.currentTimeMillis()}.png")
+            put(MediaStore.Images.Media.MIME_TYPE,"image/png")
+            put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_PICTURES + "/$APP_FOLDER_NAME")
+            // is_pending 1 makes that other apps cant read the image half read. it will be available after image
+            // is written to gallery.
+            put(MediaStore.Images.Media.IS_PENDING, 1)
+        }
+        val collection = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+        val itemUri = context.contentResolver.insert(collection,values)
+            ?: return ShareResult.Failed(IllegalStateException("MediaStore insert returned null"))
+        return try {
+            context.contentResolver.openOutputStream(itemUri)?.use { it.write(png) }
+                 ?: return ShareResult.Failed(IllegalStateException("Could not open output stream"))
+            values.clear()
+            // making is pending 0 so that image can be read.
+            values.put(MediaStore.Images.Media.IS_PENDING, 0)
+            context.contentResolver.update(itemUri,values,null,null)
+            ShareResult.Success
+        }
+        catch (e : Exception)
+        {
+            context.contentResolver.delete(itemUri,null,null) // don't leave a half-written row
+            ShareResult.Failed(e)
+        }
+    }
+
+    private fun saveViaLegacyFile(png: ByteArray) : ShareResult
+    {
+        return try {
+            val pictureDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+            val dir = File(pictureDir, APP_FOLDER_NAME).apply { mkdirs() }
+            val file = File(dir, "${APP_FOLDER_NAME}_${System.currentTimeMillis()}.png")
+            file.writeBytes(png)
+            // No MediaStore entry gets created automatically on this path — without telling the
+            // media scanner explicitly, the file exists on disk but won't appear in the gallery
+            // app until the next full device scan (which could be never, from the user's view).
+            MediaScannerConnection.scanFile(context, arrayOf(file.absolutePath), arrayOf("image/png"), null)
+            ShareResult.Success
+        }
+        catch (e: Exception)
+        {
+            ShareResult.Failed(e)
+        }
+    }
+
+    override suspend fun saveToGallery(png: ByteArray): ShareResult =
+        withContext(Dispatchers.IO) {
+            try {
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
+                {
+                    saveMediaStorage(png)
+                }
+                else
+                {
+                    saveViaLegacyFile(png)
+                }
+            }
+            catch (e: Exception)
+            {
+                ShareResult.Failed(e)
+            }
+        }
 }

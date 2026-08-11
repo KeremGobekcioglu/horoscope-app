@@ -17,6 +17,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHost
@@ -26,17 +27,21 @@ import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.graphics.rememberGraphicsLayer
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.Lifecycle
@@ -69,6 +74,12 @@ import com.kg.yildizname.feature.settings.ui.components.SettingsCard
 import com.kg.yildizname.feature.settings.ui.components.SettingsRow
 import com.kg.yildizname.feature.settings.ui.components.SettingsRowDivider
 import com.kg.yildizname.feature.settings.ui.components.SettingsSectionLabel
+import com.kg.yildizname.feature.share.ui.CaptureHost
+import com.kg.yildizname.feature.share.ui.ShareCard
+import com.kg.yildizname.feature.share.ui.ShareCardExportDensity
+import com.kg.yildizname.platform.ShareManager
+import com.kg.yildizname.platform.ShareResult
+import com.kg.yildizname.platform.toPngBytes
 import horoscope.shared.generated.resources.Res
 import horoscope.shared.generated.resources.settings_about
 import horoscope.shared.generated.resources.settings_daily_notification
@@ -89,8 +100,11 @@ import horoscope.shared.generated.resources.settings_restart_title
 import horoscope.shared.generated.resources.settings_share_app
 import horoscope.shared.generated.resources.settings_title
 import horoscope.shared.generated.resources.settings_version
+import kotlinx.coroutines.launch
+import kotlinx.datetime.LocalDate
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.koinInject
 
 @Composable
 fun SettingsScreen(
@@ -328,6 +342,10 @@ fun SettingsScreen(
                     Text(text = stringResource(Res.string.settings_reset_data), color = YzError)
                 }
             }
+
+            Spacer(Modifier.height(24.dp))
+
+            ShareCaptureTestButton(snackbarHostState = snackbarHostState)
         }
         if (showSignSheet) {
             SelectSignBottomSheet(
@@ -403,3 +421,43 @@ private fun LanguageOption(
         Text(text = label, color = if (selected) YzSurface else YzInk)
     }
 }
+
+// ---- TEMPORARY: share-card capture test, delete once verified ----
+@Composable
+private fun ShareCaptureTestButton(snackbarHostState: SnackbarHostState) {
+    val layer = rememberGraphicsLayer()
+    val shareManager = koinInject<ShareManager>()
+    val scope = rememberCoroutineScope()
+
+    // Composed off-screen (CaptureHost reports zero size), pinned to export density so the
+    // captured pixels are always 1080x1920 regardless of this device's real density/fontScale.
+    CompositionLocalProvider(LocalDensity provides ShareCardExportDensity) {
+        CaptureHost(layer = layer) {
+            ShareCard(
+                sign = ZodiacSign.ARIES,
+                date = LocalDate(2026, 8, 11),
+                quoteText = "Bugün kendine güvenmenin tam zamanı. Yıldızlar cesaretini destekliyor.",
+            )
+        }
+    }
+    // The layer only has a real size after CaptureHost's draw phase has run at least once.
+    // Reading layer.size here re-triggers recomposition of this Text on every frame until
+    // it becomes non-zero — cheap for a throwaway test, not something to ship long-term.
+    val isReady = layer.size.width > 0 && layer.size.height > 0
+    Button(
+        enabled = isReady,onClick = {
+            scope.launch {
+                val bytes = layer.toImageBitmap().toPngBytes()
+                val result = shareManager.saveToGallery(bytes)
+                val message = when (result) {
+                    is ShareResult.Success -> "Saved — check gallery"
+                    is ShareResult.Failed -> "Failed: ${result.cause?.message}"
+                    is ShareResult.TargetUnavailable -> "Unavailable"
+                }
+            snackbarHostState.showSnackbar(message)
+        }
+    }) {
+        Text(if (isReady) "TEST: Capture & Save" else "Preparing…")
+    }
+}
+// ---- END TEMPORARY ----
