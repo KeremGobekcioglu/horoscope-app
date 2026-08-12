@@ -241,6 +241,8 @@
     <string name="share_option_copy_link">Bağlantıyı Kopyala</string>
     <string name="share_option_save_image">Görsel Olarak Kaydet</string>
     <string name="share_close">KAPAT</string>
+    <string name="share_error_generic">Paylaşım sırasında bir sorun oluştu. Lütfen tekrar deneyin.</string>
+    <string name="share_error_permission_denied">Görseli kaydetmek için galeri izni gerekiyor.</string>
 
     <!-- Lucky color names -->
     <string name="lucky_color_red">Kırmızı</string>

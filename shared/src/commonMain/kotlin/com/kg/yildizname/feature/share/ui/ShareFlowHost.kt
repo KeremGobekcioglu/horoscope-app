@@ -6,20 +6,26 @@ import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.rememberGraphicsLayer
 import com.kg.yildizname.core.data.model.CompatibilityScores
 import com.kg.yildizname.core.data.model.ZodiacSign
 import com.kg.yildizname.core.data.model.localizedName
 import com.kg.yildizname.core.domain.model.CompatibilityBand
 import com.kg.yildizname.core.domain.model.localizedDesc
+import com.kg.yildizname.platform.ShareManager
 import horoscope.shared.generated.resources.Res
 import horoscope.shared.generated.resources.compat_score_communication
 import horoscope.shared.generated.resources.compat_score_friendship
 import horoscope.shared.generated.resources.compat_score_long_term
 import horoscope.shared.generated.resources.compat_score_love
+import horoscope.shared.generated.resources.share_error_generic
+import horoscope.shared.generated.resources.share_error_permission_denied
 import kotlinx.datetime.LocalDate
 import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.koinInject
 
 /** Localized, all-caps sign name — matches the format ShareCard expects. */
 //@Composable
@@ -84,6 +90,18 @@ fun rememberShareFlowState(): ShareFlowState = remember { ShareFlowState() }
 fun ShareFlowHost(state: ShareFlowState) {
     val request = state.request ?: return
 
+    // 1- dependencies
+    // 1. dependencies
+    val layer = rememberGraphicsLayer()
+    val shareManager = koinInject<ShareManager>()
+    val scope = rememberCoroutineScope()
+
+    // 2. state — just two vars, no sealed class
+    var isWorking by remember { mutableStateOf(false) }
+    var errorMessage by remember { mutableStateOf<String?>(null) }
+    // 3. strings (stringResource must be called in composable scope, not inside perform)
+    val genericError = stringResource(Res.string.share_error_generic)
+    val permissionDenied = stringResource(Res.string.share_error_permission_denied)
     ShareBottomSheet(
         preview = {
             when (request) {
