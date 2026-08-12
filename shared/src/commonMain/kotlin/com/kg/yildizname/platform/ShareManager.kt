@@ -33,4 +33,5 @@ interface ShareManager
     suspend fun share( png: ByteArray, target: ShareTarget) : ShareResult
     /** Saves [png] to the device's photo gallery. May require a runtime permission. */
     suspend fun saveToGallery(png: ByteArray) : ShareResult
+    suspend fun shareText(text: String, target: ShareTarget): ShareResult
 }

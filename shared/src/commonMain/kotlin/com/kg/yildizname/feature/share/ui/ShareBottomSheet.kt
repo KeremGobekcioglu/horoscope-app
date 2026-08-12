@@ -25,6 +25,7 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
@@ -40,6 +41,7 @@ import com.kg.yildizname.core.ui.theme.CardShape
 import com.kg.yildizname.core.ui.theme.ChipShape
 import com.kg.yildizname.core.ui.theme.SheetShape
 import com.kg.yildizname.core.ui.theme.YzBorder
+import com.kg.yildizname.core.ui.theme.YzError
 import com.kg.yildizname.core.ui.theme.YzGold
 import com.kg.yildizname.core.ui.theme.YzInk
 import com.kg.yildizname.core.ui.theme.YzSurface
@@ -48,6 +50,7 @@ import com.kg.yildizname.core.ui.utils.yzNavigationBarsPadding
 import compose.icons.FeatherIcons
 import compose.icons.FontAwesomeIcons
 import compose.icons.feathericons.Download
+import compose.icons.feathericons.FileText
 import compose.icons.feathericons.Link
 import compose.icons.feathericons.Share2
 import compose.icons.fontawesomeicons.Brands
@@ -62,6 +65,7 @@ import horoscope.shared.generated.resources.share_option_facebook
 import horoscope.shared.generated.resources.share_option_general
 import horoscope.shared.generated.resources.share_option_instagram_stories
 import horoscope.shared.generated.resources.share_option_save_image
+import horoscope.shared.generated.resources.share_option_share_text
 import horoscope.shared.generated.resources.share_option_whatsapp
 import org.jetbrains.compose.resources.stringResource
 
@@ -79,11 +83,13 @@ private val FacebookBlue = Color(0xFF1877F2)
 @Composable
 fun ShareBottomSheet(
     preview: @Composable () -> Unit,
+    isWorking: Boolean,
+    errorMessage: String?,
     onInstagramStoriesClick: () -> Unit,
     onWhatsAppClick: () -> Unit,
     onFacebookClick: () -> Unit,
     onGeneralShareClick: () -> Unit,
-    onCopyLinkClick: () -> Unit,
+    onShareTextClick: () -> Unit,
     onSaveImageClick: () -> Unit,
     onDismiss: () -> Unit,
 ) {
@@ -101,9 +107,11 @@ fun ShareBottomSheet(
             onWhatsAppClick = onWhatsAppClick,
             onFacebookClick = onFacebookClick,
             onGeneralShareClick = onGeneralShareClick,
-            onCopyLinkClick = onCopyLinkClick,
+            onShareTextClick = onShareTextClick,
             onSaveImageClick = onSaveImageClick,
             onDismiss = onDismiss,
+            isWorking = isWorking,
+            errorMessage = errorMessage
         )
     }
 }
@@ -117,11 +125,13 @@ fun ShareBottomSheet(
 @Composable
 fun ShareBottomSheetContent(
     preview: @Composable () -> Unit,
+    isWorking: Boolean,
+    errorMessage: String?,
     onInstagramStoriesClick: () -> Unit,
     onWhatsAppClick: () -> Unit,
     onFacebookClick: () -> Unit,
     onGeneralShareClick: () -> Unit,
-    onCopyLinkClick: () -> Unit,
+    onShareTextClick: () -> Unit,
     onSaveImageClick: () -> Unit,
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
@@ -153,18 +163,21 @@ fun ShareBottomSheetContent(
                 label = stringResource(Res.string.share_option_instagram_stories),
                 background = Brush.linearGradient(InstagramGradient),
                 onClick = onInstagramStoriesClick,
+                enabled = !isWorking,
             )
             SharePlatformOption(
                 icon = FontAwesomeIcons.Brands.Whatsapp,
                 label = stringResource(Res.string.share_option_whatsapp),
                 background = SolidColor(WhatsAppGreen),
                 onClick = onWhatsAppClick,
+                enabled = !isWorking,
             )
             SharePlatformOption(
                 icon = FontAwesomeIcons.Brands.Facebook,
                 label = stringResource(Res.string.share_option_facebook),
                 background = SolidColor(FacebookBlue),
                 onClick = onFacebookClick,
+                enabled = !isWorking,
             )
             SharePlatformOption(
                 icon = FeatherIcons.Share2,
@@ -172,6 +185,7 @@ fun ShareBottomSheetContent(
                 background = SolidColor(YzSurfaceAlt),
                 iconTint = YzGold,
                 onClick = onGeneralShareClick,
+                enabled = !isWorking,
             )
         }
 
@@ -179,15 +193,29 @@ fun ShareBottomSheetContent(
         HorizontalDivider(color = YzBorder, thickness = 1.dp)
 
         ShareTextRow(
-            icon = FeatherIcons.Link,
-            label = stringResource(Res.string.share_option_copy_link),
-            onClick = onCopyLinkClick,
+            icon = FeatherIcons.FileText,
+            label = stringResource(Res.string.share_option_share_text),
+            onClick = onShareTextClick,
+            enabled = !isWorking,
         )
         ShareTextRow(
             icon = FeatherIcons.Download,
             label = stringResource(Res.string.share_option_save_image),
             onClick = onSaveImageClick,
+            enabled = !isWorking,
         )
+
+        if (errorMessage != null) {
+            Text(
+                text = errorMessage,
+                color = YzError,
+                style = MaterialTheme.typography.bodySmall,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 24.dp, vertical = 12.dp),
+            )
+        }
 
         HorizontalDivider(color = YzBorder, thickness = 1.dp)
 
@@ -214,6 +242,7 @@ private fun SharePlatformOption(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     iconTint: Color = Color.White,
+    enabled: Boolean = true,
 ) {
     Column(
         modifier = modifier.width(72.dp),
@@ -224,7 +253,10 @@ private fun SharePlatformOption(
                 .size(56.dp)
                 .clip(ChipShape)
                 .background(background)
-                .clickable(onClick = onClick),
+                // Visually signal the disabled state — we have no drop shadows or overlays
+                // per the design system, so alpha on the whole tile is the available lever.
+                .alpha(if (enabled) 1f else 0.4f)
+                .clickable(enabled = enabled, onClick = onClick),
             contentAlignment = Alignment.Center,
         ) {
             Icon(
@@ -250,11 +282,13 @@ private fun ShareTextRow(
     label: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    enabled: Boolean = true,
 ) {
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .clickable(onClick = onClick)
+            .alpha(if (enabled) 1f else 0.4f)
+            .clickable(enabled = enabled, onClick = onClick)
             .padding(horizontal = 24.dp, vertical = 16.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {

@@ -259,7 +259,7 @@
     <string name="lucky_color_turquoise">Turquoise</string>
     <string name="lucky_color_emerald">Emerald</string>
     <string name="lucky_color_beige">Beige</string>
-
+    <string name="share_option_share_text">Share as text</string>
     <!-- Sign date ranges (English) -->
     <string name="sign_dates_aries">Mar 21 – Apr 19</string>
     <string name="sign_dates_taurus">Apr 20 – May 20</string>

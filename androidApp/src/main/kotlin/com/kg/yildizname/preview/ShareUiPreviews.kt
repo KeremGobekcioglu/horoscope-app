@@ -76,28 +76,28 @@ private const val previewShareQuote =
  * [ShareBottomSheet] — `ModalBottomSheet` renders through a Popup, which Android Studio's static
  * preview surface never captures, so a preview wrapping the actual sheet always renders blank.
  */
-@Preview(name = "ShareBottomSheet", showBackground = true, heightDp = 700)
-@Composable
-private fun ShareBottomSheetPreview() {
-    YzTheme {
-        Surface(color = YzSurface) {
-            ShareBottomSheetContent(
-                preview = {
-                    ShareCardPreview(
-                        sign = ZodiacSign.SCORPIO,
-                        date = previewShareDate,
-                        quoteText = previewShareQuote,
-                        modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp),
-                    )
-                },
-                onInstagramStoriesClick = {},
-                onWhatsAppClick = {},
-                onFacebookClick = {},
-                onGeneralShareClick = {},
-                onCopyLinkClick = {},
-                onSaveImageClick = {},
-                onDismiss = {},
-            )
-        }
-    }
-}
+//@Preview(name = "ShareBottomSheet", showBackground = true, heightDp = 700)
+//@Composable
+//private fun ShareBottomSheetPreview() {
+//    YzTheme {
+//        Surface(color = YzSurface) {
+//            ShareBottomSheetContent(
+//                preview = {
+//                    ShareCardPreview(
+//                        sign = ZodiacSign.SCORPIO,
+//                        date = previewShareDate,
+//                        quoteText = previewShareQuote,
+//                        modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp),
+//                    )
+//                },
+//                onInstagramStoriesClick = {},
+//                onWhatsAppClick = {},
+//                onFacebookClick = {},
+//                onGeneralShareClick = {},
+//                onCopyLinkClick = {},
+//                onSaveImageClick = {},
+//                onDismiss = {},
+//            )
+//        }
+//    }
+//}

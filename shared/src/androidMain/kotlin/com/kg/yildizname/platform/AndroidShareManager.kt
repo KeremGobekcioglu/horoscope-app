@@ -241,4 +241,37 @@ class AndroidShareManager(private val context: Context) : ShareManager
                 ShareResult.Failed(e)
             }
         }
+
+    override suspend fun shareText(
+        text: String,
+        target: ShareTarget
+    ): ShareResult = withContext(Dispatchers.IO)
+    {
+        try {
+            val base = Intent(Intent.ACTION_SEND).apply {
+                type = "text/plain"
+                putExtra(Intent.EXTRA_TEXT,text)
+                resolvePackage(target)?.let { setPackage(it) }
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            }
+            val intent =
+                if(target == ShareTarget.SystemSheet)
+                {
+                    Intent.createChooser(base, null).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                }
+                else
+                {
+                    base
+                }
+            if (intent.resolveActivity(context.packageManager) == null) ShareResult.TargetUnavailable
+            else {
+                context.startActivity(intent);
+                ShareResult.Success
+            }
+        }
+        catch (e : Exception)
+        {
+            ShareResult.Failed(e)
+        }
+    }
 }

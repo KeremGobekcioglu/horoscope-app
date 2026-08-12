@@ -39,7 +39,7 @@
     <string name="home_share_cd">Yorumu paylaş</string>
     <string name="home_notification_cd">Bildirimler</string>
     <string name="home_share_card_cd">Paylaşım kartı</string>
-
+    <string name="share_option_share_text">Metin olarak paylaş</string>
     <!-- Reading periods -->
     <string name="period_daily">Günlük</string>
     <string name="period_weekly">Haftalık</string>
