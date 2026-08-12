@@ -9,9 +9,6 @@ import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
 import androidx.core.content.FileProvider
-import com.kg.yildizname.shared.R
-import horoscope.shared.generated.resources.Res
-import horoscope.shared.generated.resources.app_name
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
