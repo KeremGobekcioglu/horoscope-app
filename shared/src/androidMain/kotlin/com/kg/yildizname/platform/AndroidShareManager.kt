@@ -13,6 +13,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
 
+private const val SHARE_FILE_PREFIX = "yildizname"
 private const val FACEBOOK_APP_ID = "2197763431069255"   // numeric here; "fb"-prefixed in the manifest
 private const val INSTAGRAM_PACKAGE = "com.instagram.android"
 private const val WHATSAPP_PACKAGE = "com.whatsapp"
@@ -143,7 +144,8 @@ class AndroidShareManager(private val context: Context) : ShareManager
             }
         }
         // every name is unique because if we use same name we can delete and replace the file which is at mid-read by another app.
-        val file = File(dir, "${APP_FOLDER_NAME}_$now.png")
+        val file = File(dir, "${SHARE_FILE_PREFIX}_$now.png")
+        file.writeBytes(png)
         // this must match provider in manifest. android authorities. the fileprovider suffix must match android authorities value.
         return FileProvider.getUriForFile(context, "${context.packageName}.fileprovider", file)
     }
