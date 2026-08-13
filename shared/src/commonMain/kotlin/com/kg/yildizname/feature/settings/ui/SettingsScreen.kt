@@ -346,7 +346,6 @@ fun SettingsScreen(
 
             Spacer(Modifier.height(24.dp))
 
-            ShareCaptureTestButton(snackbarHostState = snackbarHostState)
         }
         if (showSignSheet) {
             SelectSignBottomSheet(
@@ -422,53 +421,3 @@ private fun LanguageOption(
         Text(text = label, color = if (selected) YzSurface else YzInk)
     }
 }
-
-// ---- TEMPORARY: share-card capture test, delete once verified ----
-@Composable
-private fun ShareCaptureTestButton(snackbarHostState: SnackbarHostState) {
-    val layer = rememberGraphicsLayer()
-    val shareManager = koinInject<ShareManager>()
-    val scope = rememberCoroutineScope()
-
-    // Composed off-screen (CaptureHost reports zero size), pinned to export density so the
-    // captured pixels are always 1080x1920 regardless of this device's real density/fontScale.
-    Box(
-        modifier = Modifier
-            .size(0.dp)          // parent reserves nothing
-            .wrapContentSize(unbounded = true)   // child may exceed those bounds
-    ) {
-        CompositionLocalProvider(LocalDensity provides ShareCardExportDensity) {
-            CaptureHost(layer = layer) {
-                ShareCard(
-                    sign = ZodiacSign.ARIES,
-                    date = LocalDate(2026, 8, 11),
-                    quoteText = "Bugün kendine güvenmenin tam zamanı. Yıldızlar cesaretini destekliyor.",
-                )
-            }
-        }
-    }
-    // The layer only has a real size after CaptureHost's draw phase has run at least once.
-    // Reading layer.size here re-triggers recomposition of this Text on every frame until
-    // it becomes non-zero — cheap for a throwaway test, not something to ship long-term.
-    val isReady = layer.size.width > 0 && layer.size.height > 0
-    Button(
-        onClick = {
-            scope.launch {
-                if (layer.size.width == 0 || layer.size.height == 0) {
-                    snackbarHostState.showSnackbar("Layer not ready yet — tap again")
-                    return@launch
-                }
-                val bytes = layer.toImageBitmap().toPngBytes()
-                val result = shareManager.saveToGallery(bytes)
-                val message = when (result) {
-                    is ShareResult.Success -> "Saved — check gallery"
-                    is ShareResult.Failed -> "Failed: ${result.cause?.message}"
-                    is ShareResult.TargetUnavailable -> "Unavailable"
-                }
-            snackbarHostState.showSnackbar(message)
-        }
-    }) {
-        Text(if (isReady) "TEST: Capture & Save" else "Preparing…")
-    }
-}
-// ---- END TEMPORARY ----
