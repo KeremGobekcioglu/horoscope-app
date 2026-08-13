@@ -71,8 +71,8 @@ fun CompatibilityScreen(
     onAnalyze : (signA: String, signB: String) -> Unit
 ) {
     StarFieldBackground(Modifier.fillMaxSize())
-    var personOneSign by rememberSaveable { mutableStateOf<ZodiacSign?>(null) }
-    var personTwoSign by rememberSaveable { mutableStateOf<ZodiacSign?>(null) }
+    var personOneSign by remember { mutableStateOf<ZodiacSign?>(null) }
+    var personTwoSign by remember { mutableStateOf<ZodiacSign?>(null) }
     var pickingSlot by remember { mutableStateOf<SignSlot?>(null) }
     Box(
         modifier = Modifier.fillMaxSize().yzStatusBarsPadding(),

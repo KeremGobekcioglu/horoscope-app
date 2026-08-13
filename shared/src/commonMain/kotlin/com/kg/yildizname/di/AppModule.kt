@@ -18,7 +18,7 @@ val appModule: Module = module {
     viewModel { OnboardingViewModel(get()) }
     viewModel { HomeViewModel(get(), get()) }
     viewModel { CalendarViewModel(get(),get()) }
-    viewModel { params -> CompatibilityResultViewModel(get() , params.get() , params.get()) }
+    viewModel { CompatibilityResultViewModel(get()) }
     // Using (date, signKey) = params instead of params.get<T>().
     // Our route param was nullable (String?), and get<T>() can't reliably
     // type-match on a nullable type. So instead of failing, it silently

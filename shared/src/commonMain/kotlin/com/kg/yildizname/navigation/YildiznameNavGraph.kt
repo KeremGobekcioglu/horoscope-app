@@ -91,13 +91,9 @@ private fun NavBackStackEntry.rememberOnboardingViewModel(
 @Composable
 private fun NavBackStackEntry.rememberCompatibilityViewModel(
     navController: NavController,
-    signA: String?,
-    signB: String?,
 ): CompatibilityResultViewModel {
     val graphEntry = remember(this) { navController.getBackStackEntry<CompatibilityGraph>() }
-    return koinViewModel(viewModelStoreOwner = graphEntry) {
-        parametersOf(signA, signB)
-    }
+    return koinViewModel(viewModelStoreOwner = graphEntry)
 }
 
 @Composable
@@ -354,9 +350,10 @@ fun YildiznameNavGraph(navController: NavHostController) {
                     val route: CompatibilityResultRoute = backStackEntry.toRoute()
                     val resultViewModel = backStackEntry.rememberCompatibilityViewModel(
                         navController = navController,
-                        signA = route.signA,
-                        signB = route.signB,
                     )
+                    LaunchedEffect(route.signA, route.signB) {
+                        resultViewModel.loadResult(route.signA, route.signB)
+                    }
                     val state by resultViewModel.uiState.collectAsStateWithLifecycle()
                     CompatibilityResultScreen(
                         uiState = state,
@@ -381,8 +378,6 @@ fun YildiznameNavGraph(navController: NavHostController) {
                 composable<CompatibilityDetailRoute> { backStackEntry ->
                     val resultViewModel = backStackEntry.rememberCompatibilityViewModel(
                         navController = navController,
-                        signA = null,
-                        signB = null,
                     )
                     val state by resultViewModel.uiState.collectAsStateWithLifecycle()
                     CompatibilityDetailedResultScreen(

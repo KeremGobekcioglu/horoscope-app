@@ -14,8 +14,6 @@ import kotlinx.coroutines.launch
 
 class CompatibilityResultViewModel(
     private val repository: CompatibilityRepository,
-    private val signA: String,
-    private val signB: String
 ) : ViewModel()
 {
     // this result screen will fetch data.
@@ -23,12 +21,24 @@ class CompatibilityResultViewModel(
     private val _uiState = MutableStateFlow<CompatibilityResultUIState>(CompatibilityResultUIState.Loading)
     val uiState : StateFlow<CompatibilityResultUIState> = _uiState.asStateFlow()
 
-    init {
-        fetchResults()
+    // this ViewModel is shared (graph-scoped) between the result and detail screens,
+    // so picking a new pair on the selection screen re-enters the same instance.
+    // Track the last-loaded pair to avoid refetching when the detail screen re-observes
+    // with the same signs, while still reloading when the user picks a new pair.
+    private var loadedSignA: String? = null
+    private var loadedSignB: String? = null
+
+    fun loadResult(signA: String, signB: String) {
+        if (loadedSignA == signA && loadedSignB == signB) return
+        loadedSignA = signA
+        loadedSignB = signB
+        fetchResults(signA, signB)
     }
-    private fun fetchResults() {
+
+    private fun fetchResults(signA: String, signB: String) {
         val zodiacSignA = ZodiacSign.fromKey(signA)
         val zodiacSignB = ZodiacSign.fromKey(signB)
+        _uiState.value = CompatibilityResultUIState.Loading
         viewModelScope.launch {
             try {
                 /*
