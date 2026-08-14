@@ -13,12 +13,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHost
@@ -28,23 +26,18 @@ import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.graphics.rememberGraphicsLayer
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
@@ -61,7 +54,6 @@ import com.kg.yildizname.core.data.model.compatGridIcon
 import com.kg.yildizname.core.data.model.localizedDateRange
 import com.kg.yildizname.core.data.model.localizedName
 import com.kg.yildizname.core.ui.components.SelectSignBottomSheet
-import com.kg.yildizname.core.ui.theme.YzBorder
 import com.kg.yildizname.core.ui.theme.YzError
 import com.kg.yildizname.core.ui.theme.YzErrorBorder
 import com.kg.yildizname.core.ui.theme.YzGold
@@ -74,12 +66,6 @@ import com.kg.yildizname.feature.settings.ui.components.SettingsCard
 import com.kg.yildizname.feature.settings.ui.components.SettingsRow
 import com.kg.yildizname.feature.settings.ui.components.SettingsRowDivider
 import com.kg.yildizname.feature.settings.ui.components.SettingsSectionLabel
-import com.kg.yildizname.feature.share.ui.CaptureHost
-import com.kg.yildizname.feature.share.ui.ShareCard
-import com.kg.yildizname.feature.share.ui.ShareCardExportDensity
-import com.kg.yildizname.platform.ShareManager
-import com.kg.yildizname.platform.ShareResult
-import com.kg.yildizname.platform.toPngBytes
 import horoscope.shared.generated.resources.Res
 import horoscope.shared.generated.resources.settings_about
 import horoscope.shared.generated.resources.settings_daily_notification
@@ -100,21 +86,13 @@ import horoscope.shared.generated.resources.settings_restart_title
 import horoscope.shared.generated.resources.settings_share_app
 import horoscope.shared.generated.resources.settings_title
 import horoscope.shared.generated.resources.settings_version
-import kotlinx.coroutines.launch
-import kotlinx.datetime.LocalDate
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import org.koin.compose.koinInject
 
 @Composable
 fun SettingsScreen(
-    notificationsEnabled: Boolean,
-    notificationTime: String,
-    currentLanguage: String,
-    appVersion: String,
     onChangeSignClick: (ZodiacSign) -> Unit,
     onNotificationSwitchTapped: () -> Unit,
-    onTimeClick: () -> Unit,
     onLanguageChange: (String) -> Unit,
     onPrivacyPolicyClick: () -> Unit,
     onShareAppClick: () -> Unit,
@@ -239,13 +217,12 @@ fun SettingsScreen(
                         )
                     },
                 )
-                if (notificationsEnabled) {
+                if (state.notificationsEnabled == true) {
                     SettingsRowDivider()
                     SettingsRow(
                         title = stringResource(Res.string.settings_notification_time),
                         leadingIcon = FeatherIcons.Clock,
-                        onClick = onTimeClick,
-                        trailing = { Text(text = notificationTime, color = YzGold) },
+                        trailing = { Text(text = state.notificationTime, color = YzGold) },
                     )
                 }
             }
@@ -264,13 +241,13 @@ fun SettingsScreen(
             ) {
                 LanguageOption(
                     label = stringResource(Res.string.settings_language_tr),
-                    selected = currentLanguage == "tr",
+                    selected = state.currentLanguage == "tr",
                     modifier = Modifier.weight(1f),
                     onClick = { onLanguageChange("tr") },
                 )
                 LanguageOption(
                     label = stringResource(Res.string.settings_language_en),
-                    selected = currentLanguage == "en",
+                    selected = state.currentLanguage == "en",
                     modifier = Modifier.weight(1f),
                     onClick = { onLanguageChange("en") },
                 )
@@ -285,7 +262,7 @@ fun SettingsScreen(
                     title = stringResource(Res.string.settings_version),
                     leadingIcon = FeatherIcons.Info,
                     iconTint = YzMuted,
-                    trailing = { Text(text = appVersion, color = YzMuted) },
+                    trailing = { Text(text = state.appVersion, color = YzMuted) },
                 )
                 SettingsRowDivider()
                 SettingsRow(
@@ -347,10 +324,7 @@ fun SettingsScreen(
         }
         if (showSignSheet) {
             SelectSignBottomSheet(
-                onSignConfirmed = { sign ->
-                    onChangeSignClick(sign)
-                    showSignSheet = false
-                },
+                onSignSelected = { sign -> onChangeSignClick(sign) },
                 onDismiss = { showSignSheet = false },
             )
         }
@@ -411,7 +385,7 @@ private fun LanguageOption(
     Box(
         modifier = modifier
             .clip(RoundedCornerShape(12.dp))
-            .background(if (selected) YzGold else YzSurfaceAlt)
+            .background(if (selected) YzGold else YzSurface)
             .clickable(onClick = onClick)
             .padding(vertical = 10.dp),
         contentAlignment = Alignment.Center,

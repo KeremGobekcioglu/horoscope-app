@@ -429,13 +429,8 @@ fun YildiznameNavGraph(navController: NavHostController) {
 
                 // Stateless SettingsScreen currently wired with placeholder state and stub callbacks.
                 SettingsScreen(
-                    notificationsEnabled = uiState.notificationsEnabled ?: true,
-                    notificationTime = "11:00",
-                    currentLanguage = uiState.currentLanguage,
-                    appVersion = "0.0.0",
                     onChangeSignClick = viewModel::updateSign,
                     onNotificationSwitchTapped = viewModel::onNotificationsSwitchTapped,
-                    onTimeClick = { /* TODO: open time picker */ },
                     onLanguageChange = viewModel::onLanguageChange,
                     onPrivacyPolicyClick = viewModel::onPrivacyClick,
                     onShareAppClick = { /* TODO: open share sheet */ },
