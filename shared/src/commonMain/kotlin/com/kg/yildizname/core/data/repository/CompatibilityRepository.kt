@@ -62,7 +62,10 @@ class CompatibilityRepository(
             println("CompatibilityRepository: ROOM HIT for id=$id")
            //emit(cached.toDomain())
            // return@flow
-            return cached.toDomain()
+            // id/storage order is always alphabetical (pairId() sorts it), but the
+            // caller's signA/signB order is what the user actually picked on screen —
+            // restore that order here so "Person 1"/"Person 2" in the UI stays stable.
+            return cached.toDomain().copy(signs = listOf(signA, signB))
         }
         println("CompatibilityRepository: ROOM MISS for id=$id, trying Firestore")
 
@@ -80,7 +83,7 @@ class CompatibilityRepository(
             // finds it instantly, and we skip Firestore entirely.
             dao.upsert(entity)
             //emit(domain)
-            return entity.toDomain()
+            return entity.toDomain().copy(signs = listOf(signA, signB))
         }
         else
         {
