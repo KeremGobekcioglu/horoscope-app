@@ -31,6 +31,7 @@ import com.kg.yildizname.core.ui.components.YzBottomNav
 import com.kg.yildizname.core.ui.components.YzBottomNavItemData
 import com.kg.yildizname.core.util.DateUtils
 import com.kg.yildizname.core.util.appScope
+import kotlinx.datetime.LocalDate
 import com.kg.yildizname.feature.calendar.ui.CalendarScreen
 import com.kg.yildizname.feature.calendar.ui.CalendarViewModel
 import com.kg.yildizname.feature.compatability.ui.CompatibilityDetailedResult.CompatibilityDetailedResultScreen
@@ -307,13 +308,12 @@ fun YildiznameNavGraph(navController: NavHostController) {
                     uiState     = uiState,
                     onBackClick = { navController.popBackStack() },
                     onShareClick = {
-                            // needs to be fixed, date should reflect date parameter.
                             shareFlowState.open(
                                 ShareCardRequest(
                                     signDisplayName = uiState.signDisplayName,
                                     sign = uiState.sign,
                                     quoteText = shareQuoteFrom(uiState.generalText),
-                                    date = DateUtils.todayLocalDate(),
+                                    date = route.date?.let { LocalDate.parse(it) } ?: DateUtils.todayLocalDate(),
                                 )
                             )
 
