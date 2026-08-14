@@ -217,14 +217,14 @@ fun SettingsScreen(
                         )
                     },
                 )
-                if (state.notificationsEnabled == true) {
-                    SettingsRowDivider()
-                    SettingsRow(
-                        title = stringResource(Res.string.settings_notification_time),
-                        leadingIcon = FeatherIcons.Clock,
-                        trailing = { Text(text = state.notificationTime, color = YzGold) },
-                    )
-                }
+//                if (state.notificationsEnabled == true) {
+//                    SettingsRowDivider()
+//                    SettingsRow(
+//                        title = stringResource(Res.string.settings_notification_time),
+//                        leadingIcon = FeatherIcons.Clock,
+//                        trailing = { Text(text = state.notificationTime, color = YzGold) },
+//                    )
+//                }
             }
 
             Spacer(Modifier.height(24.dp))
