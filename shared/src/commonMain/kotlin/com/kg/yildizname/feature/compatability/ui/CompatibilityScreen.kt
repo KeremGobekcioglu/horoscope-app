@@ -69,9 +69,9 @@ private enum class SignSlot { ONE, TWO }
 fun CompatibilityScreen(
     onAnalyze : (signA: String, signB: String) -> Unit
 ) {
-    var personOneSign by remember { mutableStateOf<ZodiacSign?>(null) }
-    var personTwoSign by remember { mutableStateOf<ZodiacSign?>(null) }
-    var pickingSlot by remember { mutableStateOf<SignSlot?>(null) }
+    var personOneSign by rememberSaveable { mutableStateOf<ZodiacSign?>(null) }
+    var personTwoSign by rememberSaveable { mutableStateOf<ZodiacSign?>(null) }
+    var pickingSlot by rememberSaveable { mutableStateOf<SignSlot?>(null) }
     Box(
         modifier = Modifier.fillMaxSize().yzStatusBarsPadding(),
         contentAlignment = Alignment.TopCenter,
@@ -182,12 +182,11 @@ fun CompatibilityScreen(
 
         pickingSlot?.let { slot ->
             SelectSignBottomSheet(
-                onSignConfirmed = { sign ->
+                onSignSelected = { sign ->
                     when (slot) {
                         SignSlot.ONE -> personOneSign = sign
                         SignSlot.TWO -> personTwoSign = sign
                     }
-                    pickingSlot = null
                 },
                 onDismiss = { pickingSlot = null },
             )

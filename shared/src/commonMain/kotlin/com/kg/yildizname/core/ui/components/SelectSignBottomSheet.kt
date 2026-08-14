@@ -51,20 +51,27 @@ import org.jetbrains.compose.resources.stringResource
 
 
 /**
- * Modal sheet with a 4x3 grid of the 12 zodiac signs and a confirm button below it.
- * Tap a tile to highlight it, then tap the button to commit that choice via [onSignConfirmed].
+ * Modal sheet with a 4x3 grid of the 12 zodiac signs.
+ * Tapping a tile just highlights it so the user can change their mind. The pick is only
+ * reported via [onSignSelected] when the sheet closes — whether by the button, tapping the
+ * scrim, or the back gesture — so callers never see the selection update while it's still open.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SelectSignBottomSheet(
-    onSignConfirmed: (ZodiacSign) -> Unit,
+    onSignSelected: (ZodiacSign) -> Unit,
     onDismiss: () -> Unit,
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var selectedSign by remember { mutableStateOf<ZodiacSign?>(null) }
 
+    val commitAndDismiss: () -> Unit = {
+        selectedSign?.let(onSignSelected)
+        onDismiss()
+    }
+
     ModalBottomSheet(
-        onDismissRequest = onDismiss,
+        onDismissRequest = commitAndDismiss,
         sheetState = sheetState,
         shape = SheetShape,
         containerColor = YzSurface,
@@ -104,9 +111,7 @@ fun SelectSignBottomSheet(
             AnalyzeButton(
                 isEnabled = selectedSign != null,
                 text = stringResource(Res.string.compat_select_sign),
-                onClick = {
-                    selectedSign?.let(onSignConfirmed)
-                },
+                onClick = commitAndDismiss,
                 iconVisible = false
             )
 

@@ -8,13 +8,9 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
@@ -34,25 +30,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kg.yildizname.core.ui.theme.YzBg
 import com.kg.yildizname.core.ui.theme.YzGold
-import com.kg.yildizname.core.ui.theme.YzOnSurface
 import com.kg.yildizname.core.ui.utils.DateFormatter
 import com.kg.yildizname.feature.calendar.ui.CalendarDay
 import com.kg.yildizname.feature.calendar.ui.MonthRelation
 import compose.icons.FeatherIcons
 import compose.icons.feathericons.ChevronLeft
 import compose.icons.feathericons.ChevronRight
-import compose.icons.feathericons.ChevronsRight
 import horoscope.shared.generated.resources.Res
 import horoscope.shared.generated.resources.next_month
 import horoscope.shared.generated.resources.previous_month
-import io.ktor.client.request.invoke
 import kotlinx.datetime.LocalDate
-import kotlinx.datetime.Month
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.isoDayNumber
-import kotlinx.datetime.number
-import kotlinx.datetime.todayIn
-import kotlin.time.Clock
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun Calendar(
@@ -88,7 +76,7 @@ fun Calendar(
             IconButton(onClick = { onPreviousMonth() }, enabled = canGoToPreviousMonth) {
                 Icon(
                     imageVector = FeatherIcons.ChevronLeft,
-                    contentDescription = Res.string.previous_month.toString(),
+                    contentDescription = stringResource(Res.string.previous_month),
                     tint = YzGold,
                     modifier = Modifier.alpha(if (canGoToPreviousMonth) 1f else 0f)
                 )
@@ -103,7 +91,7 @@ fun Calendar(
             {
                 Icon(
                     imageVector = FeatherIcons.ChevronRight,
-                    contentDescription = Res.string.next_month.toString(),
+                    contentDescription = stringResource(Res.string.next_month),
                     tint = YzGold,
                     modifier = Modifier.alpha(if (canGoToNextMonth) 1f else 0f)
                 )

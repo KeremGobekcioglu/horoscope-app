@@ -18,13 +18,8 @@ fun SettingsScreenPreview() {
     YzTheme {
         Box(modifier = Modifier.fillMaxSize().background(YzBg)) {
             SettingsScreen(
-                notificationsEnabled = true,
-                notificationTime = "09:00",
-                currentLanguage = "tr",
-                appVersion = "1.0.0",
                 onChangeSignClick = {},
                 onNotificationSwitchTapped = {},
-                onTimeClick = {},
                 onLanguageChange = {},
                 onPrivacyPolicyClick = {},
                 onShareAppClick = {},
@@ -37,6 +32,9 @@ fun SettingsScreenPreview() {
                 state = SettingsState(
                     notificationsEnabled = true,
                     sign = ZodiacSign.ARIES,
+                    currentLanguage = "tr",
+                    notificationTime = "09:00",
+                    appVersion = "1.0.0",
                 ),
             )
         }
