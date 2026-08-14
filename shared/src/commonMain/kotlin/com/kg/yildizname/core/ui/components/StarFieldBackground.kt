@@ -34,6 +34,7 @@ import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.floor
 import kotlin.math.sin
+import kotlin.math.sqrt
 import kotlin.random.Random
 
 private data class Star(
@@ -65,7 +66,7 @@ private fun buildStars(seed: Long = 99L): List<Star> {
     val rng = Random(seed)
     return buildList {
         repeat(90) { i ->
-            val mobile = rng.nextFloat() < 0.2f
+            val mobile = rng.nextFloat() < 0.45f
             add(
                 Star(
                     x = rng.nextFloat(),
@@ -76,10 +77,10 @@ private fun buildStars(seed: Long = 99L): List<Star> {
                     twinklePhase = rng.nextFloat() * 2f * PI.toFloat(),
                     twinkleSpeed = rng.nextFloat() * 0.1f + 0.06f,
                     isMobile = mobile,
-                    cycleLength = rng.nextFloat() * 15f + 18f,   // holds still 18-33s
+                    cycleLength = rng.nextFloat() * 6f + 5f,      // holds still 5-11s
                     phaseOffset = rng.nextFloat() * 30f,          // stagger so they don't sync up
-                    slideDuration = rng.nextFloat() * 1.5f + 2f,  // slide itself: 2-3.5s
-                    slideRadius = rng.nextFloat() * 22f + 10f,    // wanders 10-32px
+                    slideDuration = rng.nextFloat() * 1f + 1.5f,  // slide itself: 1.5-2.5s
+                    slideRadius = rng.nextFloat() * 40f + 30f,    // wanders 30-70px
                     seed = i
                 )
             )
@@ -185,6 +186,11 @@ fun StarFieldBackground(modifier: Modifier = Modifier) {
         stars.forEach { s ->
             var offsetX = 0f
             var offsetY = 0f
+            var isSliding = false
+            var slideProgress = 0f
+            var slideDirX = 0f
+            var slideDirY = 0f
+            var slideLen = 0f
 
             if (s.isMobile) {
                 val localTime = time + s.phaseOffset
@@ -199,10 +205,23 @@ fun StarFieldBackground(modifier: Modifier = Modifier) {
 
                 val from = targetFor(cycleIndex - 1)
                 val to = targetFor(cycleIndex)
-                val t = smoothstep((localT / s.slideDuration).coerceIn(0f, 1f))
+                val rawT = (localT / s.slideDuration).coerceIn(0f, 1f)
+                val t = smoothstep(rawT)
 
-                offsetX = if (localT < s.slideDuration) from.x + (to.x - from.x) * t else to.x
-                offsetY = if (localT < s.slideDuration) from.y + (to.y - from.y) * t else to.y
+                isSliding = localT < s.slideDuration
+                offsetX = if (isSliding) from.x + (to.x - from.x) * t else to.x
+                offsetY = if (isSliding) from.y + (to.y - from.y) * t else to.y
+
+                if (isSliding) {
+                    slideProgress = rawT
+                    val dx = to.x - from.x
+                    val dy = to.y - from.y
+                    slideLen = sqrt(dx * dx + dy * dy)
+                    if (slideLen > 0.001f) {
+                        slideDirX = dx / slideLen
+                        slideDirY = dy / slideLen
+                    }
+                }
             }
 
             val px = s.x * size.width + offsetX + pX * (if (s.isGlow) 0.7f else 0.4f)
@@ -221,6 +240,29 @@ fun StarFieldBackground(modifier: Modifier = Modifier) {
                     radius = r * 6f, center = Offset(px, py),
                 )
             }
+
+            if (isSliding && slideLen > 0.001f) {
+                // meteor-style fading trail behind the star while it's mid-slide
+                val fade = when {
+                    slideProgress < 0.2f -> slideProgress / 0.2f
+                    slideProgress > 0.8f -> (1f - slideProgress) / 0.2f
+                    else -> 1f
+                }
+                val tailLen = slideLen * 0.9f
+                val tailX = px - slideDirX * tailLen
+                val tailY = py - slideDirY * tailLen
+                drawLine(
+                    brush = Brush.linearGradient(
+                        listOf(Color.Transparent, YzStarWhite.copy(alpha = twinkleAlpha * fade)),
+                        start = Offset(tailX, tailY), end = Offset(px, py)
+                    ),
+                    start = Offset(tailX, tailY),
+                    end = Offset(px, py),
+                    strokeWidth = (r * 0.9f).coerceAtLeast(1f),
+                    cap = StrokeCap.Round
+                )
+            }
+
             drawCircle(YzStarWhite.copy(alpha = twinkleAlpha), r, Offset(px, py))
         }
 

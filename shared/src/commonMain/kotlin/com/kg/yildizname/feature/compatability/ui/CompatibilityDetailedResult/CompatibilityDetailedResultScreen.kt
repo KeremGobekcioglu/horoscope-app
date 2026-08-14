@@ -41,7 +41,6 @@ import androidx.compose.ui.unit.sp
 import com.kg.yildizname.core.data.model.compatGridIcon
 import com.kg.yildizname.core.data.model.localizedElementName
 import com.kg.yildizname.core.data.model.localizedName
-import com.kg.yildizname.core.ui.components.StarFieldBackground
 import com.kg.yildizname.core.ui.theme.AppIcons
 import com.kg.yildizname.core.ui.theme.YzBgLight
 import com.kg.yildizname.core.ui.theme.YzGold
@@ -104,7 +103,6 @@ fun CompatibilityDetailedResultSuccessScreen(
     val bgCard = YzBgLight.copy(0.65f)
     val signA = uiState.result.signs[0]
     val signB = uiState.result.signs[1]
-    StarFieldBackground()
     Box(modifier = Modifier.yzStatusBarsPadding().fillMaxSize())
     {
         Column(

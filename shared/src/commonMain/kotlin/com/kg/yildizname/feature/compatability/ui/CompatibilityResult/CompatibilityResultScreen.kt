@@ -42,7 +42,6 @@ import com.kg.yildizname.core.domain.model.CompatibilityBand
 import com.kg.yildizname.core.domain.model.ElementPairing
 import com.kg.yildizname.core.domain.model.localizedDesc
 import com.kg.yildizname.core.domain.model.tintColor
-import com.kg.yildizname.core.ui.components.StarFieldBackground
 import com.kg.yildizname.core.ui.utils.yzStatusBarsPadding
 import com.kg.yildizname.feature.compatability.ui.components.CompatButton
 import com.kg.yildizname.feature.compatability.ui.components.ResultColumn
@@ -93,7 +92,6 @@ fun CompatibilityResultScreen(
 fun CompatibilityResultLoadingScreen(
     onBackClick: () -> Unit = {}
 ) {
-    StarFieldBackground()
     Box(modifier = Modifier.yzStatusBarsPadding().fillMaxSize()) {
         Row(modifier = Modifier.fillMaxWidth()) {
             IconButton(onClick = onBackClick) {
@@ -116,7 +114,6 @@ fun CompatibilityResultErrorScreen(
     message: String,
     onBackClick: () -> Unit = {}
 ) {
-    StarFieldBackground()
     Box(modifier = Modifier.yzStatusBarsPadding().fillMaxSize()) {
         Row(modifier = Modifier.fillMaxWidth()) {
             IconButton(onClick = onBackClick) {
@@ -150,7 +147,6 @@ fun CompatibilityResultSuccessScreen(
 {
     val signA = uiState.result.signs[0]
     val signB = uiState.result.signs[1]
-    StarFieldBackground()
     Box(modifier = Modifier.yzStatusBarsPadding().fillMaxSize())
     {
         Column(modifier = Modifier

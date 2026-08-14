@@ -35,7 +35,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.kg.yildizname.core.ui.components.StarFieldBackground
 import com.kg.yildizname.core.ui.theme.PillShape
 import com.kg.yildizname.core.ui.theme.YzGold
 import com.kg.yildizname.core.ui.theme.YzMuted
@@ -120,8 +119,6 @@ private fun CalendarScreenSuccessContent(
         YzWindowWidth.Medium -> 600.dp
         YzWindowWidth.Expanded -> 720.dp
     }
-    StarFieldBackground(Modifier.fillMaxSize())
-
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.TopCenter

@@ -28,7 +28,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kg.yildizname.core.data.model.ZodiacSign
-import com.kg.yildizname.core.ui.components.StarFieldBackground
 import com.kg.yildizname.core.ui.theme.CosmicPurple
 import com.kg.yildizname.core.ui.theme.DarkGray
 import com.kg.yildizname.core.ui.theme.YzGold
@@ -70,7 +69,6 @@ private enum class SignSlot { ONE, TWO }
 fun CompatibilityScreen(
     onAnalyze : (signA: String, signB: String) -> Unit
 ) {
-    StarFieldBackground(Modifier.fillMaxSize())
     var personOneSign by remember { mutableStateOf<ZodiacSign?>(null) }
     var personTwoSign by remember { mutableStateOf<ZodiacSign?>(null) }
     var pickingSlot by remember { mutableStateOf<SignSlot?>(null) }

@@ -61,7 +61,6 @@ import com.kg.yildizname.core.data.model.compatGridIcon
 import com.kg.yildizname.core.data.model.localizedDateRange
 import com.kg.yildizname.core.data.model.localizedName
 import com.kg.yildizname.core.ui.components.SelectSignBottomSheet
-import com.kg.yildizname.core.ui.components.StarFieldBackground
 import com.kg.yildizname.core.ui.theme.YzBorder
 import com.kg.yildizname.core.ui.theme.YzError
 import com.kg.yildizname.core.ui.theme.YzErrorBorder
@@ -154,7 +153,6 @@ fun SettingsScreen(
         onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
     }
 
-    StarFieldBackground(modifier = Modifier.fillMaxSize())
     Box(
         modifier = modifier.fillMaxSize().yzStatusBarsPadding(),
         contentAlignment = Alignment.TopCenter,
