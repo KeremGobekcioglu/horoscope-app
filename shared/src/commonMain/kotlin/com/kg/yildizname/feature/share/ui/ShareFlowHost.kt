@@ -22,6 +22,7 @@ import com.kg.yildizname.core.data.model.localizedName
 import com.kg.yildizname.core.domain.model.CompatibilityBand
 import com.kg.yildizname.core.domain.model.localizedDesc
 import com.kg.yildizname.core.ui.utils.DateFormatter
+import com.kg.yildizname.core.util.AppLinks
 import com.kg.yildizname.core.util.yzUppercase
 import com.kg.yildizname.platform.ShareManager
 import com.kg.yildizname.platform.ShareResult
@@ -215,7 +216,8 @@ private fun shareTextFor(request: ShareRequest): String = when (request) {
         appendLine()
         appendLine(request.request.quoteText)
         appendLine()
-        append(stringResource(Res.string.share_card_app_name))
+        appendLine(stringResource(Res.string.share_card_app_name))
+        append(AppLinks.LANDING_PAGE)
     }
     is ShareRequest.Compatibility -> buildString {
         val r = request.request
@@ -224,6 +226,7 @@ private fun shareTextFor(request: ShareRequest): String = when (request) {
         appendLine()
         appendLine(r.verdictText)
         appendLine()
-        append(stringResource(Res.string.share_card_app_name))
+        appendLine(stringResource(Res.string.share_card_app_name))
+        append(AppLinks.LANDING_PAGE)
     }
 }

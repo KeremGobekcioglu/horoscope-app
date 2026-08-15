@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.kg.yildizname.core.data.model.ZodiacSign
 import com.kg.yildizname.core.data.repository.UserRepository
 import com.kg.yildizname.core.domain.usecase.ResetAppDataUseCase
+import com.kg.yildizname.core.util.AppLinks
 import com.kg.yildizname.core.util.applyLanguage
 import com.kg.yildizname.core.util.currentLanguageCode
 import com.kg.yildizname.platform.NotificationPermissionRequester
@@ -126,5 +127,10 @@ class SettingsViewModel(
     fun onPrivacyClick()
     {
         urlOpener.open(PRIVACY_POLICY_URL)
+    }
+
+    fun onShareAppClick()
+    {
+        urlOpener.open(AppLinks.LANDING_PAGE)
     }
 }

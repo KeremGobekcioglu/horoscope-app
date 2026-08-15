@@ -433,7 +433,7 @@ fun YildiznameNavGraph(navController: NavHostController) {
                     onNotificationSwitchTapped = viewModel::onNotificationsSwitchTapped,
                     onLanguageChange = viewModel::onLanguageChange,
                     onPrivacyPolicyClick = viewModel::onPrivacyClick,
-                    onShareAppClick = { /* TODO: open share sheet */ },
+                    onShareAppClick = viewModel::onShareAppClick,
                     onResetDataClick = viewModel::onResetDataClick,
                     onDismissRestartDialog = viewModel::dismissRestartDialog,
                     onDismissResetDialog = viewModel::dismissResetDialog,

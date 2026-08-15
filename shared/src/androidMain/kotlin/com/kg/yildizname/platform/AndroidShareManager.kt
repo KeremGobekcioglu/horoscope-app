@@ -9,6 +9,7 @@ import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
 import androidx.core.content.FileProvider
+import com.kg.yildizname.core.util.AppLinks
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
@@ -98,6 +99,9 @@ class AndroidShareManager(private val context: Context) : ShareManager
         return Intent("com.instagram.share.ADD_TO_STORY").apply {
             setDataAndType(uri, "image/png")
             putExtra("source_application", FACEBOOK_APP_ID)
+            // Attaches a tappable link sticker to the story that opens this URL —
+            // otherwise the shared image has no clickable element at all.
+            putExtra("content_url", AppLinks.LANDING_PAGE)
             addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         }
