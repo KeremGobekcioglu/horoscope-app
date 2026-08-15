@@ -60,29 +60,37 @@ data class ShareCardRequest(
     val date: LocalDate,
 )
 
-/**
- * Everything CompatibilityShareCard/ShareBottomSheet need to render for one share request.
- * [summary]/[strengths]/[challenges] are optional — leave blank for the compact card (the
- * quick-result screen); pass all three for the richer, taller card used from the detailed
- * result screen.
- */
+/** Everything [CompatibilityShareCard]/ShareBottomSheet need to render for one share request —
+ * used from the quick-result screen. */
 data class CompatibilityShareCardRequest(
     val signA: ZodiacSign,
     val signB: ZodiacSign,
     val matchPercent: Int,
     val scores: CompatibilityScores,
     val verdictText: String,
-    val summary: String = "",
-    val strengths: String = "",
-    val challenges: String = "",
-    val pros: List<String> = emptyList(),
-    val cons: List<String> = emptyList(),
 )
 
-/** The card [ShareFlowHost] is currently asked to preview/share — either a reading or a compatibility result. */
+/** Everything [CompatibilityDetailedShareCard]/ShareBottomSheet need to render for one share
+ * request — used from the detailed-result screen. No [CompatibilityScores]: the detailed card
+ * never renders the score grid, so there's nothing here for it to feed. */
+data class CompatibilityDetailedShareCardRequest(
+    val signA: ZodiacSign,
+    val signB: ZodiacSign,
+    val matchPercent: Int,
+    val verdictText: String,
+    val summary: String,
+    val strengths: String,
+    val challenges: String,
+    val pros: List<String>,
+    val cons: List<String>,
+)
+
+/** The card [ShareFlowHost] is currently asked to preview/share — a reading, a quick-result
+ * compatibility card, or a detailed-result compatibility card. */
 sealed interface ShareRequest {
     data class Horoscope(val request: ShareCardRequest) : ShareRequest
     data class Compatibility(val request: CompatibilityShareCardRequest) : ShareRequest
+    data class CompatibilityDetailed(val request: CompatibilityDetailedShareCardRequest) : ShareRequest
 }
 
 /** First sentence or two of a reading's body text, used as the share card's pull-quote. */
@@ -100,6 +108,10 @@ class ShareFlowState internal constructor() {
 
     fun open(request: CompatibilityShareCardRequest) {
         this.request = ShareRequest.Compatibility(request)
+    }
+
+    fun open(request: CompatibilityDetailedShareCardRequest) {
+        this.request = ShareRequest.CompatibilityDetailed(request)
     }
 
     fun dismiss() {
@@ -131,6 +143,13 @@ private fun ShareRequestCard(request: ShareRequest) {
                 ShareScore(stringResource(Res.string.compat_score_long_term), request.request.scores.longTerm),
             ),
             verdictText = request.request.verdictText,
+        )
+        is ShareRequest.CompatibilityDetailed -> CompatibilityDetailedShareCard(
+            signA = request.request.signA,
+            signB = request.request.signB,
+            matchPercent = request.request.matchPercent,
+            bandLabel = CompatibilityBand.fromScore(request.request.matchPercent).localizedDesc(),
+            verdictText = request.request.verdictText,
             summary = request.request.summary,
             strengths = request.request.strengths,
             challenges = request.request.challenges,
@@ -141,9 +160,10 @@ private fun ShareRequestCard(request: ShareRequest) {
 }
 
 /**
- * Renders the ShareBottomSheet (with the ShareCard/CompatibilityShareCard preview embedded
- * inside it) for [state]'s current request, if any. Any screen that wants to open the share
- * flow just calls `state.open(ShareCardRequest(...))` or `state.open(CompatibilityShareCardRequest(...))`
+ * Renders the ShareBottomSheet (with the ShareCard/CompatibilityShareCard/
+ * CompatibilityDetailedShareCard preview embedded inside it) for [state]'s current request, if
+ * any. Any screen that wants to open the share flow just calls `state.open(ShareCardRequest(...))`,
+ * `state.open(CompatibilityShareCardRequest(...))`, or `state.open(CompatibilityDetailedShareCardRequest(...))`
  * — this host owns the card/sheet composition and dismiss wiring so screens/nav graph don't have to.
  */
 @Composable
@@ -262,6 +282,16 @@ private fun shareTextFor(request: ShareRequest): String = when (request) {
         append(AppLinks.LANDING_PAGE)
     }
     is ShareRequest.Compatibility -> buildString {
+        val r = request.request
+        appendLine("${r.signA.localizedName()} ♥ ${r.signB.localizedName()} — %${r.matchPercent}")
+        appendLine(CompatibilityBand.fromScore(r.matchPercent).localizedDesc())
+        appendLine()
+        appendLine(r.verdictText)
+        appendLine()
+        appendLine(stringResource(Res.string.share_card_app_name))
+        append(AppLinks.LANDING_PAGE)
+    }
+    is ShareRequest.CompatibilityDetailed -> buildString {
         val r = request.request
         appendLine("${r.signA.localizedName()} ♥ ${r.signB.localizedName()} — %${r.matchPercent}")
         appendLine(CompatibilityBand.fromScore(r.matchPercent).localizedDesc())
