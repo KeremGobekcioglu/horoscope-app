@@ -392,6 +392,11 @@ fun YildiznameNavGraph(navController: NavHostController) {
                                         matchPercent = success.result.matchPercent,
                                         scores = success.result.scores,
                                         verdictText = shareQuoteFrom(success.result.content.finalVerdict),
+                                        summary = success.result.content.summary,
+                                        strengths = success.result.content.strengths,
+                                        challenges = success.result.content.challenges,
+                                        pros = success.result.content.pros,
+                                        cons = success.result.content.cons,
                                     )
                                 )
                             }

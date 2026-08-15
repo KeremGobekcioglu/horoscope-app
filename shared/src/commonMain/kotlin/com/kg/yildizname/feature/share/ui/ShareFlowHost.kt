@@ -60,13 +60,23 @@ data class ShareCardRequest(
     val date: LocalDate,
 )
 
-/** Everything CompatibilityShareCard/ShareBottomSheet need to render for one share request. */
+/**
+ * Everything CompatibilityShareCard/ShareBottomSheet need to render for one share request.
+ * [summary]/[strengths]/[challenges] are optional — leave blank for the compact card (the
+ * quick-result screen); pass all three for the richer, taller card used from the detailed
+ * result screen.
+ */
 data class CompatibilityShareCardRequest(
     val signA: ZodiacSign,
     val signB: ZodiacSign,
     val matchPercent: Int,
     val scores: CompatibilityScores,
     val verdictText: String,
+    val summary: String = "",
+    val strengths: String = "",
+    val challenges: String = "",
+    val pros: List<String> = emptyList(),
+    val cons: List<String> = emptyList(),
 )
 
 /** The card [ShareFlowHost] is currently asked to preview/share — either a reading or a compatibility result. */
@@ -121,6 +131,11 @@ private fun ShareRequestCard(request: ShareRequest) {
                 ShareScore(stringResource(Res.string.compat_score_long_term), request.request.scores.longTerm),
             ),
             verdictText = request.request.verdictText,
+            summary = request.request.summary,
+            strengths = request.request.strengths,
+            challenges = request.request.challenges,
+            pros = request.request.pros,
+            cons = request.request.cons,
         )
     }
 }
@@ -250,6 +265,26 @@ private fun shareTextFor(request: ShareRequest): String = when (request) {
         val r = request.request
         appendLine("${r.signA.localizedName()} ♥ ${r.signB.localizedName()} — %${r.matchPercent}")
         appendLine(CompatibilityBand.fromScore(r.matchPercent).localizedDesc())
+        if (r.summary.isNotBlank()) {
+            appendLine()
+            appendLine(r.summary)
+        }
+        if (r.strengths.isNotBlank()) {
+            appendLine()
+            appendLine(r.strengths)
+        }
+        if (r.challenges.isNotBlank()) {
+            appendLine()
+            appendLine(r.challenges)
+        }
+        if (r.pros.isNotEmpty()) {
+            appendLine()
+            r.pros.forEach { appendLine("+ $it") }
+        }
+        if (r.cons.isNotEmpty()) {
+            appendLine()
+            r.cons.forEach { appendLine("- $it") }
+        }
         appendLine()
         appendLine(r.verdictText)
         appendLine()

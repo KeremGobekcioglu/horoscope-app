@@ -28,6 +28,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -42,6 +43,7 @@ import com.kg.yildizname.core.data.model.localizedName
 import com.kg.yildizname.core.util.yzUppercase
 import com.kg.yildizname.core.domain.model.tintColor
 import com.kg.yildizname.core.ui.components.StaticStarField
+import com.kg.yildizname.core.ui.theme.AppIcons
 import com.kg.yildizname.core.ui.theme.CardShape
 import com.kg.yildizname.core.ui.theme.YzBg
 import com.kg.yildizname.core.ui.theme.YzBorder
@@ -49,15 +51,29 @@ import com.kg.yildizname.core.ui.theme.YzGold
 import com.kg.yildizname.core.ui.theme.YzInk
 import com.kg.yildizname.core.ui.theme.YzMuted
 import horoscope.shared.generated.resources.Res
+import horoscope.shared.generated.resources.challenges
+import horoscope.shared.generated.resources.cons
+import horoscope.shared.generated.resources.pros
 import horoscope.shared.generated.resources.share_card_app_name
 import horoscope.shared.generated.resources.share_card_app_url
 import horoscope.shared.generated.resources.share_card_compat_header
+import horoscope.shared.generated.resources.strengths
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 
 private val MedallionSize = 176.dp
 private val MedallionColumnWidth = 220.dp
+
+/** Fixed footer gap — was `Modifier.weight(1f)`, which stranded the URL far below the content
+ * on a card taller than its actual content (esp. the compact card, or a detailed card with few
+ * sections filled in). */
+private val FooterGap = 40.dp
+
+/** Extra card height budgeted per optional detail section, added only when that section renders. */
+private val SummarySectionHeight = 120.dp
+private val ParagraphSectionHeight = 110.dp
+private val ProsConsSectionHeight = 230.dp
 
 /**
  * A single labelled score row for the 2x2 tile grid. [label] is already-localized display
@@ -82,6 +98,14 @@ data class ShareScore(val label: String, val value: Int)
  *   (İletişim, Arkadaşlık, Aşk, Uzun Vadeli).
  * @param verdictText localized final-verdict sentence(s). Keep it short enough to fit ~3 lines;
  *   caller is responsible for trimming to the first sentence if the source runs long.
+ * @param summary optional overview paragraph; leave blank (with [strengths]/[challenges]/[pros]/
+ *   [cons] also empty) to keep the compact card. Any section passed in renders above the verdict
+ *   quote and grows the card by just that section's own height.
+ * @param strengths optional "what works" paragraph (localized `strengths` label as its header).
+ * @param challenges optional "what to watch for" paragraph (localized `challenges` label).
+ * @param pros optional short bullet list, rendered alongside [cons] as a two-column mini list
+ *   (top 3 items each).
+ * @param cons optional short bullet list, see [pros].
  */
 @Composable
 fun CompatibilityShareCard(
@@ -92,11 +116,28 @@ fun CompatibilityShareCard(
     scores: List<ShareScore>,
     verdictText: String,
     modifier: Modifier = Modifier,
+    summary: String = "",
+    strengths: String = "",
+    challenges: String = "",
+    pros: List<String> = emptyList(),
+    cons: List<String> = emptyList(),
 ) {
+    val hasSummary = summary.isNotBlank()
+    val hasStrengths = strengths.isNotBlank()
+    val hasChallenges = challenges.isNotBlank()
+    val hasProsCons = pros.isNotEmpty() || cons.isNotEmpty()
+    val hasDetails = hasSummary || hasStrengths || hasChallenges || hasProsCons
+
+    val extraHeight = (if (hasSummary) SummarySectionHeight else 0.dp) +
+        (if (hasStrengths) ParagraphSectionHeight else 0.dp) +
+        (if (hasChallenges) ParagraphSectionHeight else 0.dp) +
+        (if (hasProsCons) ProsConsSectionHeight else 0.dp)
+    val cardHeight = ShareCardHeight + extraHeight
+
     Box(
         modifier = modifier
             .width(ShareCardWidth)
-            .height(ShareCardHeight)
+            .height(cardHeight)
             .background(YzBg),
     ) {
         StaticStarField(Modifier.fillMaxSize())
@@ -159,11 +200,54 @@ fun CompatibilityShareCard(
 
             ScoreGrid(scores = scores)
 
+            if (hasDetails) {
+                Spacer(Modifier.height(32.dp))
+
+                if (summary.isNotBlank()) {
+                    Text(
+                        text = summary,
+                        maxLines = 4,
+                        overflow = TextOverflow.Ellipsis,
+                        color = YzInk.copy(alpha = 0.9f),
+                        textAlign = TextAlign.Center,
+                        style = MaterialTheme.typography.bodyMedium.copy(
+                            fontFamily = FontFamily.Serif,
+                            lineHeight = 22.sp,
+                        ),
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+                    Spacer(Modifier.height(28.dp))
+                }
+
+                if (strengths.isNotBlank()) {
+                    DetailSection(
+                        title = stringResource(Res.string.strengths),
+                        body = strengths,
+                        accentColor = YzGold,
+                    )
+                    Spacer(Modifier.height(20.dp))
+                }
+
+                if (challenges.isNotBlank()) {
+                    DetailSection(
+                        title = stringResource(Res.string.challenges),
+                        body = challenges,
+                        accentColor = YzMuted,
+                    )
+                    Spacer(Modifier.height(20.dp))
+                }
+
+                if (hasProsCons) {
+                    ProsConsSection(pros = pros.take(3), cons = cons.take(3))
+                    Spacer(Modifier.height(8.dp))
+                }
+            }
+
             Spacer(Modifier.height(36.dp))
 
             VerdictQuote(text = verdictText)
 
-            Spacer(Modifier.weight(1f))
+            Spacer(Modifier.height(FooterGap))
 
             Text(
                 text = stringResource(Res.string.share_card_app_url),
@@ -369,6 +453,122 @@ private fun ScoreTile(
 }
 
 /**
+ * Labelled paragraph for the detailed card's extra sections (strengths/challenges): a small
+ * all-caps header in [accentColor] over a body paragraph capped to 3 lines.
+ */
+@Composable
+private fun DetailSection(
+    title: String,
+    body: String,
+    accentColor: Color,
+    modifier: Modifier = Modifier,
+) {
+    Column(modifier = modifier.fillMaxWidth()) {
+        Text(
+            text = title.yzUppercase(),
+            color = accentColor,
+            style = MaterialTheme.typography.labelSmall,
+            fontWeight = FontWeight.SemiBold,
+            letterSpacing = 2.sp,
+        )
+        Spacer(Modifier.height(6.dp))
+        Text(
+            text = body,
+            maxLines = 3,
+            overflow = TextOverflow.Ellipsis,
+            color = YzInk,
+            style = MaterialTheme.typography.bodyMedium,
+            lineHeight = 20.sp,
+        )
+    }
+}
+
+/**
+ * Two-column pros/cons mini list for the detailed card — mirrors the on-screen `ProsConsCard`'s
+ * icon/color language (check/positive, cross/negative) at share-card scale. Callers cap each
+ * list to a handful of items; this just renders whatever it's given.
+ */
+@Composable
+private fun ProsConsSection(
+    pros: List<String>,
+    cons: List<String>,
+    modifier: Modifier = Modifier,
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .clip(CardShape)
+            .background(
+                Brush.verticalGradient(
+                    colors = listOf(Color(0xFF171B38), Color(0xFF0E1226)),
+                ),
+            )
+            .border(0.5.dp, YzBorder, CardShape)
+            .padding(horizontal = 20.dp, vertical = 18.dp),
+        horizontalArrangement = Arrangement.spacedBy(20.dp),
+    ) {
+        ProsConsColumn(
+            title = stringResource(Res.string.pros),
+            items = pros,
+            icon = AppIcons.Positive,
+            tint = AppIcons.PositiveTint,
+            modifier = Modifier.weight(1f),
+        )
+        ProsConsColumn(
+            title = stringResource(Res.string.cons),
+            items = cons,
+            icon = AppIcons.Negative,
+            tint = AppIcons.NegativeTint,
+            modifier = Modifier.weight(1f),
+        )
+    }
+}
+
+@Composable
+private fun ProsConsColumn(
+    title: String,
+    items: List<String>,
+    icon: ImageVector,
+    tint: Color,
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(10.dp),
+    ) {
+        Text(
+            text = title.yzUppercase(),
+            color = tint,
+            style = MaterialTheme.typography.labelSmall,
+            fontWeight = FontWeight.SemiBold,
+            letterSpacing = 1.sp,
+        )
+        items.forEach { item ->
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(6.dp),
+            ) {
+                Icon(
+                    imageVector = icon,
+                    contentDescription = null,
+                    tint = tint,
+                    modifier = Modifier
+                        .padding(top = 2.dp)
+                        .size(11.dp),
+                )
+                Text(
+                    text = item,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis,
+                    color = YzInk,
+                    style = MaterialTheme.typography.bodySmall,
+                    lineHeight = 16.sp,
+                )
+            }
+        }
+    }
+}
+
+/**
  * Final-verdict quote: gold rail + serif italic text, matching the daily [ShareCard]'s quote
  * block treatment so the two cards read as a family.
  */
@@ -424,6 +624,11 @@ fun CompatibilityShareCardPreview(
     verdictText: String,
     modifier: Modifier = Modifier,
     previewHeight: Dp = 480.dp,
+    summary: String = "",
+    strengths: String = "",
+    challenges: String = "",
+    pros: List<String> = emptyList(),
+    cons: List<String> = emptyList(),
 ) = ScaledShareCard(modifier = modifier, previewHeight = previewHeight) {
     CompatibilityShareCard(
         signA = signA,
@@ -432,5 +637,10 @@ fun CompatibilityShareCardPreview(
         bandLabel = bandLabel,
         scores = scores,
         verdictText = verdictText,
+        summary = summary,
+        strengths = strengths,
+        challenges = challenges,
+        pros = pros,
+        cons = cons,
     )
 }
