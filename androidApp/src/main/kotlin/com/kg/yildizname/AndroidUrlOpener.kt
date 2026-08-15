@@ -1,8 +1,8 @@
 package com.kg.yildizname;
 
-import android.content.Intent
 import android.net.Uri
 import androidx.activity.ComponentActivity
+import androidx.browser.customtabs.CustomTabsIntent
 import com.kg.yildizname.platform.UrlOpener
 
 class AndroidUrlOpener(
@@ -10,7 +10,6 @@ class AndroidUrlOpener(
 ) : UrlOpener
 {
     override fun open(url: String) {
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-        activity.startActivity(intent)
+        CustomTabsIntent.Builder().build().launchUrl(activity, Uri.parse(url))
     }
 }

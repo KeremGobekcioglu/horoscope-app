@@ -17,6 +17,7 @@ dependencies {
     implementation(project.dependencies.platform(libs.firebase.bom))
     implementation(libs.firebase.messaging)
     implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.browser)
     implementation(libs.koin.android)
     implementation(libs.datastore.preferences.core)
     implementation(libs.compose.components.resources)
