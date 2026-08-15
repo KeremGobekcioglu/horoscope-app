@@ -243,6 +243,7 @@
     <string name="share_close">CLOSE</string>
     <string name="share_error_generic">Something went wrong while sharing. Please try again.</string>
     <string name="share_error_permission_denied">Gallery permission is required to save the image.</string>
+    <string name="share_save_success">Image saved to gallery</string>
 
     <!-- Lucky color names -->
     <string name="lucky_color_red">Red</string>

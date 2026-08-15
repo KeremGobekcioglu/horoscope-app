@@ -1,9 +1,12 @@
 package com.kg.yildizname.feature.share.ui
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.Stable
@@ -12,6 +15,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.rememberGraphicsLayer
 import androidx.compose.ui.platform.LocalDensity
@@ -22,6 +26,7 @@ import com.kg.yildizname.core.data.model.localizedName
 import com.kg.yildizname.core.domain.model.CompatibilityBand
 import com.kg.yildizname.core.domain.model.localizedDesc
 import com.kg.yildizname.core.ui.utils.DateFormatter
+import com.kg.yildizname.core.ui.utils.yzNavigationBarsPadding
 import com.kg.yildizname.core.util.AppLinks
 import com.kg.yildizname.core.util.yzUppercase
 import com.kg.yildizname.platform.ShareManager
@@ -36,6 +41,7 @@ import horoscope.shared.generated.resources.compat_score_love
 import horoscope.shared.generated.resources.share_card_app_name
 import horoscope.shared.generated.resources.share_error_generic
 import horoscope.shared.generated.resources.share_error_permission_denied
+import horoscope.shared.generated.resources.share_save_success
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
 import org.jetbrains.compose.resources.stringResource
@@ -127,85 +133,106 @@ private fun ShareRequestCard(request: ShareRequest) {
  */
 @Composable
 fun ShareFlowHost(state: ShareFlowState) {
-    val request = state.request ?: return
-    val shareText = shareTextFor(request)
-    // 1- dependencies
-    // 1. dependencies
-    val layer = rememberGraphicsLayer()
-    val shareManager = koinInject<ShareManager>()
-    val scope = rememberCoroutineScope()
+    // Declared here, outside the `request != null` block below, so the coroutine that shows
+    // the snackbar survives state.dismiss() — that call unmounts the block below on the next
+    // recomposition, which would otherwise cancel a scope remembered inside it mid-animation.
+    val snackbarScope = rememberCoroutineScope()
+    val snackbarHostState = remember { SnackbarHostState() }
+    val saveSuccessMessage = stringResource(Res.string.share_save_success)
 
-    // 2. state — just two vars, no sealed class
-    var isWorking by remember { mutableStateOf(false) }
-    var errorMessage by remember { mutableStateOf<String?>(null) }
-    // 3. strings (stringResource must be called in composable scope, not inside perform)
-    val genericError = stringResource(Res.string.share_error_generic)
-    val permissionDenied = stringResource(Res.string.share_error_permission_denied)
+    val request = state.request
+    if (request != null) {
+        val shareText = shareTextFor(request)
+        // 1- dependencies
+        // 1. dependencies
+        val layer = rememberGraphicsLayer()
+        val shareManager = koinInject<ShareManager>()
+        // Unlike snackbarScope above, this one is scoped to the request block and dies with
+        // it on dismiss — fine for the in-flight encode/share work, but never launch the
+        // snackbar on this one, or it'll get cancelled mid-animation by the same dismiss() call.
+        val shareScope = rememberCoroutineScope()
 
-    // Offscreen export copy. Reports its real size — a zero-sized node is skipped during the
-    // draw phase, so nothing would ever be recorded into the layer — and is wrapped in a
-    // 0dp Box with unbounded wrapping so the parent still reserves no space for it.
-    Box(modifier = Modifier.size(0.dp).wrapContentSize(unbounded = true))
-    {
-        CompositionLocalProvider(LocalDensity provides ShareCardExportDensity)
+        // 2. state — just two vars, no sealed class
+        var isWorking by remember { mutableStateOf(false) }
+        var errorMessage by remember { mutableStateOf<String?>(null) }
+        // 3. strings (stringResource must be called in composable scope, not inside perform)
+        val genericError = stringResource(Res.string.share_error_generic)
+        val permissionDenied = stringResource(Res.string.share_error_permission_denied)
+
+        // Offscreen export copy. Reports its real size — a zero-sized node is skipped during the
+        // draw phase, so nothing would ever be recorded into the layer — and is wrapped in a
+        // 0dp Box with unbounded wrapping so the parent still reserves no space for it.
+        Box(modifier = Modifier.size(0.dp).wrapContentSize(unbounded = true))
         {
-            CaptureHost(layer = layer) {
-                ShareRequestCard(request)
+            CompositionLocalProvider(LocalDensity provides ShareCardExportDensity)
+            {
+                CaptureHost(layer = layer) {
+                    ShareRequestCard(request)
+                }
             }
         }
-    }
-    /**/
-    fun perform(action: suspend (ByteArray) -> ShareResult)
-    {
-        if(isWorking) return // guards the double-tap → double-encode race
-        scope.launch {
-            isWorking = true
-            errorMessage = null
-            try {
-                if(layer.size.width == 0 || layer.size.height == 0)
-                {
-                    errorMessage = genericError
-                    return@launch
-                }
-                val png = layer.toImageBitmap().toPngBytes()
-                when (val result = action(png)) {
-                    ShareResult.Success -> state.dismiss()
-                    // App isn't installed — the user asked to share, so give them a way to
-                    // rather than an error. Reuses the same bytes, no re-encode.
-                    ShareResult.TargetUnavailable ->
-                        if (shareManager.share(png, ShareTarget.SystemSheet) is ShareResult.Success) {
+        /**/
+        fun perform(successMessage: String? = null, action: suspend (ByteArray) -> ShareResult)
+        {
+            if(isWorking) return // guards the double-tap → double-encode race
+            shareScope.launch {
+                isWorking = true
+                errorMessage = null
+                try {
+                    if(layer.size.width == 0 || layer.size.height == 0)
+                    {
+                        errorMessage = genericError
+                        return@launch
+                    }
+                    val png = layer.toImageBitmap().toPngBytes()
+                    when (val result = action(png)) {
+                        ShareResult.Success -> {
                             state.dismiss()
-                        } else {
-                            errorMessage = genericError
+                            if (successMessage != null) {
+                                snackbarScope.launch { snackbarHostState.showSnackbar(successMessage) }
+                            }
                         }
-                    is ShareResult.Failed -> errorMessage = result.cause?.message ?: genericError
+                        // App isn't installed — the user asked to share, so give them a way to
+                        // rather than an error. Reuses the same bytes, no re-encode.
+                        ShareResult.TargetUnavailable ->
+                            if (shareManager.share(png, ShareTarget.SystemSheet) is ShareResult.Success) {
+                                state.dismiss()
+                            } else {
+                                errorMessage = genericError
+                            }
+                        is ShareResult.Failed -> errorMessage = result.cause?.message ?: genericError
+                    }
+                } finally {
+                    isWorking = false
                 }
-            } finally {
-                isWorking = false
             }
         }
+
+        val onSave = rememberGallerySaveGate(
+            onGranted = { perform(successMessage = saveSuccessMessage) { shareManager.saveToGallery(it) } },
+            onDenied = {errorMessage = permissionDenied}
+        )
+        ShareBottomSheet(
+            preview = {
+                ScaledShareCard(modifier = Modifier.fillMaxWidth()) { ShareRequestCard(request) }
+            },
+            isWorking = isWorking,
+            errorMessage = errorMessage,
+            onInstagramStoriesClick = { perform { shareManager.share(it, ShareTarget.InstagramStories) } },
+            onWhatsAppClick = { perform { shareManager.share(it, ShareTarget.WhatsApp) } },
+            onFacebookClick = { perform { shareManager.share(it, ShareTarget.Facebook) } },
+            onGeneralShareClick = { perform { shareManager.share(it, ShareTarget.SystemSheet) } },
+            onSaveImageClick = onSave,
+            onShareTextClick = {
+                if (!isWorking) shareScope.launch { shareManager.shareText(shareText, ShareTarget.SystemSheet) }
+            },
+            onDismiss = state::dismiss,
+        )
     }
 
-    val onSave = rememberGallerySaveGate(
-        onGranted = { perform { shareManager.saveToGallery(it) }},
-        onDenied = {errorMessage = permissionDenied}
-    )
-    ShareBottomSheet(
-        preview = {
-            ScaledShareCard(modifier = Modifier.fillMaxWidth()) { ShareRequestCard(request) }
-        },
-        isWorking = isWorking,
-        errorMessage = errorMessage,
-        onInstagramStoriesClick = { perform { shareManager.share(it, ShareTarget.InstagramStories) } },
-        onWhatsAppClick = { perform { shareManager.share(it, ShareTarget.WhatsApp) } },
-        onFacebookClick = { perform { shareManager.share(it, ShareTarget.Facebook) } },
-        onGeneralShareClick = { perform { shareManager.share(it, ShareTarget.SystemSheet) } },
-        onSaveImageClick = onSave,
-        onShareTextClick = {
-            if (!isWorking) scope.launch { shareManager.shareText(shareText, ShareTarget.SystemSheet) }
-        },
-        onDismiss = state::dismiss,
-    )
+    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomCenter) {
+        SnackbarHost(hostState = snackbarHostState, modifier = Modifier.yzNavigationBarsPadding())
+    }
 }
 
 @Composable
