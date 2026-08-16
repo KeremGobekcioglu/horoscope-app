@@ -12,22 +12,23 @@ import com.kg.yildizname.feature.share.ui.CompatibilityShareCard
 import com.kg.yildizname.feature.share.ui.CompatibilityShareCardPreview
 import com.kg.yildizname.feature.share.ui.ShareScore
 
-private val previewCompatibilityScores = listOf(
+internal val previewCompatibilityScores = listOf(
     ShareScore("İletişim", 82),
     ShareScore("Arkadaşlık", 74),
     ShareScore("Aşk", 91),
     ShareScore("Uzun Vadeli", 68),
 )
 
-private const val previewVerdictText =
+internal const val previewVerdictText =
     "İki yıldız birbirine değdiğinde, gökyüzü bile nefesini tutar. Bu bağ, sabır ve " +
         "anlayışla beslendikçe daha da güçlenecek."
 
 /**
- * Full-size 675x1200dp export asset, unscaled. Lets you eyeball the literal bitmap that gets
- * rendered offscreen for sharing — never composed at this size in real UI.
+ * Full-size 675x1240dp export asset, unscaled. Lets you eyeball the literal bitmap that gets
+ * rendered offscreen for sharing — never composed at this size in real UI. heightDp accounts for
+ * the card's top-safe-area budget (1200 + 40 = 1240).
  */
-@Preview(name = "CompatibilityShareCard — Full export size", showBackground = true, heightDp = 1200, widthDp = 675)
+@Preview(name = "CompatibilityShareCard — Full export size", showBackground = true, heightDp = 1240, widthDp = 675)
 @Composable
 private fun CompatibilityShareCardExportPreview() {
     YzTheme {

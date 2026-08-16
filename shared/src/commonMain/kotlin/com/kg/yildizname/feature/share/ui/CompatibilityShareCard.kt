@@ -6,6 +6,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -59,6 +61,24 @@ import org.jetbrains.compose.resources.stringResource
 private val MedallionSize = 176.dp
 private val MedallionColumnWidth = 220.dp
 
+/** Fixed footer gap — was `Modifier.weight(1f)`, which stranded the URL far below the content
+ * on a card taller than its actual content (esp. the compact card, or a detailed card with few
+ * sections filled in). */
+private val FooterGap = 40.dp
+
+/** Extra top breathing room so the wordmark clears Instagram Stories' own status-bar/camera
+ * overlay when this card is posted there — added to the top spacer. Shared by
+ * [CompatibilityShareCard] and [CompatibilityDetailedShareCard] via [CompatibilityShareCardFrame]. */
+internal val TopSafeAreaExtra = 40.dp
+
+/**
+ * Minimum export height, shared by both cards: the canonical 9:16 Instagram Stories canvas
+ * ([ShareCardHeight]) plus [TopSafeAreaExtra]. Content that fits within this — the compact card
+ * always does; the detailed card does whenever there isn't much to say — exports at exactly this
+ * size. Longer content is allowed to grow the card past it rather than being clipped/ellipsized.
+ */
+internal val MinCardHeight = ShareCardHeight + TopSafeAreaExtra
+
 /**
  * A single labelled score row for the 2x2 tile grid. [label] is already-localized display
  * text; [value] is 0..100.
@@ -66,15 +86,17 @@ private val MedallionColumnWidth = 220.dp
 data class ShareScore(val label: String, val value: Int)
 
 /**
- * Self-contained Instagram Stories share card (9:16, 675x1200dp) for a compatibility result.
- * Rendered offscreen to a Bitmap via BitmapRender — must not depend on any parent
- * Scaffold/theme surface, and must contain NO enter/scroll animations (the bitmap is captured
- * in a single frame). Mirrors [ShareCard]'s export pattern: fixed dp/sp values, no constraint
- * shrinking. Use [CompatibilityShareCardPreview] for on-screen previews.
+ * Self-contained Instagram Stories share card (9:16, 675x1200dp) for a compatibility result's
+ * quick/compact result screen. Rendered offscreen to a Bitmap via BitmapRender — must not
+ * depend on any parent Scaffold/theme surface, and must contain NO enter/scroll animations (the
+ * bitmap is captured in a single frame). Mirrors [ShareCard]'s export pattern: fixed dp/sp
+ * values, no constraint shrinking. Use [CompatibilityShareCardPreview] for on-screen previews.
  *
  * Layout: wordmark → dual medallions bridged by interlocking element-tinted rings (sign name
  * sits centered under each medallion) → big match % + band label → 2x2 score tiles → verdict
- * quote → footer url.
+ * quote → footer url. This is the number — the reasoning behind it lives on the separate
+ * [CompatibilityDetailedShareCard], used from the detailed result screen instead of overloading
+ * this one with optional paragraphs.
  *
  * @param bandLabel localized CompatibilityBand headline (e.g. "Tutkulu Uyum"). Pass resolved
  *   text — this composable stays dumb.
@@ -93,21 +115,60 @@ fun CompatibilityShareCard(
     verdictText: String,
     modifier: Modifier = Modifier,
 ) {
+    CompatibilityShareCardFrame(
+        signA = signA,
+        signB = signB,
+        matchPercent = matchPercent,
+        bandLabel = bandLabel,
+        verdictText = verdictText,
+        modifier = modifier,
+    ) {
+        ScoreGrid(scores = scores)
+    }
+}
+
+/**
+ * Shared chrome for both [CompatibilityShareCard] (compact) and [CompatibilityDetailedShareCard]
+ * (detailed): wordmark → dual-medallion hero → big match % + band label → [content] → verdict
+ * quote → footer url, on the shared starfield background. The two cards differ only in what they
+ * pass as [content] — everything above/below that slot is identical, so it lives here once
+ * instead of being duplicated or branched on optional params.
+ *
+ * Height is a floor, not a fixed budget: [MinCardHeight] guarantees every card exports at least
+ * the canonical 9:16 Instagram Stories canvas (so short content — the compact card, or a
+ * detailed card with little to say — still produces a clean, consistently sized image instead of
+ * an oddly short one), but the card is free to grow taller when [content] genuinely needs more
+ * room. A *fixed* height forced every text block inside [content] to cap `maxLines` and
+ * ellipsize to fit a number nobody could verify against real (often longer than preview-fixture)
+ * AI-generated copy — which is exactly how the detailed card's summary/strengths/pros-cons text
+ * was getting silently truncated to "…". Width stays fixed at [ShareCardWidth] (that's the
+ * Instagram Stories asset width the export density is pinned to); only height flexes.
+ */
+@Composable
+internal fun CompatibilityShareCardFrame(
+    signA: ZodiacSign,
+    signB: ZodiacSign,
+    matchPercent: Int,
+    bandLabel: String,
+    verdictText: String,
+    modifier: Modifier = Modifier,
+    content: @Composable ColumnScope.() -> Unit,
+) {
     Box(
         modifier = modifier
             .width(ShareCardWidth)
-            .height(ShareCardHeight)
+            .heightIn(min = MinCardHeight)
             .background(YzBg),
     ) {
-        StaticStarField(Modifier.fillMaxSize())
+        StaticStarField(Modifier.matchParentSize())
 
         Column(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 52.dp),
+                .fillMaxWidth()
+                .padding(horizontal = 40.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Spacer(Modifier.height(60.dp))
+            Spacer(Modifier.height(48.dp + TopSafeAreaExtra))
 
             Text(
                 text = stringResource(Res.string.share_card_app_name),
@@ -157,13 +218,13 @@ fun CompatibilityShareCard(
 
             Spacer(Modifier.height(44.dp))
 
-            ScoreGrid(scores = scores)
+            content()
 
             Spacer(Modifier.height(36.dp))
 
             VerdictQuote(text = verdictText)
 
-            Spacer(Modifier.weight(1f))
+            Spacer(Modifier.height(FooterGap))
 
             Text(
                 text = stringResource(Res.string.share_card_app_url),
@@ -370,7 +431,8 @@ private fun ScoreTile(
 
 /**
  * Final-verdict quote: gold rail + serif italic text, matching the daily [ShareCard]'s quote
- * block treatment so the two cards read as a family.
+ * block treatment so the two cards read as a family. Shared by both cards via
+ * [CompatibilityShareCardFrame].
  */
 @Composable
 private fun VerdictQuote(
@@ -434,3 +496,4 @@ fun CompatibilityShareCardPreview(
         verdictText = verdictText,
     )
 }
+

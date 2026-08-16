@@ -4,9 +4,13 @@ import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 
 /**
- * Single source of truth for share card geometry. Both [ShareCard] and [CompatibilityShareCard]
- * render at exactly this size; [ScaledShareCard] divides by [ShareCardHeight] for preview scale;
- * the offscreen capture path composes at [ShareCardExportDensity].
+ * Single source of truth for share card width — every share card (daily [ShareCard],
+ * [CompatibilityShareCard], [CompatibilityDetailedShareCard]) is exactly this wide; height wraps
+ * each card's actual content instead of being pinned, so text is never forced to ellipsize to
+ * fit a guessed-at budget. [ShareCardHeight] is [ShareCard]/[CompatibilityShareCard]'s nominal,
+ * roughly-accurate content height, kept around only as [ScaledShareCard]'s preview-scale
+ * reference — it is not a layout constraint. The offscreen capture path composes at
+ * [ShareCardExportDensity] and captures whatever size the content actually measures to.
  */
 internal val ShareCardWidth = 675.dp
 internal val ShareCardHeight = 1200.dp

@@ -53,6 +53,7 @@ import com.kg.yildizname.feature.readingDetail.ui.ReadingDetailViewModel
 import com.kg.yildizname.feature.settings.ui.SettingsScreen
 import com.kg.yildizname.feature.settings.ui.SettingsState
 import com.kg.yildizname.feature.settings.ui.SettingsViewModel
+import com.kg.yildizname.feature.share.ui.CompatibilityDetailedShareCardRequest
 import com.kg.yildizname.feature.share.ui.CompatibilityShareCardRequest
 import com.kg.yildizname.feature.share.ui.ShareCardRequest
 import com.kg.yildizname.feature.share.ui.ShareFlowHost
@@ -386,12 +387,16 @@ fun YildiznameNavGraph(navController: NavHostController) {
                         onShare = {
                             (state as? CompatibilityResultUIState.Success)?.let { success ->
                                 shareFlowState.open(
-                                    CompatibilityShareCardRequest(
+                                    CompatibilityDetailedShareCardRequest(
                                         signA = success.result.signs[0],
                                         signB = success.result.signs[1],
                                         matchPercent = success.result.matchPercent,
-                                        scores = success.result.scores,
                                         verdictText = shareQuoteFrom(success.result.content.finalVerdict),
+                                        summary = success.result.content.summary,
+                                        strengths = success.result.content.strengths,
+                                        challenges = success.result.content.challenges,
+                                        pros = success.result.content.pros,
+                                        cons = success.result.content.cons,
                                     )
                                 )
                             }
