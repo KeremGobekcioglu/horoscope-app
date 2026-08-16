@@ -47,6 +47,7 @@ import com.kg.yildizname.core.ui.theme.YzInk
 import com.kg.yildizname.core.ui.theme.YzSurface
 import com.kg.yildizname.core.ui.theme.YzSurfaceAlt
 import com.kg.yildizname.core.ui.utils.yzNavigationBarsPadding
+import com.kg.yildizname.platform.ShareTarget
 import compose.icons.FeatherIcons
 import compose.icons.FontAwesomeIcons
 import compose.icons.feathericons.Download
@@ -70,9 +71,9 @@ import horoscope.shared.generated.resources.share_option_whatsapp
 import org.jetbrains.compose.resources.stringResource
 
 // Platform brand colors — not app design tokens, hardcoded per each platform's own brand guidelines.
-private val InstagramGradient = listOf(Color(0xFFFEDA75), Color(0xFFD62976), Color(0xFF962FBF), Color(0xFF4F5BD5))
+/*private val InstagramGradient = listOf(Color(0xFFFEDA75), Color(0xFFD62976), Color(0xFF962FBF), Color(0xFF4F5BD5))
 private val WhatsAppGreen = Color(0xFF25D366)
-private val FacebookBlue = Color(0xFF1877F2)
+private val FacebookBlue = Color(0xFF1877F2) */
 
 /**
  * @param preview Already-scaled preview content shown at the top of the sheet — pass
@@ -85,10 +86,8 @@ fun ShareBottomSheet(
     preview: @Composable () -> Unit,
     isWorking: Boolean,
     errorMessage: String?,
-    onInstagramStoriesClick: () -> Unit,
-    onWhatsAppClick: () -> Unit,
-    onFacebookClick: () -> Unit,
-    onGeneralShareClick: () -> Unit,
+    options: List<ShareOption>,
+    onOptionClick: (ShareTarget) -> Unit,
     onShareTextClick: () -> Unit,
     onSaveImageClick: () -> Unit,
     onDismiss: () -> Unit,
@@ -103,15 +102,13 @@ fun ShareBottomSheet(
     ) {
         ShareBottomSheetContent(
             preview = preview,
-            onInstagramStoriesClick = onInstagramStoriesClick,
-            onWhatsAppClick = onWhatsAppClick,
-            onFacebookClick = onFacebookClick,
-            onGeneralShareClick = onGeneralShareClick,
+            isWorking = isWorking,
+            errorMessage = errorMessage,
+            options = options,
+            onOptionClick = onOptionClick,
             onShareTextClick = onShareTextClick,
             onSaveImageClick = onSaveImageClick,
             onDismiss = onDismiss,
-            isWorking = isWorking,
-            errorMessage = errorMessage
         )
     }
 }
@@ -127,10 +124,8 @@ fun ShareBottomSheetContent(
     preview: @Composable () -> Unit,
     isWorking: Boolean,
     errorMessage: String?,
-    onInstagramStoriesClick: () -> Unit,
-    onWhatsAppClick: () -> Unit,
-    onFacebookClick: () -> Unit,
-    onGeneralShareClick: () -> Unit,
+    options: List<ShareOption>,
+    onOptionClick: (ShareTarget) -> Unit,
     onShareTextClick: () -> Unit,
     onSaveImageClick: () -> Unit,
     onDismiss: () -> Unit,
@@ -156,37 +151,20 @@ fun ShareBottomSheetContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 24.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
+            horizontalArrangement =
+                if (options.size <= 2) Arrangement.spacedBy(32.dp, Alignment.CenterHorizontally)
+                else Arrangement.SpaceBetween,
         ) {
-            SharePlatformOption(
-                icon = FontAwesomeIcons.Brands.Instagram,
-                label = stringResource(Res.string.share_option_instagram_stories),
-                background = Brush.linearGradient(InstagramGradient),
-                onClick = onInstagramStoriesClick,
-                enabled = !isWorking,
-            )
-            SharePlatformOption(
-                icon = FontAwesomeIcons.Brands.Whatsapp,
-                label = stringResource(Res.string.share_option_whatsapp),
-                background = SolidColor(WhatsAppGreen),
-                onClick = onWhatsAppClick,
-                enabled = !isWorking,
-            )
-            SharePlatformOption(
-                icon = FontAwesomeIcons.Brands.Facebook,
-                label = stringResource(Res.string.share_option_facebook),
-                background = SolidColor(FacebookBlue),
-                onClick = onFacebookClick,
-                enabled = !isWorking,
-            )
-            SharePlatformOption(
-                icon = FeatherIcons.Share2,
-                label = stringResource(Res.string.share_option_general),
-                background = SolidColor(YzSurfaceAlt),
-                iconTint = YzGold,
-                onClick = onGeneralShareClick,
-                enabled = !isWorking,
-            )
+            options.forEach {
+                option ->
+                SharePlatformOption(
+                    icon = option.icon,
+                    label = option.label,
+                    background = option.background,
+                    onClick = { onOptionClick(option.target) },
+                    enabled = !isWorking,
+                )
+            }
         }
 
         Spacer(Modifier.height(24.dp))

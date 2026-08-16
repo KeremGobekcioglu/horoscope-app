@@ -10,7 +10,9 @@ import com.kg.yildizname.core.data.remote.PushTokenProvider
 import com.kg.yildizname.core.data.remote.iOSPushTokenProvider
 import com.kg.yildizname.platform.NotificationPermissionRequester
 import com.kg.yildizname.platform.NotificationSettingsOpener
+import com.kg.yildizname.platform.ShareManager
 import com.kg.yildizname.platform.UrlOpener
+import com.kg.yildizname.platform.iOSShareManager
 import okio.Path.Companion.toPath
 import org.koin.dsl.module
 import platform.Foundation.NSHomeDirectory
@@ -27,4 +29,5 @@ val iosPlatformModule = module {
     single<NotificationPermissionRequester> { IosNotificationPermissionRequester() }
     single<NotificationSettingsOpener> { IosNotificationSettingsOpener() }
     single<UrlOpener> { IosUrlOpener() }
+    single<ShareManager> { iOSShareManager() }
 }
