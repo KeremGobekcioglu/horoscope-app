@@ -157,21 +157,25 @@ fun CompatibilityResultSuccessScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         )
         {
-            Row(modifier = Modifier.fillMaxWidth()) {
-                IconButton(onClick = onBackClick) {
+            Box(modifier = Modifier.fillMaxWidth()) {
+                IconButton(
+                    onClick = onBackClick,
+                    modifier = Modifier.align(Alignment.CenterStart)
+                ) {
                     Icon(
                         imageVector = FeatherIcons.ArrowLeft,
                         contentDescription = stringResource(Res.string.cd_back),
                         tint = YzInk
                     )
                 }
+                Text(
+                    text = stringResource(Res.string.compat_title),
+                    color = YzGold,
+                    style = MaterialTheme.typography.headlineLarge,
+                    modifier = Modifier.align(Alignment.Center)
+                )
             }
-            Text(
-                text = stringResource(Res.string.compat_title),
-                color = YzGold,
-                style = MaterialTheme.typography.headlineLarge
-            )
-            Spacer(Modifier.height(16.dp))
+            Spacer(Modifier.height(8.dp))
             Text(
                 text = stringResource(Res.string.compat_subtitle),
                 color = YzInk,

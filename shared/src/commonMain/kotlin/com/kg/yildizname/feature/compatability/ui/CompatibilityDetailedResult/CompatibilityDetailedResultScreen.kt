@@ -114,11 +114,11 @@ fun CompatibilityDetailedResultSuccessScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         )
         {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                IconButton(onClick = onBack) {
+            Box(modifier = Modifier.fillMaxWidth()) {
+                IconButton(
+                    onClick = onBack,
+                    modifier = Modifier.align(Alignment.CenterStart)
+                ) {
                     Icon(
                         imageVector = FeatherIcons.ArrowLeft,
                         contentDescription = stringResource(Res.string.cd_back),
@@ -129,7 +129,7 @@ fun CompatibilityDetailedResultSuccessScreen(
                     text = stringResource(Res.string.detailed_compat_title),
                     color = YzGold,
                     style = MaterialTheme.typography.headlineLarge,
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.align(Alignment.Center)
                 )
             }
             Spacer(Modifier.height(16.dp))
