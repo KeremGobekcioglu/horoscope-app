@@ -22,6 +22,13 @@ data class ShareOption(
 @Composable
 expect fun rememberShareOptions(): List<ShareOption>
 
+/**
+ * iOS has no separate share-sheet real estate worth spending on a two-row list, so it folds
+ * "Share as text" / "Save image" into the icon grid as extra tiles instead. Android keeps them
+ * as the row list below the divider.
+ */
+expect val promoteShareActionsIntoGrid: Boolean
+
 // Platform brand colors — not app design tokens, per each platform's own brand guidelines.
 internal val InstagramGradient = Brush.linearGradient(
     listOf(Color(0xFFFEDA75), Color(0xFFD62976), Color(0xFF962FBF), Color(0xFF4F5BD5))

@@ -34,3 +34,5 @@ actual fun rememberShareOptions(): List<ShareOption> = listOf(
         iconTint = YzGold,
     ),
 )
+
+actual val promoteShareActionsIntoGrid: Boolean = true
