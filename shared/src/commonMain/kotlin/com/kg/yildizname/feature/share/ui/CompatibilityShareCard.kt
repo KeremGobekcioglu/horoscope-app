@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -66,10 +67,17 @@ private val MedallionColumnWidth = 220.dp
 private val FooterGap = 40.dp
 
 /** Extra top breathing room so the wordmark clears Instagram Stories' own status-bar/camera
- * overlay when this card is posted there — added to the top spacer, so it must also be added to
- * each card's own height budget or the footer gets squeezed off the bottom. Shared by
+ * overlay when this card is posted there — added to the top spacer. Shared by
  * [CompatibilityShareCard] and [CompatibilityDetailedShareCard] via [CompatibilityShareCardFrame]. */
 internal val TopSafeAreaExtra = 40.dp
+
+/**
+ * Minimum export height, shared by both cards: the canonical 9:16 Instagram Stories canvas
+ * ([ShareCardHeight]) plus [TopSafeAreaExtra]. Content that fits within this — the compact card
+ * always does; the detailed card does whenever there isn't much to say — exports at exactly this
+ * size. Longer content is allowed to grow the card past it rather than being clipped/ellipsized.
+ */
+internal val MinCardHeight = ShareCardHeight + TopSafeAreaExtra
 
 /**
  * A single labelled score row for the 2x2 tile grid. [label] is already-localized display
@@ -113,7 +121,6 @@ fun CompatibilityShareCard(
         matchPercent = matchPercent,
         bandLabel = bandLabel,
         verdictText = verdictText,
-        cardHeight = ShareCardHeight + TopSafeAreaExtra,
         modifier = modifier,
     ) {
         ScoreGrid(scores = scores)
@@ -124,8 +131,18 @@ fun CompatibilityShareCard(
  * Shared chrome for both [CompatibilityShareCard] (compact) and [CompatibilityDetailedShareCard]
  * (detailed): wordmark → dual-medallion hero → big match % + band label → [content] → verdict
  * quote → footer url, on the shared starfield background. The two cards differ only in what they
- * pass as [content] and [cardHeight] — everything above/below that slot is identical, so it lives
- * here once instead of being duplicated or branched on optional params.
+ * pass as [content] — everything above/below that slot is identical, so it lives here once
+ * instead of being duplicated or branched on optional params.
+ *
+ * Height is a floor, not a fixed budget: [MinCardHeight] guarantees every card exports at least
+ * the canonical 9:16 Instagram Stories canvas (so short content — the compact card, or a
+ * detailed card with little to say — still produces a clean, consistently sized image instead of
+ * an oddly short one), but the card is free to grow taller when [content] genuinely needs more
+ * room. A *fixed* height forced every text block inside [content] to cap `maxLines` and
+ * ellipsize to fit a number nobody could verify against real (often longer than preview-fixture)
+ * AI-generated copy — which is exactly how the detailed card's summary/strengths/pros-cons text
+ * was getting silently truncated to "…". Width stays fixed at [ShareCardWidth] (that's the
+ * Instagram Stories asset width the export density is pinned to); only height flexes.
  */
 @Composable
 internal fun CompatibilityShareCardFrame(
@@ -134,21 +151,20 @@ internal fun CompatibilityShareCardFrame(
     matchPercent: Int,
     bandLabel: String,
     verdictText: String,
-    cardHeight: Dp,
     modifier: Modifier = Modifier,
     content: @Composable ColumnScope.() -> Unit,
 ) {
     Box(
         modifier = modifier
             .width(ShareCardWidth)
-            .height(cardHeight)
+            .heightIn(min = MinCardHeight)
             .background(YzBg),
     ) {
-        StaticStarField(Modifier.fillMaxSize())
+        StaticStarField(Modifier.matchParentSize())
 
         Column(
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxWidth()
                 .padding(horizontal = 40.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {

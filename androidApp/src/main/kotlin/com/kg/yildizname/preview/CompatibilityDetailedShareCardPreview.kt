@@ -32,12 +32,13 @@ private const val previewChallenges =
 
 /**
  * Full-size export asset for the detailed-result screen's share button — summary +
- * strengths/challenges + pros/cons, no score grid. heightDp accounts for the card's own height
- * budget (1200 + 40 top-safe-area + 260 detailed = 1500); the composable's actual measured
- * height drives the real export, this is just enough canvas for the IDE to render it without
- * clipping.
+ * strengths/challenges + pros/cons, no score grid. The card's height is no longer a fixed
+ * budget — it wraps whatever [CompatibilityShareCardFrame]'s content actually measures to, so
+ * none of this text gets ellipsized to fit a guessed-at number. heightDp here is just a
+ * generously oversized IDE preview canvas (real content lands well under it); it does not
+ * constrain the composable or the real export.
  */
-@Preview(name = "CompatibilityDetailedShareCard — Full export size", showBackground = true, heightDp = 1500, widthDp = 675)
+@Preview(name = "CompatibilityDetailedShareCard — Full export size", showBackground = true, heightDp = 1800, widthDp = 675)
 @Composable
 private fun CompatibilityDetailedShareCardExportPreview() {
     YzTheme {
@@ -57,7 +58,7 @@ private fun CompatibilityDetailedShareCardExportPreview() {
 }
 
 /** Scaled-down on-screen version, as embedded in a share bottom sheet. */
-@Preview(name = "CompatibilityDetailedShareCardPreview — Scaled", showBackground = true, widthDp = 360, heightDp = 580)
+@Preview(name = "CompatibilityDetailedShareCardPreview — Scaled", showBackground = true, widthDp = 360, heightDp = 750)
 @Composable
 private fun CompatibilityDetailedShareCardScaledPreview() {
     YzTheme {

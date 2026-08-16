@@ -23,7 +23,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -43,21 +42,13 @@ import horoscope.shared.generated.resources.strengths
 import org.jetbrains.compose.resources.stringResource
 
 /**
- * Extra card height for the detailed variant on top of [ShareCardHeight] + [TopSafeAreaExtra].
- * Flat, not per-section: dropping [ScoreGrid] frees roughly as much room as summary +
- * strengths/challenges + pros/cons + their spacing costs, so one fixed budget (rather than
- * additive per-section heights) keeps the card from growing unpredictably as sections are
- * independently present/absent.
- */
-private val DetailedExtraHeight = 260.dp
-
-/**
- * Self-contained Instagram Stories share card (9:16, 675x1500dp) for a compatibility result's
- * *detailed* result screen — a separate composable from [CompatibilityShareCard] rather than
- * that card branching on optional params, because the two genuinely carry different payloads:
- * compact is the number, this one is the reasoning behind it. Same offscreen-render constraints
- * as [CompatibilityShareCard] (no parent Scaffold/theme dependency, no enter/scroll animations).
- * Use [CompatibilityDetailedShareCardPreview] for on-screen previews.
+ * Self-contained Instagram Stories share card (675dp wide, height grows to fit content) for a
+ * compatibility result's *detailed* result screen — a separate composable from
+ * [CompatibilityShareCard] rather than that card branching on optional params, because the two
+ * genuinely carry different payloads: compact is the number, this one is the reasoning behind
+ * it. Same offscreen-render constraints as [CompatibilityShareCard] (no parent Scaffold/theme
+ * dependency, no enter/scroll animations). Use [CompatibilityDetailedShareCardPreview] for
+ * on-screen previews.
  *
  * Layout: wordmark → dual medallions bridged by interlocking element-tinted rings → big match %
  * + band label → summary line → strengths/challenges → pros/cons → verdict quote → footer url.
@@ -94,7 +85,6 @@ fun CompatibilityDetailedShareCard(
         matchPercent = matchPercent,
         bandLabel = bandLabel,
         verdictText = verdictText,
-        cardHeight = ShareCardHeight + TopSafeAreaExtra + DetailedExtraHeight,
         modifier = modifier,
     ) {
         var needsSpacer = false
@@ -120,7 +110,9 @@ fun CompatibilityDetailedShareCard(
 /**
  * Single centered takeaway line above strengths/challenges — the one uncontained text block on
  * the detailed card, giving the eye a rest between the hero/score-band and the boxed sections
- * below. No card/border, deliberately, unlike every other detail block.
+ * below. No card/border, deliberately, unlike every other detail block. No `maxLines`/ellipsis —
+ * the card's height wraps its content (see [CompatibilityShareCardFrame]), so there is no fixed
+ * budget this text needs to fit inside; capping it here would silently drop real copy instead.
  */
 @Composable
 private fun SummaryLine(
@@ -129,8 +121,6 @@ private fun SummaryLine(
 ) {
     Text(
         text = text,
-        maxLines = 3,
-        overflow = TextOverflow.Ellipsis,
         color = YzInk.copy(alpha = 0.85f),
         textAlign = TextAlign.Center,
         style = MaterialTheme.typography.bodyLarge.copy(fontFamily = FontFamily.Serif),
@@ -202,8 +192,6 @@ private fun DetailColumn(
         )
         Text(
             text = body,
-            maxLines = 6,
-            overflow = TextOverflow.Ellipsis,
             color = YzInk,
             style = MaterialTheme.typography.bodySmall,
             lineHeight = 17.sp,
@@ -290,8 +278,6 @@ private fun ProsConsColumn(
                 )
                 Text(
                     text = item,
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis,
                     color = YzInk,
                     style = MaterialTheme.typography.bodySmall,
                     lineHeight = 17.sp,
