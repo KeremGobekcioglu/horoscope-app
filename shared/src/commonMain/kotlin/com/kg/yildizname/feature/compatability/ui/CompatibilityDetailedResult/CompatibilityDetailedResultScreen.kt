@@ -107,14 +107,17 @@ fun CompatibilityDetailedResultSuccessScreen(
     {
         Column(
             modifier = Modifier
-                .padding(horizontal = 8.dp)
-                .padding(bottom = 32.dp)
                 .fillMaxSize()
-                .verticalScroll(rememberScrollState()),
+                .verticalScroll(rememberScrollState())
+                .padding(horizontal = 8.dp)
+                .padding(bottom = 32.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         )
         {
-            Row(modifier = Modifier.fillMaxWidth()) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 IconButton(onClick = onBack) {
                     Icon(
                         imageVector = FeatherIcons.ArrowLeft,
@@ -122,12 +125,13 @@ fun CompatibilityDetailedResultSuccessScreen(
                         tint = YzInk
                     )
                 }
+                Text(
+                    text = stringResource(Res.string.detailed_compat_title),
+                    color = YzGold,
+                    style = MaterialTheme.typography.headlineLarge,
+                    modifier = Modifier.weight(1f)
+                )
             }
-            Text(
-                text = stringResource(Res.string.detailed_compat_title),
-                color = YzGold,
-                style = MaterialTheme.typography.headlineLarge
-            )
             Spacer(Modifier.height(16.dp))
             Row(
                 modifier = Modifier.fillMaxWidth(),

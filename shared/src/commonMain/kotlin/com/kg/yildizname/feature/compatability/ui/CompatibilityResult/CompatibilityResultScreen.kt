@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
@@ -150,14 +151,17 @@ fun CompatibilityResultSuccessScreen(
     Box(modifier = Modifier.yzStatusBarsPadding().fillMaxSize())
     {
         Column(modifier = Modifier
-            .padding(horizontal = 8.dp)
-            .padding(bottom = 32.dp)
             .fillMaxSize()
-            .verticalScroll(rememberScrollState()),
+            .verticalScroll(rememberScrollState())
+            .padding(horizontal = 8.dp)
+            .padding(bottom = 32.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         )
         {
-            Row(modifier = Modifier.fillMaxWidth()) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 IconButton(onClick = onBackClick) {
                     Icon(
                         imageVector = FeatherIcons.ArrowLeft,
@@ -165,19 +169,26 @@ fun CompatibilityResultSuccessScreen(
                         tint = YzInk
                     )
                 }
+                Column(
+                    modifier = Modifier.weight(1f),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = stringResource(Res.string.compat_title),
+                        color = YzGold,
+                        style = MaterialTheme.typography.headlineLarge,
+                        textAlign = TextAlign.Center
+                    )
+                    Text(
+                        text = stringResource(Res.string.compat_subtitle),
+                        color = YzInk,
+                        style = MaterialTheme.typography.headlineMedium,
+                        textAlign = TextAlign.Center
+                    )
+                }
+                Spacer(Modifier.width(48.dp))
             }
-            Text(
-                text = stringResource(Res.string.compat_title),
-                color = YzGold,
-                style = MaterialTheme.typography.headlineLarge
-            )
-            Spacer(Modifier.height(16.dp))
-            Text(
-                text = stringResource(Res.string.compat_subtitle),
-                color = YzInk,
-                style = MaterialTheme.typography.headlineMedium
-            )
-            Spacer(Modifier.height(16.dp))
+            Spacer(Modifier.height(24.dp))
             SignBox(
                 sign= signA.localizedName(),
                 icon = signA.compatGridIcon,
