@@ -23,6 +23,10 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.ui.graphics.Color
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -139,22 +143,22 @@ private fun ReadingDetailSuccessScreen(
         YzWindowWidth.Expanded -> 520.dp
     }
 
-    Scaffold(
-        modifier = modifier,
-        containerColor = Color.Transparent,
-        contentWindowInsets = WindowInsets(0),
-        topBar = {
-            ReadingDetailTopBar(
-                signName = uiState.signDisplayName,
-                periodLabel = uiState.periodLabel,
-                onBackClick = onBackClick,
-                date = uiState.formattedDate
-            )
-        },
-        bottomBar = {
-            SharePillButton(onClick = onShareClick)
-        },
-    ) { innerPadding ->
+    var pillHeight by remember { mutableStateOf(0.dp) }
+
+    Box(modifier = modifier.fillMaxSize()) {
+        Scaffold(
+            modifier = Modifier.fillMaxSize(),
+            containerColor = Color.Transparent,
+            contentWindowInsets = WindowInsets(0),
+            topBar = {
+                ReadingDetailTopBar(
+                    signName = uiState.signDisplayName,
+                    periodLabel = uiState.periodLabel,
+                    onBackClick = onBackClick,
+                    date = uiState.formattedDate
+                )
+            },
+        ) { innerPadding ->
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -237,9 +241,16 @@ private fun ReadingDetailSuccessScreen(
                     )
                 }
 
-                Spacer(Modifier.height(24.dp))
+                Spacer(Modifier.height(pillHeight + 16.dp))
             }
         }
+        }
+
+        SharePillButton(
+            onClick = onShareClick,
+            modifier = Modifier.align(Alignment.BottomCenter),
+            onHeightMeasured = { pillHeight = it },
+        )
     }
 }
 

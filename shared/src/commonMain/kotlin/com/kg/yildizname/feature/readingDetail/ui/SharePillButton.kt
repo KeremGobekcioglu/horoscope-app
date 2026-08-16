@@ -18,7 +18,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.kg.yildizname.core.ui.theme.PillShape
 import com.kg.yildizname.core.ui.theme.YzBg
@@ -33,13 +36,22 @@ import org.jetbrains.compose.resources.stringResource
 internal fun SharePillButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    onHeightMeasured: (Dp) -> Unit = {},
 ) {
+    val density = androidx.compose.ui.platform.LocalDensity.current
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .background(YzBg)
+            .onSizeChanged { onHeightMeasured(with(density) { it.height.toDp() }) }
+            .background(
+                Brush.verticalGradient(
+                    0f to YzBg.copy(alpha = 0f),
+                    0.45f to YzBg.copy(alpha = 0.85f),
+                    1f to YzBg,
+                ),
+            )
             .yzNavigationBarsPadding()
-            .padding(horizontal = 20.dp, vertical = 12.dp),
+            .padding(horizontal = 20.dp, vertical = 20.dp),
         contentAlignment = Alignment.Center,
     ) {
         Button(
@@ -52,6 +64,10 @@ internal fun SharePillButton(
             colors = ButtonDefaults.buttonColors(
                 containerColor = YzGold,
                 contentColor = YzBg,
+            ),
+            elevation = ButtonDefaults.buttonElevation(
+                defaultElevation = 8.dp,
+                pressedElevation = 4.dp,
             ),
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
