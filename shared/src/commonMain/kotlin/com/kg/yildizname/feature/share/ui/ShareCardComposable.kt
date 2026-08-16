@@ -98,7 +98,7 @@ fun ShareCard(
                 modifier = Modifier.fillMaxWidth(),
             )
 
-            Spacer(Modifier.height(64.dp))
+            Spacer(Modifier.height(32.dp))
 
             ConstellationHero(
                 sign = sign,
@@ -107,7 +107,7 @@ fun ShareCard(
                     .aspectRatio(1f),
             )
 
-            Spacer(Modifier.height(80.dp))
+            Spacer(Modifier.height(32.dp))
 
             Text(
                 text = sign.localizedName().yzUppercase(),
@@ -131,11 +131,11 @@ fun ShareCard(
                 modifier = Modifier.fillMaxWidth(),
             )
 
-            Spacer(Modifier.height(60.dp))
+            Spacer(Modifier.height(32.dp))
 
             ShareCardQuoteBlock(quoteText = quoteText)
 
-            Spacer(Modifier.height(40.dp))
+            Spacer(Modifier.height(32.dp))
 
             Text(
                 text = stringResource(Res.string.share_card_app_url),
@@ -202,7 +202,7 @@ private fun ShareCardQuoteBlock(
         ) {
             Text(
                 text = "\u201C$quoteText\u201D",
-                maxLines = 7,
+                //maxLines = 7,
                 overflow = TextOverflow.Ellipsis,
                 color = YzInk,
                 style = MaterialTheme.typography.bodyLarge.copy(

@@ -168,7 +168,7 @@ internal fun CompatibilityShareCardFrame(
                 .padding(horizontal = 40.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Spacer(Modifier.height(48.dp + TopSafeAreaExtra))
+            Spacer(Modifier.height(32.dp + TopSafeAreaExtra))
 
             Text(
                 text = stringResource(Res.string.share_card_app_name),
@@ -180,7 +180,7 @@ internal fun CompatibilityShareCardFrame(
                 modifier = Modifier.fillMaxWidth(),
             )
 
-            Spacer(Modifier.height(64.dp))
+            Spacer(Modifier.height(48.dp))
 
             CompatibilityHero(signA = signA, signB = signB)
 
@@ -216,7 +216,7 @@ internal fun CompatibilityShareCardFrame(
                 modifier = Modifier.fillMaxWidth(),
             )
 
-            Spacer(Modifier.height(44.dp))
+            Spacer(Modifier.height(36.dp))
 
             content()
 
@@ -236,7 +236,7 @@ internal fun CompatibilityShareCardFrame(
                 modifier = Modifier.fillMaxWidth(),
             )
 
-            Spacer(Modifier.height(56.dp))
+            Spacer(Modifier.height(32.dp))
         }
     }
 }
@@ -459,7 +459,7 @@ private fun VerdictQuote(
         )
         Text(
             text = "\u201C$text\u201D",
-            maxLines = 6,
+            //maxLines = 6,
             overflow = TextOverflow.Ellipsis,
             color = YzInk,
             style = MaterialTheme.typography.bodyLarge.copy(
