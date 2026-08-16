@@ -242,7 +242,7 @@ fun ShareFlowHost(state: ShareFlowState) {
                 }
             }
         }
-
+        val options = rememberShareOptions()
         val onSave = rememberGallerySaveGate(
             onGranted = { perform(successMessage = saveSuccessMessage) { shareManager.saveToGallery(it) } },
             onDenied = {errorMessage = permissionDenied}
@@ -253,10 +253,8 @@ fun ShareFlowHost(state: ShareFlowState) {
             },
             isWorking = isWorking,
             errorMessage = errorMessage,
-            onInstagramStoriesClick = { perform { shareManager.share(it, ShareTarget.InstagramStories) } },
-            onWhatsAppClick = { perform { shareManager.share(it, ShareTarget.WhatsApp) } },
-            onFacebookClick = { perform { shareManager.share(it, ShareTarget.Facebook) } },
-            onGeneralShareClick = { perform { shareManager.share(it, ShareTarget.SystemSheet) } },
+            options = options,
+            onOptionClick = { target -> perform { shareManager.share(it, target) }},
             onSaveImageClick = onSave,
             onShareTextClick = {
                 if (!isWorking) shareScope.launch { shareManager.shareText(shareText, ShareTarget.SystemSheet) }

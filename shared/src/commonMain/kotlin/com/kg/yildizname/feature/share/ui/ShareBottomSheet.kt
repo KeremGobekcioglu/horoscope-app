@@ -47,6 +47,7 @@ import com.kg.yildizname.core.ui.theme.YzInk
 import com.kg.yildizname.core.ui.theme.YzSurface
 import com.kg.yildizname.core.ui.theme.YzSurfaceAlt
 import com.kg.yildizname.core.ui.utils.yzNavigationBarsPadding
+import com.kg.yildizname.platform.ShareTarget
 import compose.icons.FeatherIcons
 import compose.icons.FontAwesomeIcons
 import compose.icons.feathericons.Download
@@ -70,9 +71,9 @@ import horoscope.shared.generated.resources.share_option_whatsapp
 import org.jetbrains.compose.resources.stringResource
 
 // Platform brand colors — not app design tokens, hardcoded per each platform's own brand guidelines.
-private val InstagramGradient = listOf(Color(0xFFFEDA75), Color(0xFFD62976), Color(0xFF962FBF), Color(0xFF4F5BD5))
+/*private val InstagramGradient = listOf(Color(0xFFFEDA75), Color(0xFFD62976), Color(0xFF962FBF), Color(0xFF4F5BD5))
 private val WhatsAppGreen = Color(0xFF25D366)
-private val FacebookBlue = Color(0xFF1877F2)
+private val FacebookBlue = Color(0xFF1877F2) */
 
 /**
  * @param preview Already-scaled preview content shown at the top of the sheet — pass
@@ -85,10 +86,8 @@ fun ShareBottomSheet(
     preview: @Composable () -> Unit,
     isWorking: Boolean,
     errorMessage: String?,
-    onInstagramStoriesClick: () -> Unit,
-    onWhatsAppClick: () -> Unit,
-    onFacebookClick: () -> Unit,
-    onGeneralShareClick: () -> Unit,
+    options: List<ShareOption>,
+    onOptionClick: (ShareTarget) -> Unit,
     onShareTextClick: () -> Unit,
     onSaveImageClick: () -> Unit,
     onDismiss: () -> Unit,
@@ -103,15 +102,13 @@ fun ShareBottomSheet(
     ) {
         ShareBottomSheetContent(
             preview = preview,
-            onInstagramStoriesClick = onInstagramStoriesClick,
-            onWhatsAppClick = onWhatsAppClick,
-            onFacebookClick = onFacebookClick,
-            onGeneralShareClick = onGeneralShareClick,
+            isWorking = isWorking,
+            errorMessage = errorMessage,
+            options = options,
+            onOptionClick = onOptionClick,
             onShareTextClick = onShareTextClick,
             onSaveImageClick = onSaveImageClick,
             onDismiss = onDismiss,
-            isWorking = isWorking,
-            errorMessage = errorMessage
         )
     }
 }
@@ -127,10 +124,8 @@ fun ShareBottomSheetContent(
     preview: @Composable () -> Unit,
     isWorking: Boolean,
     errorMessage: String?,
-    onInstagramStoriesClick: () -> Unit,
-    onWhatsAppClick: () -> Unit,
-    onFacebookClick: () -> Unit,
-    onGeneralShareClick: () -> Unit,
+    options: List<ShareOption>,
+    onOptionClick: (ShareTarget) -> Unit,
     onShareTextClick: () -> Unit,
     onSaveImageClick: () -> Unit,
     onDismiss: () -> Unit,
@@ -152,58 +147,77 @@ fun ShareBottomSheetContent(
                 .padding(vertical = 16.dp),
         )
 
+        val tiles = if (promoteShareActionsIntoGrid) {
+            buildList {
+                options.forEachIndexed { index, option ->
+                    add(GridTile(option.icon, option.label, option.background, option.iconTint) { onOptionClick(option.target) })
+                    // iOS only ever offers [InstagramStories, SystemSheet] — insert the
+                    // promoted actions right after the first tile so the grid reads
+                    // [Instagram Stories] [Save image] [Share as text] [More].
+                    if (index == 0) {
+                        add(
+                            GridTile(
+                                icon = FeatherIcons.Download,
+                                label = stringResource(Res.string.share_option_save_image),
+                                background = SolidColor(YzSurfaceAlt),
+                                iconTint = YzGold,
+                                onClick = onSaveImageClick,
+                            )
+                        )
+                        add(
+                            GridTile(
+                                icon = FeatherIcons.FileText,
+                                label = stringResource(Res.string.share_option_share_text),
+                                background = SolidColor(YzSurfaceAlt),
+                                iconTint = YzGold,
+                                onClick = onShareTextClick,
+                            )
+                        )
+                    }
+                }
+            }
+        } else {
+            options.map { option -> GridTile(option.icon, option.label, option.background, option.iconTint) { onOptionClick(option.target) } }
+        }
+
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 24.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
+            horizontalArrangement =
+                if (tiles.size <= 2) Arrangement.spacedBy(32.dp, Alignment.CenterHorizontally)
+                else Arrangement.SpaceBetween,
         ) {
-            SharePlatformOption(
-                icon = FontAwesomeIcons.Brands.Instagram,
-                label = stringResource(Res.string.share_option_instagram_stories),
-                background = Brush.linearGradient(InstagramGradient),
-                onClick = onInstagramStoriesClick,
-                enabled = !isWorking,
-            )
-            SharePlatformOption(
-                icon = FontAwesomeIcons.Brands.Whatsapp,
-                label = stringResource(Res.string.share_option_whatsapp),
-                background = SolidColor(WhatsAppGreen),
-                onClick = onWhatsAppClick,
-                enabled = !isWorking,
-            )
-            SharePlatformOption(
-                icon = FontAwesomeIcons.Brands.Facebook,
-                label = stringResource(Res.string.share_option_facebook),
-                background = SolidColor(FacebookBlue),
-                onClick = onFacebookClick,
-                enabled = !isWorking,
-            )
-            SharePlatformOption(
-                icon = FeatherIcons.Share2,
-                label = stringResource(Res.string.share_option_general),
-                background = SolidColor(YzSurfaceAlt),
-                iconTint = YzGold,
-                onClick = onGeneralShareClick,
-                enabled = !isWorking,
-            )
+            tiles.forEach { tile ->
+                SharePlatformOption(
+                    icon = tile.icon,
+                    label = tile.label,
+                    background = tile.background,
+                    iconTint = tile.iconTint,
+                    onClick = tile.onClick,
+                    enabled = !isWorking,
+                )
+            }
         }
 
         Spacer(Modifier.height(24.dp))
-        HorizontalDivider(color = YzBorder, thickness = 1.dp)
 
-        ShareTextRow(
-            icon = FeatherIcons.FileText,
-            label = stringResource(Res.string.share_option_share_text),
-            onClick = onShareTextClick,
-            enabled = !isWorking,
-        )
-        ShareTextRow(
-            icon = FeatherIcons.Download,
-            label = stringResource(Res.string.share_option_save_image),
-            onClick = onSaveImageClick,
-            enabled = !isWorking,
-        )
+        if (!promoteShareActionsIntoGrid) {
+            HorizontalDivider(color = YzBorder, thickness = 1.dp)
+
+            ShareTextRow(
+                icon = FeatherIcons.FileText,
+                label = stringResource(Res.string.share_option_share_text),
+                onClick = onShareTextClick,
+                enabled = !isWorking,
+            )
+            ShareTextRow(
+                icon = FeatherIcons.Download,
+                label = stringResource(Res.string.share_option_save_image),
+                onClick = onSaveImageClick,
+                enabled = !isWorking,
+            )
+        }
 
         if (errorMessage != null) {
             Text(
@@ -233,6 +247,15 @@ fun ShareBottomSheetContent(
         )
     }
 }
+
+/** Unifies a [ShareOption] tile and a promoted action (save/share-text) so the icon row can render both the same way. */
+private data class GridTile(
+    val icon: ImageVector,
+    val label: String,
+    val background: Brush,
+    val iconTint: Color = Color.White,
+    val onClick: () -> Unit,
+)
 
 @Composable
 private fun SharePlatformOption(
