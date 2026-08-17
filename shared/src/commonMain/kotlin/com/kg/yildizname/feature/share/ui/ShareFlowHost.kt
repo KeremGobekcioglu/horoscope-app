@@ -30,6 +30,7 @@ import com.kg.yildizname.feature.share.ui.components.CompatibilityDetailedShareC
 import com.kg.yildizname.feature.share.ui.components.CompatibilityShareCard
 import com.kg.yildizname.feature.share.ui.components.ScaledShareCard
 import com.kg.yildizname.feature.share.ui.components.ShareCard
+import com.kg.yildizname.feature.share.ui.components.ShareRequestCard
 import com.kg.yildizname.feature.share.ui.components.ShareScore
 import com.kg.yildizname.feature.share.ui.domain.ShareRequest
 import com.kg.yildizname.feature.share.ui.platform.rememberGallerySaveGate
@@ -52,55 +53,6 @@ import horoscope.shared.generated.resources.share_save_success
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.koinInject
-
-/** The card for [request], at full export size. Shared by the preview and the capture path. */
-@Composable
-private fun ShareRequestCard(request: ShareRequest) {
-    when (request) {
-        is ShareRequest.Horoscope -> ShareCard(
-            sign = request.request.sign,
-            date = request.request.date,
-            quoteText = request.request.quoteText,
-        )
-        is ShareRequest.Compatibility -> CompatibilityShareCard(
-            signA = request.request.signA,
-            signB = request.request.signB,
-            matchPercent = request.request.matchPercent,
-            bandLabel = CompatibilityBand.fromScore(request.request.matchPercent).localizedDesc(),
-            scores = listOf(
-                ShareScore(
-                    stringResource(Res.string.compat_score_communication),
-                    request.request.scores.communication
-                ),
-                ShareScore(
-                    stringResource(Res.string.compat_score_friendship),
-                    request.request.scores.friendship
-                ),
-                ShareScore(
-                    stringResource(Res.string.compat_score_love),
-                    request.request.scores.love
-                ),
-                ShareScore(
-                    stringResource(Res.string.compat_score_long_term),
-                    request.request.scores.longTerm
-                ),
-            ),
-            verdictText = request.request.verdictText,
-        )
-        is ShareRequest.CompatibilityDetailed -> CompatibilityDetailedShareCard(
-            signA = request.request.signA,
-            signB = request.request.signB,
-            matchPercent = request.request.matchPercent,
-            bandLabel = CompatibilityBand.fromScore(request.request.matchPercent).localizedDesc(),
-            verdictText = request.request.verdictText,
-            summary = request.request.summary,
-            strengths = request.request.strengths,
-            challenges = request.request.challenges,
-            pros = request.request.pros,
-            cons = request.request.cons,
-        )
-    }
-}
 
 /**
  * Renders the ShareBottomSheet (with the ShareCard/CompatibilityShareCard/
