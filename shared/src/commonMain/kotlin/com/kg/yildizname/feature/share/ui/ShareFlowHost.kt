@@ -236,6 +236,8 @@ fun ShareFlowHost(state: ShareFlowState) {
                                 errorMessage = genericError
                             }
                         is ShareResult.Failed -> errorMessage = result.cause?.message ?: genericError
+                        // this dont close the sheet. user can choose another option too.
+                        is ShareResult.Cancelled -> Unit
                     }
                 } finally {
                     isWorking = false

@@ -12,6 +12,7 @@ struct iOSApp: App {
         SwiftNotificationPermissionBridgeKt.swiftNotificationPermissionBridge = RealNotificationPermissionBridge()
         SwiftSettingsOpenerBridgeKt.swiftSettingsOpenerBridge = RealSettingsOpenerBridge()
         SwiftUrlOpenerBridgeKt.swiftUrlOpenerBridge = RealUrlOpenerBridge()
+        SwiftShareBridgeKt.swiftShareBridge = RealShareBridge()
     }
 
     var body: some Scene {

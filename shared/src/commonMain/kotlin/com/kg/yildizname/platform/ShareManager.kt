@@ -17,6 +17,8 @@ sealed interface ShareResult{
     data object Success : ShareResult
     data object TargetUnavailable: ShareResult
     data class Failed(val cause: Throwable?) : ShareResult
+    // when user dismisses
+    data object Cancelled : ShareResult
 }
 
 /**
