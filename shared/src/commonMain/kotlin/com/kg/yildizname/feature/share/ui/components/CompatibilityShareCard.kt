@@ -50,6 +50,7 @@ import com.kg.yildizname.core.ui.theme.YzBorder
 import com.kg.yildizname.core.ui.theme.YzGold
 import com.kg.yildizname.core.ui.theme.YzInk
 import com.kg.yildizname.core.ui.theme.YzMuted
+import com.kg.yildizname.feature.share.ui.ScaledShareCard
 import com.kg.yildizname.feature.share.ui.util.ShareCardHeight
 import com.kg.yildizname.feature.share.ui.util.ShareCardWidth
 import horoscope.shared.generated.resources.Res
@@ -488,7 +489,7 @@ fun CompatibilityShareCardPreview(
     verdictText: String,
     modifier: Modifier = Modifier,
     previewHeight: Dp = 480.dp,
-) = _root_ide_package_.com.kg.yildizname.feature.share.ui.ScaledShareCard(
+) = ScaledShareCard(
     modifier = modifier,
     previewHeight = previewHeight
 ) {
