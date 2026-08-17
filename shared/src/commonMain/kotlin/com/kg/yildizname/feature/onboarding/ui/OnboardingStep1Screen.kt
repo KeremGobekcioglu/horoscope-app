@@ -27,7 +27,10 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -35,6 +38,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -152,6 +157,9 @@ fun OnboardingStep1Screen(
         YzWindowWidth.Expanded -> 6
     }
 
+    val density = LocalDensity.current
+    var buttonHeight by remember { mutableStateOf(0.dp) }
+
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
             modifier            = Modifier
@@ -197,7 +205,7 @@ fun OnboardingStep1Screen(
                 modifier              = Modifier
                     .weight(1f)
                     .padding(horizontal = 16.dp),
-                contentPadding        = PaddingValues(bottom = 8.dp),
+                contentPadding        = PaddingValues(bottom = buttonHeight + 8.dp),
                 horizontalArrangement = Arrangement.spacedBy(10.dp),
                 verticalArrangement   = Arrangement.spacedBy(10.dp),
             ) {
@@ -210,35 +218,36 @@ fun OnboardingStep1Screen(
                     )
                 }
             }
+        }
 
-            // fillMaxWidth, no weight — fixed height so the grid doesn't compete for space
+        val enabled = selectedSign != null
+        Box(
+            modifier         = Modifier
+                .align(Alignment.BottomCenter)
+                .fillMaxWidth()
+                .onSizeChanged { buttonHeight = with(density) { it.height.toDp() } }
+                .background(Brush.verticalGradient(listOf(Color.Transparent, YzBg, YzBg)))
+                .yzNavigationBarsPadding()
+                .padding(horizontal = 20.dp, vertical = 20.dp),
+            contentAlignment = Alignment.Center,
+        ) {
             Box(
-                modifier         = Modifier
+                modifier = Modifier
+                    .widthIn(max = 480.dp)
                     .fillMaxWidth()
-                    .background(Brush.verticalGradient(listOf(Color.Transparent, YzBg, YzBg)))
-                    .yzNavigationBarsPadding()
-                    .padding(horizontal = 20.dp, vertical = 20.dp),
+                    .height(52.dp)
+                    .clip(RoundedCornerShape(50))
+                    .background(if (enabled) YzGold else YzGold.copy(alpha = 0.35f))
+                    .alpha(if (enabled) 1f else 0.6f)
+                    .clickable(enabled = enabled) { onContinue() },
                 contentAlignment = Alignment.Center,
             ) {
-                val enabled = selectedSign != null
-                Box(
-                    modifier = Modifier
-                        .widthIn(max = 480.dp)
-                        .fillMaxWidth()
-                        .height(52.dp)
-                        .clip(RoundedCornerShape(50))
-                        .background(if (enabled) YzGold else YzGold.copy(alpha = 0.35f))
-                        .alpha(if (enabled) 1f else 0.6f)
-                        .clickable(enabled = enabled) { onContinue() },
-                    contentAlignment = Alignment.Center,
-                ) {
-                    Text(
-                        text       = stringResource(Res.string.onboarding_continue),
-                        color      = if (enabled) Color(0xFF1A1400) else YzMuted,
-                        fontSize   = 16.sp,
-                        fontWeight = FontWeight.SemiBold,
-                    )
-                }
+                Text(
+                    text       = stringResource(Res.string.onboarding_continue),
+                    color      = if (enabled) Color(0xFF1A1400) else YzMuted,
+                    fontSize   = 16.sp,
+                    fontWeight = FontWeight.SemiBold,
+                )
             }
         }
 
