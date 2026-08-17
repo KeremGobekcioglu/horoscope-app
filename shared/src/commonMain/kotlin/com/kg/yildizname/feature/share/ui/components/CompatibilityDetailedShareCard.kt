@@ -34,8 +34,6 @@ import com.kg.yildizname.core.ui.theme.YzBorder
 import com.kg.yildizname.core.ui.theme.YzGold
 import com.kg.yildizname.core.ui.theme.YzInk
 import com.kg.yildizname.core.ui.theme.YzMuted
-import com.kg.yildizname.feature.share.ui.ScaledShareCard
-import com.kg.yildizname.feature.share.ui.components.CompatibilityShareCardFrame
 import horoscope.shared.generated.resources.Res
 import horoscope.shared.generated.resources.challenges
 import horoscope.shared.generated.resources.cons

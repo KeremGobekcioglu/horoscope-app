@@ -1,4 +1,4 @@
-package com.kg.yildizname.feature.share.ui
+package com.kg.yildizname.feature.share.ui.components
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier

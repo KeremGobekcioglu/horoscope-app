@@ -28,6 +28,7 @@ import com.kg.yildizname.core.util.AppLinks
 import com.kg.yildizname.core.util.yzUppercase
 import com.kg.yildizname.feature.share.ui.components.CompatibilityDetailedShareCard
 import com.kg.yildizname.feature.share.ui.components.CompatibilityShareCard
+import com.kg.yildizname.feature.share.ui.components.ScaledShareCard
 import com.kg.yildizname.feature.share.ui.components.ShareCard
 import com.kg.yildizname.feature.share.ui.components.ShareScore
 import com.kg.yildizname.feature.share.ui.domain.ShareRequest
