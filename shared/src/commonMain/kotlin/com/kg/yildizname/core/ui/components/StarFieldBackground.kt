@@ -2,11 +2,6 @@ package com.kg.yildizname.core.ui.components
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.RepeatMode
-import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
@@ -14,6 +9,7 @@ import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -29,6 +25,7 @@ import com.kg.yildizname.core.ui.theme.YzBg
 import com.kg.yildizname.core.ui.theme.YzStarWhite
 import com.kg.yildizname.core.ui.theme.YzViolet
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlin.math.PI
 import kotlin.math.cos
@@ -36,6 +33,7 @@ import kotlin.math.floor
 import kotlin.math.sin
 import kotlin.math.sqrt
 import kotlin.random.Random
+import kotlin.time.Duration.Companion.milliseconds
 
 private data class Star(
     val x: Float,               // base position, 0..1 fraction of width
@@ -113,15 +111,20 @@ fun StarFieldBackground(modifier: Modifier = Modifier) {
     val scope = rememberCoroutineScope()
 
     // Time in seconds — feeds both twinkle and the slide-cycle math below.
-    val timeState = rememberInfiniteTransition(label = "starFieldTime").animateFloat(
-        initialValue = 0f,
-        targetValue = 100_000f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(durationMillis = 100_000_000, easing = LinearEasing),
-            repeatMode = RepeatMode.Restart
-        ),
-        label = "time"
-    )
+    // Driven by a fixed ~30fps ticker rather than a vsync-locked animation so
+    // redraw/brush-allocation rate doesn't scale with the display's refresh
+    // rate — on 120Hz ProMotion iPhones the old infinite-transition approach
+    // redrew and reallocated gradients up to 4x more often than the slow
+    // twinkle/slide motion actually needs, competing for frame budget with
+    // things like bottom-sheet drag gestures.
+    val timeState = remember { mutableFloatStateOf(0f) }
+    LaunchedEffect(Unit) {
+        val tickMs = 33L
+        while (isActive) {
+            delay(tickMs.milliseconds)
+            timeState.floatValue += tickMs / 1000f
+        }
+    }
 
     // Touch parallax — user-driven only, springs back on release. Not autonomous motion.
     val parallaxX = remember { Animatable(0f) }
@@ -135,7 +138,7 @@ fun StarFieldBackground(modifier: Modifier = Modifier) {
 
     LaunchedEffect(Unit) {
         while (true) {
-            delay(Random.nextLong(18_000, 30_000))
+            delay(Random.nextLong(18_000, 30_000).milliseconds)
             meteorStart = Offset(Random.nextFloat() * 0.6f, Random.nextFloat() * 0.25f)
             meteorAngleDeg = Random.nextFloat() * 20f + 20f
             meteorVisible = true
@@ -170,7 +173,7 @@ fun StarFieldBackground(modifier: Modifier = Modifier) {
             )
         }
     ) {
-        val time = timeState.value
+        val time = timeState.floatValue
         val pX = parallaxX.value
         val pY = parallaxY.value
 

@@ -137,7 +137,13 @@ fun ShareBottomSheetContent(
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Column(modifier.fillMaxWidth().verticalScroll(rememberScrollState()).yzNavigationBarsPadding()) {
+    Column(
+        modifier.fillMaxWidth()
+            .verticalScroll(
+                rememberScrollState()
+            )
+            .yzNavigationBarsPadding()
+    ) {
         Box(Modifier.fillMaxWidth().padding(vertical = 16.dp), contentAlignment = Alignment.Center) {
             preview()   // centered, letterboxed automatically
         }

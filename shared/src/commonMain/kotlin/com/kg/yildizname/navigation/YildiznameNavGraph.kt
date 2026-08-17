@@ -11,7 +11,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.ui.graphics.Color
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -48,17 +47,15 @@ import com.kg.yildizname.feature.onboarding.ui.OnboardingStep2Screen
 import com.kg.yildizname.feature.onboarding.ui.OnboardingStep3Screen
 import com.kg.yildizname.feature.onboarding.ui.OnboardingViewModel
 import com.kg.yildizname.feature.readingDetail.ui.ReadingDetailScreen
-import com.kg.yildizname.feature.readingDetail.ui.ReadingDetailUiState
 import com.kg.yildizname.feature.readingDetail.ui.ReadingDetailViewModel
 import com.kg.yildizname.feature.settings.ui.SettingsScreen
-import com.kg.yildizname.feature.settings.ui.SettingsState
 import com.kg.yildizname.feature.settings.ui.SettingsViewModel
-import com.kg.yildizname.feature.share.ui.CompatibilityDetailedShareCardRequest
-import com.kg.yildizname.feature.share.ui.CompatibilityShareCardRequest
-import com.kg.yildizname.feature.share.ui.ShareCardRequest
+import com.kg.yildizname.feature.share.ui.domain.CompatibilityDetailedShareCardRequest
+import com.kg.yildizname.feature.share.ui.domain.CompatibilityShareCardRequest
+import com.kg.yildizname.feature.share.ui.domain.ShareCardRequest
 import com.kg.yildizname.feature.share.ui.ShareFlowHost
 import com.kg.yildizname.feature.share.ui.rememberShareFlowState
-import com.kg.yildizname.feature.share.ui.shareQuoteFrom
+import com.kg.yildizname.feature.share.ui.domain.shareQuoteFrom
 import com.kg.yildizname.feature.splash.ui.SplashEvent
 import com.kg.yildizname.feature.splash.ui.SplashScreen
 import com.kg.yildizname.feature.splash.ui.SplashViewModel
@@ -160,9 +157,13 @@ fun YildiznameNavGraph(navController: NavHostController) {
         }
     ) { innerPadding ->
         NavHost(
-            navController    = navController,
-            startDestination = Splash,
-            modifier         = Modifier.padding(innerPadding)
+            navController      = navController,
+            startDestination   = Splash,
+            modifier           = Modifier.padding(innerPadding),
+            enterTransition    = { fadeIn(tween(1000)) },
+            exitTransition     = { fadeOut(tween(180)) },
+            popEnterTransition = { fadeIn(tween(1000)) },
+            popExitTransition  = { fadeOut(tween(180)) },
         ) {
 
             composable<Splash> {
@@ -294,11 +295,7 @@ fun YildiznameNavGraph(navController: NavHostController) {
                 )
             }
 
-            composable<ReadingDetail>(
-                /*enterTransition = { fadeIn(tween(1000)) },
-                exitTransition = { fadeOut(tween(180)) },
-                popEnterTransition = { fadeIn(tween(1000)) },
-                popExitTransition = { fadeOut(tween(180)) },*/) { backStackEntry ->
+            composable<ReadingDetail> { backStackEntry ->
                 val route: ReadingDetail = backStackEntry.toRoute()
                 val vm: ReadingDetailViewModel = koinViewModel {
                     parametersOf(route.sign, route.period, route.date)

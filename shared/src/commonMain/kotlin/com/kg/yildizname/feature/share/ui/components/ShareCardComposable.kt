@@ -1,4 +1,4 @@
-package com.kg.yildizname.feature.share.ui
+package com.kg.yildizname.feature.share.ui.components
 
 import com.kg.yildizname.core.ui.utils.DateFormatter
 import com.kg.yildizname.core.ui.utils.Language
@@ -46,6 +46,8 @@ import com.kg.yildizname.core.ui.theme.YzGold
 import com.kg.yildizname.core.ui.theme.YzInk
 import com.kg.yildizname.core.ui.theme.YzMuted
 import com.kg.yildizname.feature.home.ui.components.ConstellationHero
+import com.kg.yildizname.feature.share.ui.util.ShareCardHeight
+import com.kg.yildizname.feature.share.ui.util.ShareCardWidth
 import compose.icons.FeatherIcons
 import compose.icons.feathericons.Star
 import horoscope.shared.generated.resources.Res
@@ -167,7 +169,10 @@ fun ShareCardPreview(
     quoteText: String,
     modifier: Modifier = Modifier,
     previewHeight: Dp = 480.dp,          // tune on-device
-) = ScaledShareCard(modifier = modifier, previewHeight = previewHeight) {
+) = _root_ide_package_.com.kg.yildizname.feature.share.ui.ScaledShareCard(
+    modifier = modifier,
+    previewHeight = previewHeight
+) {
     ShareCard(
         sign = sign,
         date = date,

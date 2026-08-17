@@ -9,6 +9,7 @@ import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.kg.yildizname.core.ui.theme.CardShape
+import com.kg.yildizname.feature.share.ui.util.ShareCardHeight
 import kotlin.math.roundToInt
 
 /**

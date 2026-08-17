@@ -8,9 +8,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kg.yildizname.core.data.model.ZodiacSign
 import com.kg.yildizname.core.ui.theme.YzTheme
-import com.kg.yildizname.feature.share.ui.CompatibilityShareCard
-import com.kg.yildizname.feature.share.ui.CompatibilityShareCardPreview
-import com.kg.yildizname.feature.share.ui.ShareScore
+import com.kg.yildizname.feature.share.ui.components.CompatibilityShareCard
+import com.kg.yildizname.feature.share.ui.components.CompatibilityShareCardPreview
+import com.kg.yildizname.feature.share.ui.components.ShareScore
 
 internal val previewCompatibilityScores = listOf(
     ShareScore("İletişim", 82),
