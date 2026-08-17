@@ -243,6 +243,7 @@
     <string name="share_close">KAPAT</string>
     <string name="share_error_generic">Paylaşım sırasında bir sorun oluştu. Lütfen tekrar deneyin.</string>
     <string name="share_error_permission_denied">Görseli kaydetmek için galeri izni gerekiyor.</string>
+    <string name="share_error_permission_denied_action">Ayarları Aç</string>
     <string name="share_save_success">Görsel galeriye kaydedildi</string>
 
     <!-- Lucky color names -->

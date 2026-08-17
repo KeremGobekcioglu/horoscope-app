@@ -86,6 +86,8 @@ fun ShareBottomSheet(
     preview: @Composable () -> Unit,
     isWorking: Boolean,
     errorMessage: String?,
+    errorActionLabel: String? = null,
+    errorAction: (() -> Unit)? = null,
     options: List<ShareOption>,
     onOptionClick: (ShareTarget) -> Unit,
     onShareTextClick: () -> Unit,
@@ -104,6 +106,8 @@ fun ShareBottomSheet(
             preview = preview,
             isWorking = isWorking,
             errorMessage = errorMessage,
+            errorAction = errorAction,
+            errorActionLabel = errorActionLabel,
             options = options,
             onOptionClick = onOptionClick,
             onShareTextClick = onShareTextClick,
@@ -125,6 +129,8 @@ fun ShareBottomSheetContent(
     isWorking: Boolean,
     errorMessage: String?,
     options: List<ShareOption>,
+    errorActionLabel: String? = null,
+    errorAction: (() -> Unit)? = null,
     onOptionClick: (ShareTarget) -> Unit,
     onShareTextClick: () -> Unit,
     onSaveImageClick: () -> Unit,
@@ -220,15 +226,30 @@ fun ShareBottomSheetContent(
         }
 
         if (errorMessage != null) {
-            Text(
-                text = errorMessage,
-                color = YzError,
-                style = MaterialTheme.typography.bodySmall,
-                textAlign = TextAlign.Center,
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 24.dp, vertical = 12.dp),
-            )
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                Text(
+                    text = errorMessage,
+                    color = YzError,
+                    style = MaterialTheme.typography.bodySmall,
+                    textAlign = TextAlign.Center,
+                )
+                if (errorActionLabel != null && errorAction != null) {
+                    Spacer(Modifier.height(8.dp))
+                    Text(
+                        text = errorActionLabel,
+                        color = YzGold,
+                        style = MaterialTheme.typography.labelMedium,
+                        fontWeight = FontWeight.SemiBold,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.clickable(onClick = errorAction),
+                    )
+                }
+            }
         }
 
         HorizontalDivider(color = YzBorder, thickness = 1.dp)

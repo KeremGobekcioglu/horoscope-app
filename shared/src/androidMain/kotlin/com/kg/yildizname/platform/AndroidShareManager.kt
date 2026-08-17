@@ -8,6 +8,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
+import android.provider.Settings
 import androidx.core.content.FileProvider
 import com.kg.yildizname.core.util.AppLinks
 import kotlinx.coroutines.Dispatchers
@@ -31,7 +32,13 @@ class AndroidShareManager(private val context: Context) : ShareManager
     override fun isAvailable(target: ShareTarget): Boolean {
         return resolvePackage(target)?.let { isInstalled(it) } ?: true
     }
-
+    override fun openAppSettings() {
+        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+            data = Uri.fromParts("package", context.packageName, null)
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        }
+        context.startActivity(intent)
+    }
     override suspend fun share(
         png: ByteArray,
         target: ShareTarget

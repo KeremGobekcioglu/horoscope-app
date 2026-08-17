@@ -1,6 +1,9 @@
 package com.kg.yildizname.platform
 
 import kotlinx.coroutines.suspendCancellableCoroutine
+import platform.Foundation.NSURL
+import platform.UIKit.UIApplication
+import platform.UIKit.UIApplicationOpenSettingsURLString
 import kotlin.coroutines.resume
 
 /**
@@ -65,7 +68,14 @@ class iOSShareManager : ShareManager {
 
     private val bridge: SwiftShareBridge?
         get() = swiftShareBridge
-
+    override fun openAppSettings() {
+        val url = NSURL.URLWithString(UIApplicationOpenSettingsURLString) ?: return
+        UIApplication.sharedApplication.openURL(
+            url = url,
+            options = emptyMap<Any?, Any>(),
+            completionHandler = null,
+        )
+    }
     override fun isAvailable(target: ShareTarget): Boolean = when (target) {
         ShareTarget.SystemSheet -> true
         ShareTarget.InstagramStories -> bridge?.isInstagramAvailable() ?: false

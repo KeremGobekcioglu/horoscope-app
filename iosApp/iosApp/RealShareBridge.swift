@@ -141,18 +141,20 @@ class RealShareBridge: SwiftShareBridge {
         }
     }
 
-    func saveToPhotos(png: KotlinByteArray, onResult: @escaping (ShareResult) -> Void) {
+    func saveToPhotos(png: KotlinByteArray, onResult: @escaping (any ShareResult) -> Void) {
         guard let image = toImage(png) else {
             onResult(ShareResultFailed(cause: nil))
             return
         }
 
-        // .addOnly is the narrower authorization — we only write, never read the library.
-        // It pairs with NSPhotoLibraryAddUsageDescription in Info.plist; requesting the
-        // read scope would need the other key and draws more App Review scrutiny.
         PHPhotoLibrary.requestAuthorization(for: .addOnly) { status in
             guard status == .authorized || status == .limited else {
-                onResult(ShareResultFailed(cause: nil))
+                // Denied — but the user can still save through UIActivityViewController's
+                // built-in "Save Image", which writes via the system's own Photos grant rather
+                // than ours. Reporting TargetUnavailable lets ShareFlowHost fall through to the
+                // share sheet, so the tap still accomplishes what they asked for. There's no
+                // public way to deep-link to the Photos row in Settings anyway.
+                onResult(ShareResultTargetUnavailable())
                 return
             }
             PHPhotoLibrary.shared().performChanges {
@@ -161,6 +163,7 @@ class RealShareBridge: SwiftShareBridge {
                 if success {
                     onResult(ShareResultSuccess())
                 } else {
+                    // A real write failure, not a permission problem — no fallback would help.
                     onResult(ShareResultFailed(
                         cause: error.map { KotlinThrowable(message: $0.localizedDescription) }
                     ))

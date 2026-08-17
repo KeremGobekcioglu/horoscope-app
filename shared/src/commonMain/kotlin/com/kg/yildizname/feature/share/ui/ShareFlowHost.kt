@@ -41,6 +41,7 @@ import horoscope.shared.generated.resources.compat_score_love
 import horoscope.shared.generated.resources.share_card_app_name
 import horoscope.shared.generated.resources.share_error_generic
 import horoscope.shared.generated.resources.share_error_permission_denied
+import horoscope.shared.generated.resources.share_error_permission_denied_action
 import horoscope.shared.generated.resources.share_save_success
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
@@ -174,7 +175,7 @@ fun ShareFlowHost(state: ShareFlowState) {
     val snackbarScope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
     val saveSuccessMessage = stringResource(Res.string.share_save_success)
-
+    var errorAction by remember { mutableStateOf<(() -> Unit)?>(null) }
     val request = state.request
     if (request != null) {
         val shareText = shareTextFor(request)
@@ -193,7 +194,7 @@ fun ShareFlowHost(state: ShareFlowState) {
         // 3. strings (stringResource must be called in composable scope, not inside perform)
         val genericError = stringResource(Res.string.share_error_generic)
         val permissionDenied = stringResource(Res.string.share_error_permission_denied)
-
+        val openSettingsLabel = stringResource(Res.string.share_error_permission_denied_action)
         // Offscreen export copy. Reports its real size — a zero-sized node is skipped during the
         // draw phase, so nothing would ever be recorded into the layer — and is wrapped in a
         // 0dp Box with unbounded wrapping so the parent still reserves no space for it.
@@ -213,6 +214,7 @@ fun ShareFlowHost(state: ShareFlowState) {
             shareScope.launch {
                 isWorking = true
                 errorMessage = null
+                errorAction = null
                 try {
                     if(layer.size.width == 0 || layer.size.height == 0)
                     {
@@ -229,12 +231,15 @@ fun ShareFlowHost(state: ShareFlowState) {
                         }
                         // App isn't installed — the user asked to share, so give them a way to
                         // rather than an error. Reuses the same bytes, no re-encode.
-                        ShareResult.TargetUnavailable ->
-                            if (shareManager.share(png, ShareTarget.SystemSheet) is ShareResult.Success) {
-                                state.dismiss()
-                            } else {
-                                errorMessage = genericError
+                        ShareResult.TargetUnavailable -> {
+                            // Fall through to the system sheet. On iOS this is also the recovery path for a denied
+                            // Photos permission — the sheet's built-in Save Image works without our grant.
+                            when (shareManager.share(png, ShareTarget.SystemSheet)) {
+                                ShareResult.Success -> state.dismiss()
+                                ShareResult.Cancelled -> Unit          // backed out on purpose; sheet stays open
+                                else -> errorMessage = genericError
                             }
+                        }
                         is ShareResult.Failed -> errorMessage = result.cause?.message ?: genericError
                         // this dont close the sheet. user can choose another option too.
                         is ShareResult.Cancelled -> Unit
@@ -247,7 +252,10 @@ fun ShareFlowHost(state: ShareFlowState) {
         val options = rememberShareOptions()
         val onSave = rememberGallerySaveGate(
             onGranted = { perform(successMessage = saveSuccessMessage) { shareManager.saveToGallery(it) } },
-            onDenied = {errorMessage = permissionDenied}
+            onDenied = {
+                errorMessage = permissionDenied
+                errorAction = { shareManager.openAppSettings() }
+            }
         )
         ShareBottomSheet(
             preview = {
@@ -256,6 +264,8 @@ fun ShareFlowHost(state: ShareFlowState) {
             isWorking = isWorking,
             errorMessage = errorMessage,
             options = options,
+            errorActionLabel = if (errorAction != null) openSettingsLabel else null,
+            errorAction = errorAction,
             onOptionClick = { target -> perform { shareManager.share(it, target) }},
             onSaveImageClick = onSave,
             onShareTextClick = {
