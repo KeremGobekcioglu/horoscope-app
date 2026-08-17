@@ -1,19 +1,10 @@
-package com.kg.yildizname.feature.share.ui
+package com.kg.yildizname.feature.share.ui.platform
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
-import androidx.compose.ui.graphics.vector.ImageVector
-import com.kg.yildizname.platform.ShareTarget
-
-data class ShareOption(
-    val target: ShareTarget,
-    val label: String,
-    val icon: ImageVector,
-    val background: Brush,
-    val iconTint: Color = Color.White
-)
+import com.kg.yildizname.feature.share.ui.domain.ShareOption
 
 // Not actually `remember`-ed: ShareOption.background is a Brush, which isn't @Stable, and the
 // labels come from stringResource, so memoizing would need a locale key to stay correct.

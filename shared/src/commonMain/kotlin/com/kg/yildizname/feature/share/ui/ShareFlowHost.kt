@@ -32,6 +32,8 @@ import com.kg.yildizname.feature.share.ui.components.ScaledShareCard
 import com.kg.yildizname.feature.share.ui.components.ShareCard
 import com.kg.yildizname.feature.share.ui.components.ShareScore
 import com.kg.yildizname.feature.share.ui.domain.ShareRequest
+import com.kg.yildizname.feature.share.ui.platform.rememberGallerySaveGate
+import com.kg.yildizname.feature.share.ui.platform.rememberShareOptions
 import com.kg.yildizname.feature.share.ui.util.ShareCardExportDensity
 import com.kg.yildizname.platform.ShareManager
 import com.kg.yildizname.platform.ShareResult
@@ -191,7 +193,13 @@ fun ShareFlowHost(state: ShareFlowState) {
         }
         val options = rememberShareOptions()
         val onSave = rememberGallerySaveGate(
-            onGranted = { perform(successMessage = saveSuccessMessage) { shareManager.saveToGallery(it) } },
+            onGranted = {
+                perform(successMessage = saveSuccessMessage) {
+                    shareManager.saveToGallery(
+                        it
+                    )
+                }
+            },
             onDenied = {
                 errorMessage = permissionDenied
                 errorAction = { shareManager.openAppSettings() }

@@ -1,12 +1,10 @@
-package com.kg.yildizname.feature.share.ui
+package com.kg.yildizname.feature.share.ui.platform
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberUpdatedState
 import kotlinx.cinterop.ExperimentalForeignApi
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import platform.Foundation.NSURL
 import platform.Photos.PHAuthorizationStatusAuthorized
 import platform.Photos.PHAuthorizationStatusDenied
 import platform.Photos.PHAuthorizationStatusLimited
@@ -14,9 +12,9 @@ import platform.Photos.PHAuthorizationStatusNotDetermined
 import platform.Photos.PHAuthorizationStatusRestricted
 import platform.Photos.PHPhotoLibrary
 import platform.Photos.PHAccessLevelAddOnly
-import platform.UIKit.UIApplication
-import platform.UIKit.UIApplicationOpenSettingsURLString
 import androidx.compose.runtime.rememberCoroutineScope
+import platform.darwin.dispatch_async
+import platform.darwin.dispatch_get_main_queue
 
 @OptIn(ExperimentalForeignApi::class)
 @Composable
@@ -64,7 +62,7 @@ private fun requestPhotoAccess(onResult: (Boolean) -> Unit) {
         // requestAuthorization's completion handler fires on an arbitrary background queue,
         // not necessarily main — the caller's onResult eventually flips Compose state, and
         // Compose state must only be touched from main.
-        platform.darwin.dispatch_async(platform.darwin.dispatch_get_main_queue()) {
+        dispatch_async(dispatch_get_main_queue()) {
             onResult(granted)
         }
     }
