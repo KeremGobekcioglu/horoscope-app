@@ -44,6 +44,7 @@ import com.kg.yildizname.core.ui.theme.YzSurface
 import com.kg.yildizname.core.ui.theme.YzSurfaceAlt
 import com.kg.yildizname.core.ui.utils.yzNavigationBarsPadding
 import com.kg.yildizname.feature.share.ui.domain.ShareOption
+import com.kg.yildizname.feature.share.ui.platform.dragDismiss
 import com.kg.yildizname.feature.share.ui.platform.promoteShareActionsIntoGrid
 import com.kg.yildizname.platform.ShareTarget
 import compose.icons.FeatherIcons
@@ -87,6 +88,7 @@ fun ShareBottomSheet(
         shape = SheetShape,
         containerColor = YzSurface,
         tonalElevation = 0.dp,
+        sheetGesturesEnabled = !dragDismiss
     ) {
         ShareBottomSheetContent(
             preview = preview,
