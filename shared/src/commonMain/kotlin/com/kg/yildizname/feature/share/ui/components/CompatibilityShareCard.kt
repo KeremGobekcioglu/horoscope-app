@@ -1,4 +1,4 @@
-package com.kg.yildizname.feature.share.ui
+package com.kg.yildizname.feature.share.ui.components
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -50,6 +50,8 @@ import com.kg.yildizname.core.ui.theme.YzBorder
 import com.kg.yildizname.core.ui.theme.YzGold
 import com.kg.yildizname.core.ui.theme.YzInk
 import com.kg.yildizname.core.ui.theme.YzMuted
+import com.kg.yildizname.feature.share.ui.util.ShareCardHeight
+import com.kg.yildizname.feature.share.ui.util.ShareCardWidth
 import horoscope.shared.generated.resources.Res
 import horoscope.shared.generated.resources.share_card_app_name
 import horoscope.shared.generated.resources.share_card_app_url
@@ -73,7 +75,7 @@ internal val TopSafeAreaExtra = 40.dp
 
 /**
  * Minimum export height, shared by both cards: the canonical 9:16 Instagram Stories canvas
- * ([ShareCardHeight]) plus [TopSafeAreaExtra]. Content that fits within this — the compact card
+ * ([com.kg.yildizname.feature.share.ui.util.ShareCardHeight]) plus [TopSafeAreaExtra]. Content that fits within this — the compact card
  * always does; the detailed card does whenever there isn't much to say — exports at exactly this
  * size. Longer content is allowed to grow the card past it rather than being clipped/ellipsized.
  */
@@ -89,7 +91,7 @@ data class ShareScore(val label: String, val value: Int)
  * Self-contained Instagram Stories share card (9:16, 675x1200dp) for a compatibility result's
  * quick/compact result screen. Rendered offscreen to a Bitmap via BitmapRender — must not
  * depend on any parent Scaffold/theme surface, and must contain NO enter/scroll animations (the
- * bitmap is captured in a single frame). Mirrors [ShareCard]'s export pattern: fixed dp/sp
+ * bitmap is captured in a single frame). Mirrors [com.kg.yildizname.feature.share.ui.components.ShareCard]'s export pattern: fixed dp/sp
  * values, no constraint shrinking. Use [CompatibilityShareCardPreview] for on-screen previews.
  *
  * Layout: wordmark → dual medallions bridged by interlocking element-tinted rings (sign name
@@ -141,7 +143,7 @@ fun CompatibilityShareCard(
  * room. A *fixed* height forced every text block inside [content] to cap `maxLines` and
  * ellipsize to fit a number nobody could verify against real (often longer than preview-fixture)
  * AI-generated copy — which is exactly how the detailed card's summary/strengths/pros-cons text
- * was getting silently truncated to "…". Width stays fixed at [ShareCardWidth] (that's the
+ * was getting silently truncated to "…". Width stays fixed at [com.kg.yildizname.feature.share.ui.util.ShareCardWidth] (that's the
  * Instagram Stories asset width the export density is pinned to); only height flexes.
  */
 @Composable
@@ -430,7 +432,7 @@ private fun ScoreTile(
 }
 
 /**
- * Final-verdict quote: gold rail + serif italic text, matching the daily [ShareCard]'s quote
+ * Final-verdict quote: gold rail + serif italic text, matching the daily [com.kg.yildizname.feature.share.ui.components.ShareCard]'s quote
  * block treatment so the two cards read as a family. Shared by both cards via
  * [CompatibilityShareCardFrame].
  */
@@ -473,7 +475,7 @@ private fun VerdictQuote(
 
 /**
  * On-screen preview of [CompatibilityShareCard]: lays out the real 675x1200dp card at its true
- * fixed size and scales it down with a `graphicsLayer` transform, matching [ShareCardPreview].
+ * fixed size and scales it down with a `graphicsLayer` transform, matching [com.kg.yildizname.feature.share.ui.components.ShareCardPreview].
  */
 
 @Composable
@@ -486,7 +488,10 @@ fun CompatibilityShareCardPreview(
     verdictText: String,
     modifier: Modifier = Modifier,
     previewHeight: Dp = 480.dp,
-) = ScaledShareCard(modifier = modifier, previewHeight = previewHeight) {
+) = _root_ide_package_.com.kg.yildizname.feature.share.ui.ScaledShareCard(
+    modifier = modifier,
+    previewHeight = previewHeight
+) {
     CompatibilityShareCard(
         signA = signA,
         signB = signB,

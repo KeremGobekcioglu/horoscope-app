@@ -1,4 +1,4 @@
-package com.kg.yildizname.feature.share.ui
+package com.kg.yildizname.feature.share.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -34,6 +34,7 @@ import com.kg.yildizname.core.ui.theme.YzBorder
 import com.kg.yildizname.core.ui.theme.YzGold
 import com.kg.yildizname.core.ui.theme.YzInk
 import com.kg.yildizname.core.ui.theme.YzMuted
+import com.kg.yildizname.feature.share.ui.components.CompatibilityShareCardFrame
 import horoscope.shared.generated.resources.Res
 import horoscope.shared.generated.resources.challenges
 import horoscope.shared.generated.resources.cons
@@ -44,9 +45,9 @@ import org.jetbrains.compose.resources.stringResource
 /**
  * Self-contained Instagram Stories share card (675dp wide, height grows to fit content) for a
  * compatibility result's *detailed* result screen — a separate composable from
- * [CompatibilityShareCard] rather than that card branching on optional params, because the two
+ * [com.kg.yildizname.feature.share.ui.components.CompatibilityShareCard] rather than that card branching on optional params, because the two
  * genuinely carry different payloads: compact is the number, this one is the reasoning behind
- * it. Same offscreen-render constraints as [CompatibilityShareCard] (no parent Scaffold/theme
+ * it. Same offscreen-render constraints as [com.kg.yildizname.feature.share.ui.components.CompatibilityShareCard] (no parent Scaffold/theme
  * dependency, no enter/scroll animations). Use [CompatibilityDetailedShareCardPreview] for
  * on-screen previews.
  *
@@ -289,7 +290,7 @@ private fun ProsConsColumn(
 
 /**
  * On-screen preview of [CompatibilityDetailedShareCard]: lays out the real fixed-size card and
- * scales it down with a `graphicsLayer` transform, matching [CompatibilityShareCardPreview].
+ * scales it down with a `graphicsLayer` transform, matching [com.kg.yildizname.feature.share.ui.components.CompatibilityShareCardPreview].
  */
 @Composable
 fun CompatibilityDetailedShareCardPreview(
@@ -305,7 +306,10 @@ fun CompatibilityDetailedShareCardPreview(
     cons: List<String>,
     modifier: Modifier = Modifier,
     previewHeight: Dp = 480.dp,
-) = ScaledShareCard(modifier = modifier, previewHeight = previewHeight) {
+) = _root_ide_package_.com.kg.yildizname.feature.share.ui.ScaledShareCard(
+    modifier = modifier,
+    previewHeight = previewHeight
+) {
     CompatibilityDetailedShareCard(
         signA = signA,
         signB = signB,

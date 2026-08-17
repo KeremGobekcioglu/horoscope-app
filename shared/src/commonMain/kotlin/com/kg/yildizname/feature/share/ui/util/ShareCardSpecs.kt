@@ -1,14 +1,14 @@
-package com.kg.yildizname.feature.share.ui
+package com.kg.yildizname.feature.share.ui.util
 
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 
 /**
- * Single source of truth for share card width — every share card (daily [ShareCard],
- * [CompatibilityShareCard], [CompatibilityDetailedShareCard]) is exactly this wide; height wraps
+ * Single source of truth for share card width — every share card (daily [com.kg.yildizname.feature.share.ui.components.ShareCard],
+ * [com.kg.yildizname.feature.share.ui.components.CompatibilityShareCard], [com.kg.yildizname.feature.share.ui.components.CompatibilityDetailedShareCard]) is exactly this wide; height wraps
  * each card's actual content instead of being pinned, so text is never forced to ellipsize to
- * fit a guessed-at budget. [ShareCardHeight] is [ShareCard]/[CompatibilityShareCard]'s nominal,
- * roughly-accurate content height, kept around only as [ScaledShareCard]'s preview-scale
+ * fit a guessed-at budget. [ShareCardHeight] is [com.kg.yildizname.feature.share.ui.components.ShareCard]/[com.kg.yildizname.feature.share.ui.components.CompatibilityShareCard]'s nominal,
+ * roughly-accurate content height, kept around only as [com.kg.yildizname.feature.share.ui.ScaledShareCard]'s preview-scale
  * reference — it is not a layout constraint. The offscreen capture path composes at
  * [ShareCardExportDensity] and captures whatever size the content actually measures to.
  */

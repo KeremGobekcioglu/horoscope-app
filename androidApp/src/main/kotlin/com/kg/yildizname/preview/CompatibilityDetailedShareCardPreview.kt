@@ -8,8 +8,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kg.yildizname.core.data.model.ZodiacSign
 import com.kg.yildizname.core.ui.theme.YzTheme
-import com.kg.yildizname.feature.share.ui.CompatibilityDetailedShareCard
-import com.kg.yildizname.feature.share.ui.CompatibilityDetailedShareCardPreview
+import com.kg.yildizname.feature.share.ui.components.CompatibilityDetailedShareCard
+import com.kg.yildizname.feature.share.ui.components.CompatibilityDetailedShareCardPreview
 
 private val previewPros = listOf(
     "Ortak enerji ve heyecan",

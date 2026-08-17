@@ -11,8 +11,8 @@ import com.kg.yildizname.core.data.model.ZodiacSign
 import com.kg.yildizname.core.ui.theme.YzSurface
 import com.kg.yildizname.core.ui.theme.YzTheme
 import com.kg.yildizname.feature.share.ui.ShareBottomSheetContent
-import com.kg.yildizname.feature.share.ui.ShareCard
-import com.kg.yildizname.feature.share.ui.ShareCardPreview
+import com.kg.yildizname.feature.share.ui.components.ShareCard
+import com.kg.yildizname.feature.share.ui.components.ShareCardPreview
 import kotlinx.datetime.LocalDate
 
 private val previewShareDate = LocalDate(2026, 7, 1)

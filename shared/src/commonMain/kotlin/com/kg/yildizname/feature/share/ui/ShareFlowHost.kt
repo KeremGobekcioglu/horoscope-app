@@ -9,7 +9,6 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -20,8 +19,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.rememberGraphicsLayer
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
-import com.kg.yildizname.core.data.model.CompatibilityScores
-import com.kg.yildizname.core.data.model.ZodiacSign
 import com.kg.yildizname.core.data.model.localizedName
 import com.kg.yildizname.core.domain.model.CompatibilityBand
 import com.kg.yildizname.core.domain.model.localizedDesc
@@ -29,6 +26,12 @@ import com.kg.yildizname.core.ui.utils.DateFormatter
 import com.kg.yildizname.core.ui.utils.yzNavigationBarsPadding
 import com.kg.yildizname.core.util.AppLinks
 import com.kg.yildizname.core.util.yzUppercase
+import com.kg.yildizname.feature.share.ui.components.CompatibilityDetailedShareCard
+import com.kg.yildizname.feature.share.ui.components.CompatibilityShareCard
+import com.kg.yildizname.feature.share.ui.components.ShareCard
+import com.kg.yildizname.feature.share.ui.components.ShareScore
+import com.kg.yildizname.feature.share.ui.domain.ShareRequest
+import com.kg.yildizname.feature.share.ui.util.ShareCardExportDensity
 import com.kg.yildizname.platform.ShareManager
 import com.kg.yildizname.platform.ShareResult
 import com.kg.yildizname.platform.ShareTarget
@@ -44,84 +47,8 @@ import horoscope.shared.generated.resources.share_error_permission_denied
 import horoscope.shared.generated.resources.share_error_permission_denied_action
 import horoscope.shared.generated.resources.share_save_success
 import kotlinx.coroutines.launch
-import kotlinx.datetime.LocalDate
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.koinInject
-
-/** Localized, all-caps sign name — matches the format ShareCard expects. */
-//@Composable
-//fun shareCardSignName(sign: ZodiacSign): String =
-//    sign.localizedName().uppercase()
-
-/** Everything ShareCard/ShareBottomSheet need to render for one share request. */
-data class ShareCardRequest(
-    val signDisplayName: String,
-    val sign: ZodiacSign,
-    val quoteText: String,
-    val date: LocalDate,
-)
-
-/** Everything [CompatibilityShareCard]/ShareBottomSheet need to render for one share request —
- * used from the quick-result screen. */
-data class CompatibilityShareCardRequest(
-    val signA: ZodiacSign,
-    val signB: ZodiacSign,
-    val matchPercent: Int,
-    val scores: CompatibilityScores,
-    val verdictText: String,
-)
-
-/** Everything [CompatibilityDetailedShareCard]/ShareBottomSheet need to render for one share
- * request — used from the detailed-result screen. No [CompatibilityScores]: the detailed card
- * never renders the score grid, so there's nothing here for it to feed. */
-data class CompatibilityDetailedShareCardRequest(
-    val signA: ZodiacSign,
-    val signB: ZodiacSign,
-    val matchPercent: Int,
-    val verdictText: String,
-    val summary: String,
-    val strengths: String,
-    val challenges: String,
-    val pros: List<String>,
-    val cons: List<String>,
-)
-
-/** The card [ShareFlowHost] is currently asked to preview/share — a reading, a quick-result
- * compatibility card, or a detailed-result compatibility card. */
-sealed interface ShareRequest {
-    data class Horoscope(val request: ShareCardRequest) : ShareRequest
-    data class Compatibility(val request: CompatibilityShareCardRequest) : ShareRequest
-    data class CompatibilityDetailed(val request: CompatibilityDetailedShareCardRequest) : ShareRequest
-}
-
-/** First sentence or two of a reading's body text, used as the share card's pull-quote. */
-fun shareQuoteFrom(text: String, sentenceCount: Int = 2): String =
-    text.split(". ", ".\n")/*.take(sentenceCount)*/.joinToString(". ").trimEnd('.', ' ') + "."
-
-@Stable
-class ShareFlowState internal constructor() {
-    var request by mutableStateOf<ShareRequest?>(null)
-        private set
-
-    fun open(request: ShareCardRequest) {
-        this.request = ShareRequest.Horoscope(request)
-    }
-
-    fun open(request: CompatibilityShareCardRequest) {
-        this.request = ShareRequest.Compatibility(request)
-    }
-
-    fun open(request: CompatibilityDetailedShareCardRequest) {
-        this.request = ShareRequest.CompatibilityDetailed(request)
-    }
-
-    fun dismiss() {
-        request = null
-    }
-}
-
-@Composable
-fun rememberShareFlowState(): ShareFlowState = remember { ShareFlowState() }
 
 /** The card for [request], at full export size. Shared by the preview and the capture path. */
 @Composable
@@ -138,10 +65,22 @@ private fun ShareRequestCard(request: ShareRequest) {
             matchPercent = request.request.matchPercent,
             bandLabel = CompatibilityBand.fromScore(request.request.matchPercent).localizedDesc(),
             scores = listOf(
-                ShareScore(stringResource(Res.string.compat_score_communication), request.request.scores.communication),
-                ShareScore(stringResource(Res.string.compat_score_friendship), request.request.scores.friendship),
-                ShareScore(stringResource(Res.string.compat_score_love), request.request.scores.love),
-                ShareScore(stringResource(Res.string.compat_score_long_term), request.request.scores.longTerm),
+                ShareScore(
+                    stringResource(Res.string.compat_score_communication),
+                    request.request.scores.communication
+                ),
+                ShareScore(
+                    stringResource(Res.string.compat_score_friendship),
+                    request.request.scores.friendship
+                ),
+                ShareScore(
+                    stringResource(Res.string.compat_score_love),
+                    request.request.scores.love
+                ),
+                ShareScore(
+                    stringResource(Res.string.compat_score_long_term),
+                    request.request.scores.longTerm
+                ),
             ),
             verdictText = request.request.verdictText,
         )
