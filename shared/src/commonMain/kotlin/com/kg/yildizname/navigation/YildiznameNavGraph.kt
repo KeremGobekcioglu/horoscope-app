@@ -160,9 +160,13 @@ fun YildiznameNavGraph(navController: NavHostController) {
         }
     ) { innerPadding ->
         NavHost(
-            navController    = navController,
-            startDestination = Splash,
-            modifier         = Modifier.padding(innerPadding)
+            navController      = navController,
+            startDestination   = Splash,
+            modifier           = Modifier.padding(innerPadding),
+            enterTransition    = { fadeIn(tween(1000)) },
+            exitTransition     = { fadeOut(tween(180)) },
+            popEnterTransition = { fadeIn(tween(1000)) },
+            popExitTransition  = { fadeOut(tween(180)) },
         ) {
 
             composable<Splash> {
@@ -294,11 +298,7 @@ fun YildiznameNavGraph(navController: NavHostController) {
                 )
             }
 
-            composable<ReadingDetail>(
-                /*enterTransition = { fadeIn(tween(1000)) },
-                exitTransition = { fadeOut(tween(180)) },
-                popEnterTransition = { fadeIn(tween(1000)) },
-                popExitTransition = { fadeOut(tween(180)) },*/) { backStackEntry ->
+            composable<ReadingDetail> { backStackEntry ->
                 val route: ReadingDetail = backStackEntry.toRoute()
                 val vm: ReadingDetailViewModel = koinViewModel {
                     parametersOf(route.sign, route.period, route.date)
