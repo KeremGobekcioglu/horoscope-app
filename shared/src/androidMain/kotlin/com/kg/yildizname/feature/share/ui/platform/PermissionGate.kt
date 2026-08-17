@@ -1,4 +1,4 @@
-package com.kg.yildizname.feature.share.ui
+package com.kg.yildizname.feature.share.ui.platform
 
 import android.Manifest
 import android.content.pm.PackageManager

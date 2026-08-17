@@ -169,7 +169,7 @@ fun ShareCardPreview(
     quoteText: String,
     modifier: Modifier = Modifier,
     previewHeight: Dp = 480.dp,          // tune on-device
-) = _root_ide_package_.com.kg.yildizname.feature.share.ui.ScaledShareCard(
+) = ScaledShareCard(
     modifier = modifier,
     previewHeight = previewHeight
 ) {

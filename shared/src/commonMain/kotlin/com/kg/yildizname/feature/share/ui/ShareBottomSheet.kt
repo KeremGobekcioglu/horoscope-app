@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -27,8 +26,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
@@ -37,7 +34,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.kg.yildizname.core.ui.theme.CardShape
 import com.kg.yildizname.core.ui.theme.ChipShape
 import com.kg.yildizname.core.ui.theme.SheetShape
 import com.kg.yildizname.core.ui.theme.YzBorder
@@ -47,27 +43,17 @@ import com.kg.yildizname.core.ui.theme.YzInk
 import com.kg.yildizname.core.ui.theme.YzSurface
 import com.kg.yildizname.core.ui.theme.YzSurfaceAlt
 import com.kg.yildizname.core.ui.utils.yzNavigationBarsPadding
+import com.kg.yildizname.feature.share.ui.domain.ShareOption
+import com.kg.yildizname.feature.share.ui.platform.promoteShareActionsIntoGrid
 import com.kg.yildizname.platform.ShareTarget
 import compose.icons.FeatherIcons
-import compose.icons.FontAwesomeIcons
 import compose.icons.feathericons.Download
 import compose.icons.feathericons.FileText
-import compose.icons.feathericons.Link
-import compose.icons.feathericons.Share2
-import compose.icons.fontawesomeicons.Brands
-import compose.icons.fontawesomeicons.brands.Facebook
-import compose.icons.fontawesomeicons.brands.Instagram
-import compose.icons.fontawesomeicons.brands.Whatsapp
 import horoscope.shared.generated.resources.Res
 import horoscope.shared.generated.resources.share_bottom_sheet_title
 import horoscope.shared.generated.resources.share_close
-import horoscope.shared.generated.resources.share_option_copy_link
-import horoscope.shared.generated.resources.share_option_facebook
-import horoscope.shared.generated.resources.share_option_general
-import horoscope.shared.generated.resources.share_option_instagram_stories
 import horoscope.shared.generated.resources.share_option_save_image
 import horoscope.shared.generated.resources.share_option_share_text
-import horoscope.shared.generated.resources.share_option_whatsapp
 import org.jetbrains.compose.resources.stringResource
 
 // Platform brand colors — not app design tokens, hardcoded per each platform's own brand guidelines.

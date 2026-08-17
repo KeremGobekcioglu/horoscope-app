@@ -488,7 +488,7 @@ fun CompatibilityShareCardPreview(
     verdictText: String,
     modifier: Modifier = Modifier,
     previewHeight: Dp = 480.dp,
-) = _root_ide_package_.com.kg.yildizname.feature.share.ui.ScaledShareCard(
+) = ScaledShareCard(
     modifier = modifier,
     previewHeight = previewHeight
 ) {
