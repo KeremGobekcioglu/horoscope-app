@@ -15,11 +15,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import com.kg.yildizname.core.ui.theme.YzBg
 import com.kg.yildizname.core.ui.theme.YzStarWhite
@@ -110,6 +113,19 @@ fun StarFieldBackground(modifier: Modifier = Modifier) {
     val stars = remember { buildStars() }
     val scope = rememberCoroutineScope()
 
+    // All glow stars share the same fixed radius, so one brush + translate + alpha
+    // modulation replaces a fresh Brush.radialGradient allocation per glow star per frame.
+    val glowRadiusPx = with(LocalDensity.current) { stars.first { it.isGlow }.radius.dp.toPx() * 6f }
+    val glowBrush = remember(glowRadiusPx) {
+        Brush.radialGradient(listOf(YzStarWhite, Color.Transparent), radius = glowRadiusPx)
+    }
+
+    // Cached per-star slide targets — recomputed only when a mobile star enters a new
+    // cycle, instead of every frame for every mobile star.
+    val cachedCycle = remember { IntArray(stars.size) { Int.MIN_VALUE } }
+    val cachedFrom = remember { Array(stars.size) { Offset.Zero } }
+    val cachedTo = remember { Array(stars.size) { Offset.Zero } }
+
     // Time in seconds — feeds both twinkle and the slide-cycle math below.
     // Driven by a fixed ~30fps ticker rather than a vsync-locked animation so
     // redraw/brush-allocation rate doesn't scale with the display's refresh
@@ -149,7 +165,19 @@ fun StarFieldBackground(modifier: Modifier = Modifier) {
     }
 
     Canvas(
-        modifier = modifier.pointerInput(Unit) {
+        modifier = modifier
+            .drawWithCache {
+                val vignette = Brush.radialGradient(
+                    colors = listOf(YzViolet.copy(alpha = 0.16f), YzBg),
+                    center = Offset(size.width * 0.5f, size.height * 0.18f),
+                    radius = size.width.coerceAtLeast(size.height) * 0.9f
+                )
+                onDrawBehind {
+                    drawRect(color = YzBg)
+                    drawRect(brush = vignette)
+                }
+            }
+            .pointerInput(Unit) {
             detectDragGestures(
                 onDrag = { change, dragAmount ->
                     change.consume()
@@ -186,7 +214,7 @@ fun StarFieldBackground(modifier: Modifier = Modifier) {
             )
         )
 
-        stars.forEach { s ->
+        stars.forEachIndexed { i, s ->
             var offsetX = 0f
             var offsetY = 0f
             var isSliding = false
@@ -206,8 +234,13 @@ fun StarFieldBackground(modifier: Modifier = Modifier) {
                     return Offset(dx, dy)
                 }
 
-                val from = targetFor(cycleIndex - 1)
-                val to = targetFor(cycleIndex)
+                if (cachedCycle[i] != cycleIndex) {
+                    cachedFrom[i] = if (cachedCycle[i] == Int.MIN_VALUE) targetFor(cycleIndex - 1) else cachedTo[i]
+                    cachedTo[i] = targetFor(cycleIndex)
+                    cachedCycle[i] = cycleIndex
+                }
+                val from = cachedFrom[i]
+                val to = cachedTo[i]
                 val rawT = (localT / s.slideDuration).coerceIn(0f, 1f)
                 val t = smoothstep(rawT)
 
@@ -235,13 +268,9 @@ fun StarFieldBackground(modifier: Modifier = Modifier) {
             val twinkleAlpha = (s.alpha * (0.75f + 0.25f * flicker)).coerceIn(0.3f, 1f)
 
             if (s.isGlow) {
-                drawCircle(
-                    brush = Brush.radialGradient(
-                        listOf(YzStarWhite.copy(alpha = twinkleAlpha * 0.3f), Color.Transparent),
-                        center = Offset(px, py), radius = r * 6f,
-                    ),
-                    radius = r * 6f, center = Offset(px, py),
-                )
+                translate(px, py) {
+                    drawCircle(brush = glowBrush, alpha = twinkleAlpha * 0.3f, radius = glowRadiusPx, center = Offset.Zero)
+                }
             }
 
             if (isSliding && slideLen > 0.001f) {
