@@ -8,6 +8,7 @@ import com.kg.yildizname.core.domain.usecase.ResetAppDataUseCase
 import com.kg.yildizname.core.util.AppLinks
 import com.kg.yildizname.core.util.applyLanguage
 import com.kg.yildizname.core.util.currentLanguageCode
+import com.kg.yildizname.core.util.installUrl
 import com.kg.yildizname.platform.NotificationPermissionRequester
 import com.kg.yildizname.platform.NotificationSettingsOpener
 import com.kg.yildizname.platform.PermissionStatus
@@ -131,6 +132,6 @@ class SettingsViewModel(
 
     fun onShareAppClick()
     {
-        urlOpener.open(AppLinks.LANDING_PAGE)
+        urlOpener.open(AppLinks.installUrl)
     }
 }
